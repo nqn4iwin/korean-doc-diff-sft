@@ -20,3 +20,6 @@ TODO.md
 docs/PLAN.md
 docs/TODO.md
 # --- End Codex safety ignore block ---
+
+# Local source data and generated datasets
+data/

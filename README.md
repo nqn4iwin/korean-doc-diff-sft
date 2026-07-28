@@ -12,8 +12,8 @@ SFT 데이터셋까지 생성할 수 있는지 검증하는 실험용 저장소*
 
 ## 검증 대상
 
-1. 공공/사업 문체로 문서 작성 모델
-2. 공공데이터 활용 사전검토 챗봇
+1. 공공데이터 활용 사전검토 챗봇
+2. 공공/사업 문체로 문서 작성 모델
 3. 공공사업 보고서·RFP 분석 모델
 4. 회의기록 기반 사내 업무 이력 문의 챗봇
 
@@ -44,22 +44,24 @@ SFT 데이터셋까지 생성할 수 있는지 검증하는 실험용 저장소*
 │   ├── privacy.py                 # 개인정보 탐지 및 비식별화
 │   ├── provenance.py              # 출처·이용조건·수집시각 기록
 │   └── validation.py              # JSONL 및 공통 품질 검사
-├── 01_document_style/             # 공공/사업 문체 변환 데이터
+├── 01_public_data_review/         # 공공데이터 사전검토 데이터
 │   ├── README.md                  # 출처, 실행법, 데이터 정의
-│   ├── crawler.py                 # 공개자료 수집 및 내부 반입 목록화
-│   ├── parser.py                  # 문서와 버전 이력 추출
-│   ├── build_dataset.py           # 초안-최종본 병렬 데이터 생성
-│   ├── validate.py                # 내용 보존·비식별화·중복 검사
-│   ├── config.example.yaml
-│   └── schemas/
-├── 02_public_data_review/         # 공공데이터 사전검토 데이터
-│   ├── README.md
 │   ├── crawler.py                 # 법령·지침·이용조건·사례 수집
 │   ├── parser.py                  # 조항, 판단사례, 데이터 조건 추출
 │   ├── build_dataset.py           # 상황-체크리스트 데이터 생성
 │   ├── validate.py                # 근거 및 인용 유효성 검사
 │   ├── config.example.yaml
 │   └── schemas/
+├── 02_document_style/             # 공공/사업 문체 변환 데이터
+│   ├── README.md
+│   ├── crawler.py                 # 공개자료 수집 및 내부 반입 목록화
+│   ├── parser.py                  # 문서와 버전 이력 추출
+│   ├── build_dataset.py           # 초안-최종본 병렬 데이터 생성
+│   ├── validate.py                # 내용 보존·비식별화·중복 검사
+│   ├── config.example.yaml
+│   ├── schemas/
+│   └── docs/
+│       └── PLAN.md
 ├── 03_rfp_analysis/               # RFP·과업지시서 분석 데이터
 │   ├── README.md
 │   ├── crawler.py                 # 입찰 메타데이터와 첨부문서 수집
@@ -77,11 +79,11 @@ SFT 데이터셋까지 생성할 수 있는지 검증하는 실험용 저장소*
 │   ├── config.example.yaml
 │   └── schemas/
 ├── data/                          # Git으로 관리하지 않는 로컬 데이터
-│   ├── 01_document_style/
+│   ├── 01_public_data_review/
 │   │   ├── raw/
 │   │   ├── interim/
 │   │   └── processed/
-│   ├── 02_public_data_review/
+│   ├── 02_document_style/
 │   ├── 03_rfp_analysis/
 │   └── 04_work_history/
 ├── manifests/                     # 출처와 파일 체크섬 등 재현 정보
