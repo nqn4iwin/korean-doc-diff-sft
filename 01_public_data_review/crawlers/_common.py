@@ -58,13 +58,15 @@ def require_env(name: str) -> str:
 
 
 def _decode_json(raw: bytes, content_type: str | None) -> Any:
-    charsets: list[str] = []
+    # Some official endpoints label UTF-8 JSON with a legacy charset.
+    # Try UTF-8 first, then fall back to the declared charset and EUC-KR.
+    charsets: list[str] = ["utf-8-sig"]
     if content_type:
         for part in content_type.split(";")[1:]:
             name, separator, value = part.strip().partition("=")
             if separator and name.lower() == "charset":
                 charsets.append(value.strip("\"' "))
-    charsets.extend(["utf-8-sig", "euc-kr"])
+    charsets.append("euc-kr")
 
     last_error: Exception | None = None
     for charset in dict.fromkeys(charsets):

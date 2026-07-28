@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
+from typing import Any
 
 from _common import (
     CollectionError,
@@ -20,6 +22,37 @@ ENDPOINTS = (
     "open-data-list",
     "standard-data-list",
 )
+
+
+def collect_page(
+    *,
+    service_key: str,
+    endpoint_name: str,
+    page: int,
+    per_page: int,
+) -> tuple[Path, Any]:
+    if endpoint_name not in ENDPOINTS:
+        raise CollectionError(f"지원하지 않는 목록 종류입니다: {endpoint_name}")
+
+    endpoint = f"{BASE_ENDPOINT}/{endpoint_name}"
+    public_request = {
+        "page": page,
+        "perPage": per_page,
+        "returnType": "JSON",
+    }
+    raw, payload = fetch_json(
+        endpoint,
+        params=public_request,
+        headers={"Authorization": f"Infuser {service_key}"},
+    )
+    output_path, _ = save_snapshot(
+        raw,
+        source="공공데이터포털 목록조회서비스",
+        collection="data_portal",
+        endpoint=endpoint,
+        public_request={"endpoint": endpoint_name, **public_request},
+    )
+    return output_path, payload
 
 
 def parse_args() -> argparse.Namespace:
@@ -51,23 +84,11 @@ def main() -> int:
 
     load_project_env()
     service_key = require_env("DATA_GO_KR_SERVICE_KEY")
-    endpoint = f"{BASE_ENDPOINT}/{args.endpoint}"
-    public_request = {
-        "page": args.page,
-        "perPage": args.per_page,
-        "returnType": "JSON",
-    }
-    raw, payload = fetch_json(
-        endpoint,
-        params=public_request,
-        headers={"Authorization": f"Infuser {service_key}"},
-    )
-    output_path, _ = save_snapshot(
-        raw,
-        source="공공데이터포털 목록조회서비스",
-        collection="data_portal",
-        endpoint=endpoint,
-        public_request={"endpoint": args.endpoint, **public_request},
+    output_path, payload = collect_page(
+        service_key=service_key,
+        endpoint_name=args.endpoint,
+        page=args.page,
+        per_page=args.per_page,
     )
 
     current_count = nested_value(payload, "currentCount")
