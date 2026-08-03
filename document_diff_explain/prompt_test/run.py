@@ -314,7 +314,7 @@ def run(args: argparse.Namespace) -> int:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run fixed Solar prompt test 02.")
+    parser = argparse.ArgumentParser(description="Run fixed document-diff Solar prompt test 02.")
     parser.add_argument("--runs", type=int, default=10)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()

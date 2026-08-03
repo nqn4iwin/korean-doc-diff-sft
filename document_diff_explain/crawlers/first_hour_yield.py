@@ -1,6 +1,6 @@
 """Collect one prior-specification batch and measure its document yield.
 
-The service key is read from ``02_rfp_analysis/.env`` and is never written to
+The service key is read from ``document_diff_explain/.env`` and is never written to
 the snapshot, summary, manifest, or console output.
 """
 
@@ -27,7 +27,7 @@ from test_connections import load_env
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 REPOSITORY_DIR = PROJECT_DIR.parent
 ENV_PATH = PROJECT_DIR / ".env"
-DATA_DIR = REPOSITORY_DIR / "data" / "02_rfp_analysis"
+DATA_DIR = REPOSITORY_DIR / "data" / "document_diff_explain"
 API_DIR = DATA_DIR / "raw" / "api"
 ATTACHMENT_DIR = DATA_DIR / "raw" / "attachments"
 RUN_DIR = DATA_DIR / "runs"
@@ -451,7 +451,7 @@ def main() -> int:
         print("[실패] 조회기간과 다운로드 표본 수를 확인하세요.")
         return 2
     if not ENV_PATH.is_file():
-        print("[실패] 02_rfp_analysis/.env 파일이 없습니다.")
+        print("[실패] document_diff_explain/.env 파일이 없습니다.")
         return 2
     service_key = load_env(ENV_PATH).get(KEY_NAME, "")
     if not service_key:
