@@ -11,7 +11,7 @@
 
 ## 로컬 데이터
 
-수집 결과는 Git에서 제외되는 `data/<프로젝트명>/`에 생성합니다. 현재 `data/`는 재수집을 위해 비어 있으며, 수집 코드가 필요한 하위 경로를 만듭니다. 01번의 수집 이력은 `manifests/01_public_data_review.jsonl`에 남아 있습니다.
+수집 결과는 Git에서 제외되는 `data/<프로젝트명>/`에 생성합니다. 현재 `data/`는 재수집을 위해 비어 있으며, 수집 코드가 필요한 하위 경로를 만듭니다. 01번의 수집 이력은 `01_public_data_review/manifests/01_public_data_review.jsonl`에 남아 있습니다.
 
 ## 현재 구조
 
@@ -25,6 +25,7 @@
 │   ├── crawlers/
 │   ├── docs/PLAN.md
 │   └── prompt_test/
-├── manifests/
+├── solar.config.example.env
+├── solar_request.json
 └── docs/PLAN.md
 ```

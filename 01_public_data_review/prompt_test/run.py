@@ -13,11 +13,11 @@ from typing import Any
 
 
 CASE_DIR = Path(__file__).resolve().parent
-ROOT = CASE_DIR.parent
+REPOSITORY_DIR = CASE_DIR.parent.parent
 PROMPT_PATH = CASE_DIR / "prompt.txt"
 EVIDENCE_PATH = CASE_DIR / "data" / "evidence.json"
-SOLAR_REQUEST_PATH = ROOT / "solar_request.json"
-ENV_PATH = ROOT / ".env"
+SOLAR_REQUEST_PATH = REPOSITORY_DIR / "solar_request.json"
+ENV_PATH = REPOSITORY_DIR / ".env"
 EVIDENCE_PLACEHOLDER = "{{EVIDENCE_PACK}}"
 
 
@@ -283,7 +283,7 @@ def run(args: argparse.Namespace) -> int:
     endpoint = chat_completions_url(base_url)
     payload = request_payload(prompt)
 
-    runs_root = CASE_DIR / "run"
+    runs_root = CASE_DIR / "runs"
     run_dir = runs_root / f"01_{timestamp()}"
     run_dir.mkdir(parents=True, exist_ok=False)
 

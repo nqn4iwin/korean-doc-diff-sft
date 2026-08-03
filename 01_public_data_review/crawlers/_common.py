@@ -15,7 +15,7 @@ from typing import Any
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 REPOSITORY_DIR = PROJECT_DIR.parent
 ENV_PATH = PROJECT_DIR / ".env"
-MANIFEST_PATH = REPOSITORY_DIR / "manifests" / "01_public_data_review.jsonl"
+MANIFEST_PATH = PROJECT_DIR / "manifests" / "01_public_data_review.jsonl"
 RAW_DIR = REPOSITORY_DIR / "data" / "01_public_data_review" / "raw"
 
 
@@ -125,13 +125,16 @@ def save_snapshot(
     collection: str,
     endpoint: str,
     public_request: dict[str, str | int],
+    suffix: str = ".json",
 ) -> tuple[Path, dict[str, Any]]:
     """Save an exact response and append a secret-free provenance record."""
+    if not suffix.startswith(".") or "/" in suffix or "\\" in suffix:
+        raise CollectionError(f"잘못된 snapshot 확장자입니다: {suffix}")
     collected_at = datetime.now(timezone.utc)
     stamp = collected_at.strftime("%Y%m%dT%H%M%S%fZ")
     output_dir = RAW_DIR / collection
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{stamp}.json"
+    output_path = output_dir / f"{stamp}{suffix}"
     output_path.write_bytes(raw)
 
     digest = hashlib.sha256(raw).hexdigest()

@@ -13,14 +13,14 @@ from typing import Any
 
 
 TEST_DIR = Path(__file__).resolve().parent
-PROMPT_TEST_DIR = TEST_DIR.parent
+REPOSITORY_DIR = TEST_DIR.parent.parent
 CASE_ID = "R26BD00244326_R26BK01607991-001"
 INPUT_DIR = TEST_DIR / "data" / CASE_ID
 PROMPT_PATH = TEST_DIR / "prompt.txt"
 PRIOR_SPEC_PATH = INPUT_DIR / "prior_spec.json"
 BID_NOTICE_PATH = INPUT_DIR / "bid_notice.json"
-SOLAR_REQUEST_PATH = PROMPT_TEST_DIR / "solar_request.json"
-ENV_PATH = PROMPT_TEST_DIR / ".env"
+SOLAR_REQUEST_PATH = REPOSITORY_DIR / "solar_request.json"
+ENV_PATH = REPOSITORY_DIR / ".env"
 PLACEHOLDERS = {
     "{{PRIOR_SPEC_JSON}}": PRIOR_SPEC_PATH,
     "{{BID_NOTICE_JSON}}": BID_NOTICE_PATH,
@@ -245,7 +245,7 @@ def run(args: argparse.Namespace) -> int:
     timeout_seconds = int(os.environ.get("SOLAR_TIMEOUT_SECONDS", "180"))
     payload = request_payload(prompt)
 
-    run_dir = TEST_DIR / "run" / f"02_{timestamp()}"
+    run_dir = TEST_DIR / "runs" / f"02_{timestamp()}"
     run_dir.mkdir(parents=True, exist_ok=False)
     manifest: dict[str, Any] = {
         "case_id": CASE_ID,
