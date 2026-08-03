@@ -1,0 +1,78 @@
+{
+  "case_id": "R26BD00244326_R26BK01607991-001",
+  "project_summary": "한국마케팅진흥원이 5개 지역(서울, 경기, 대전, 부산, 제주)에서 소상공인 상생협업 교육을 운영하며, 교육용 노트북 임차, 무선 인터넷(라우터) 구성, AI Tool 계정 구매 및 운영을 지원하는 용역이다. 총 29개 기수, 약 1,150명 교육 인원을 대상으로 하며, 제한경쟁입찰 및 협상에 의한 계약으로 진행된다.",
+  "changes": [
+    {
+      "change_id": "C01",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["ambiguity_resolved"],
+      "prior_block_ids": ["prior_spec-B0062", "prior_spec-B0068"],
+      "bid_block_ids": ["bid_notice-B0062", "bid_notice-B0068"],
+      "before": "7/9(목)",
+      "after": "일정 8월 이후로 변경 예정",
+      "changed_span": {
+        "before": "7/9(목)",
+        "after": "일정 8월 이후로 변경 예정"
+      },
+      "direct_impact": "1기 및 2기 교육 일정이 7월 9일에서 8월 이후로 변경되어, 해당 일정에 맞춰 장비를 납품·회수해야 하는 용역사의 일정 관리 및 물류 계획에 영향을 미친다.",
+      "confidence": "high"
+    },
+    {
+      "change_id": "C02",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["ambiguity_resolved"],
+      "prior_block_ids": ["prior_spec-B0225", "prior_spec-B0231"],
+      "bid_block_ids": ["bid_notice-B0225", "bid_notice-B0231"],
+      "before": "7/7·7/14·7/21·8/18 (화)",
+      "after": "7/14·7/21·8/18 (화)",
+      "changed_span": {
+        "before": "7/7·7/14·7/21·8/18 (화)",
+        "after": "7/14·7/21·8/18 (화)"
+      },
+      "direct_impact": "교육일정② 1기(뷰티/패션)의 첫 번째 회차 일정이 7월 7일에서 7월 14일로 변경되었다. 또한 8월 일정 1회 추가 예정이 명시되어 있어, 향후 일정 변동 가능성을 시사한다.",
+      "confidence": "high"
+    },
+    {
+      "change_id": "C03",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["ambiguity_resolved"],
+      "prior_block_ids": ["prior_spec-B0230"],
+      "bid_block_ids": ["bid_notice-B0231"],
+      "before": "7/8·7/15·7/22·8/19 (수)",
+      "after": "7/15·7/22·8/19 (수)",
+      "changed_span": {
+        "before": "7/8·7/15·7/22·8/19 (수)",
+        "after": "7/15·7/22·8/19 (수)"
+      },
+      "direct_impact": "교육일정② 2기(식품)의 첫 번째 회차 일정이 7월 8일에서 7월 15일로 변경되었다. 또한 8월 일정 1회 추가 예정이 명시되어 있어, 향후 일정 변동 가능성을 시사한다.",
+      "confidence": "high"
+    }
+  ],
+  "issuer_intent": [
+    {
+      "claim": "발주자는 1기 및 2기 교육 일정을 7월 초에서 8월 이후로 연기하여, 교육 준비 기간을 확보하거나 다른 사업 일정과 조정하려는 의도를 가지고 있다.",
+      "basis_change_ids": ["C01"],
+      "support_level": "supported",
+      "reason": "사전규격의 1기, 2기 일정이 7/9(목)이었으나, 입찰공고에서는 '일정 8월 이후로 변경 예정'으로 명시되어 있어 일정 연기가 명확히 확인된다."
+    },
+    {
+      "claim": "발주자는 교육일정②의 1기 및 2기 첫 회차 일정을 7월 7일/8일에서 7월 14일/15일로 변경하고, 8월에 추가 회차를 편성하여 교육 운영의 유연성을 높이려는 의도를 가지고 있다.",
+      "basis_change_ids": ["C02", "C03"],
+      "support_level": "supported",
+      "reason": "사전규격 대비 첫 회차 일정이 1주일 연기되었고, '8월 일정 1회 추가 예정'이라는 문구가 추가되어 일정 조정 및 확장 의도가 확인된다."
+    }
+  ],
+  "uncertainties": [
+    {
+      "question": "1기 및 2기 교육의 정확한 8월 이후 일정은 언제 확정되는가?",
+      "why_it_matters": "입찰공고에는 '8월 이후로 변경 예정'이라고만 되어 있어, 구체적인 날짜가 명시되지 않았다. 이는 용역사가 장비 납품 및 회수 일정을 정확히 계획하는 데 불확실성을 야기한다."
+    },
+    {
+      "question": "교육일정② 1기 및 2기의 '8월 일정 1회 추가'는 정확히 어느 날짜에, 어떤 내용으로 진행되는가?",
+      "why_it_matters": "추가 회차가 기존 4회차 중 하나를 대체하는 것인지, 아니면 5회차로 늘어나는 것인지에 따라 장비 임차 수량 및 물류 운영 계획이 달라질 수 있다."
+    }
+  ]
+}

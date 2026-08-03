@@ -185,7 +185,7 @@ def probe_api(probe: ApiProbe, service_key: str) -> bool:
 
 def main() -> int:
     if not ENV_PATH.is_file():
-        print("[실패] 03_rfp_analysis/.env 파일이 없습니다.")
+        print("[실패] 02_rfp_analysis/.env 파일이 없습니다.")
         return 2
 
     env = load_env(ENV_PATH)

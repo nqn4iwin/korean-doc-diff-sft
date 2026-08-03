@@ -1,0 +1,38 @@
+{
+  "id": "chatcmpl-910df79fc63300f2",
+  "object": "chat.completion",
+  "created": 1785490625,
+  "model": "solar-open2-250b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"case_id\": \"R26BD00244326_R26BK01607991-001\",\n  \"project_summary\": \"한국마케팅진흥원이 발주하는 2026년 소상공인 상생협업교육 장비 임차 및 AI 실습지원 용역으로, 5개 지역 7개 교육장에서 29개 기수 약 1,150명을 대상으로 노트북 임차, 라우터 구성, AI Tool 계정 구매 및 운영을 수행하는 사업이다.\",\n  \"changes\": [\n    {\n      \"change_id\": \"C01\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0062\", \"prior_spec-B0068\"],\n      \"bid_block_ids\": [\"bid_notice-B0062\", \"bid_notice-B0068\"],\n      \"before\": \"7/9(목)\",\n      \"after\": \"일정 8월 이후로 변경 예정\",\n      \"changed_span\": {\n        \"before\": \"7/9(목)\",\n        \"after\": \"일정 8월 이후로 변경 예정\"\n      },\n      \"direct_impact\": \"1기 및 2기 교육 일정이 7월 9일에서 8월 이후로 변경되어, 해당 일정에 맞춰 장비를 납품·회수해야 하는 용역사의 물류 계획 및 재고 운영 일정에 영향을 미침.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"change_id\": \"C02\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0225\", \"prior_spec-B0231\"],\n      \"bid_block_ids\": [\"bid_notice-B0225\", \"bid_notice-B0231\"],\n      \"before\": \"7/7·7/14·7/21·8/18 (화)\",\n      \"after\": \"7/14·7/21·8/18 (화) ※ 8월 일정 1회 추가 예정\",\n      \"changed_span\": {\n        \"before\": \"7/7·7/14·7/21·8/18 (화)\",\n        \"after\": \"7/14·7/21·8/18 (화) ※ 8월 일정 1회 추가 예정\"\n      },\n      \"direct_impact\": \"교육일정② 1기 뷰티/패션 과정의 첫 회차(7/7)가 삭제되고, 8월 일정 1회 추가가 예고되어 총 4회차 운영 구조는 유지되나 구체적인 일정이 변경됨. 용역사는 7/7 장비 배송·설치 의무가 사라지고, 추후 공지될 8월 일정에 대비해야 함.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"change_id\": \"C03\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0230\"],\n      \"bid_block_ids\": [\"bid_notice-B0231\"],\n      \"before\": \"7/8·7/15·7/22·8/19 (수)\",\n      \"after\": \"7/15·7/22·8/19 (수) ※ 8월 일정 1회 추가 예정\",\n      \"changed_span\": {\n        \"before\": \"7/8·7/15·7/22·8/19 (수)\",\n        \"after\": \"7/15·7/22·8/19 (수) ※ 8월 일정 1회 추가 예정\"\n      },\n      \"direct_impact\": \"교육일정② 2기 식품 과정의 첫 회차(7/8)가 삭제되고, 8월 일정 1회 추가가 예고됨. 용역사는 7/8 장비 배송·설치 의무가 사라지고, 추후 공지될 8월 일정에 대비해야 함.\",\n      \"confidence\": \"high\"\n    }\n  ],\n  \"issuer_intent\": [\n    {\n      \"claim\": \"발주자는 상반기(7월 초)에 집중되었던 일부 교육 일정을 하반기로 미루고, 교육일정②의 8월 회차를 추가하여 교육 운영 시기를 조정하려는 의도가 있음.\",\n      \"basis_change_ids\": [\"C01\", \"C02\", \"C03\"],\n      \"support_level\": \"supported\",\n      \"reason\": \"사전규격에서 7/9, 7/7, 7/8로 명시되었던 일정들이 입찰공고에서 '8월 이후로 변경 예정' 또는 '8월 일정 1회 추가 예정'으로 대체됨. 이는 교육생 모집 상황, 강사 일정, 교육장 가용성 등 운영 여건 변화에 따라 일정을 유연하게 조정하려는 발주자의 의도를 직접적으로 보여줌.\"\n    },\n    {\n      \"claim\": \"발주자는 교육일정 변경 가능성을 사전에 공지하여 용역사가 일정 변동에 대비할 수 있도록 함으로써, 추후 변경 시 발생할 수 있는 분쟁을 최소화하려는 의도가 있음.\",\n      \"basis_change_ids\": [\"C01\", \"C02\", \"C03\"],\n      \"support_level\": \"plausible_but_uncertain\",\n      \"reason\": \"변경된 일정 문구 옆에 '변경 예정', '추가 예정'이라는 단서와 함께 '기수별 교육 인원·장소·일자는 발주처 사정에 따라 변동될 수 있으며, 변동 시 사전 협의하여 반영'이라는 일반 조항(prior_spec-B0052, bid_notice-B0052)이 존재함. 이는 발주자가 일정 변경 가능성을 인지하고 있으며, 이를 사전에 고지하여 용역사의 준비 시간을 확보해주려는 의도로 해석됨. 다만, 구체적인 변경 사유(모집 부진, 강사 사정 등)는 문서만으로 확인 불가.\"\n    }\n  ],\n  \"uncertainties\": [\n    {\n      \"question\": \"교육일정① 1기, 2기의 정확한 변경 일정과 교육일정② 1기, 2기의 추가되는 8월 일정의 구체적인 날짜는 언제 확정되어 공지되는가?\",\n      \"why_it_matters\": \"용역사는 장비 임차 수량, 배송·회수 물류 계획, 인력 투입 계획을 수립해야 하므로, 확정된 일정을 알지 못하면 제안서 내 운영 계획의 구체성과 신뢰성을 확보하기 어려움. 특히 '8월 이후'라는 표현은 8월, 9월, 10월 중 어느 시점인지 불명확하여 물류 재고 보관 기간 및 비용 산정에 영향을 미침.\"\n    },\n    {\n      \"question\": \"교육일정② 1기, 2기에서 삭제된 7/7, 7/8 회차 대신 추가되는 8월 일정은 기존 4회차 중 하나를 대체하는 것인가, 아니면 총 회차 수가 5회차로 늘어나는 것인가?\",\n      \"why_it_matters\": \"총 회차 수가 4회로 유지된다면 장비 임차 및 운영 총량은 변하지 않으나, 5회로 늘어난다면 추가 회차에 대한 장비 임차 비용, 인력 투입, AI Tool 계정 사용량 등이 증가하여 제안 금액 및 운영 계획에 영향을 미침. 현재 문서에는 '8월 일정 1회 추가 예정'이라고만 되어 있어 총 회차 수 유지 여부가 불명확함.\"\n    },\n    {\n      \"question\": \"일정 변경으로 인해 용역기간(계약 체결일 ~ 2026.12.31) 내 모든 정산 및 행정처리 마무리에 차질이 발생할 경우, 용역사의 책임 범위와 발주처와의 협의 절차는 어떻게 되는가?\",\n      \"why_it_matters\": \"사전규격과 입찰공고 모두 '용역기간 內 모든 정산 및 행정처리는 마무리되어야 하며, 용역기간 종료 시점까지 사업이 미완료된 경우 모든 기업 지원 완료까지 지속 지원 필수'라고 명시되어 있음. 일정 변경이 잦아질 경우 용역기간 종료 시점(12/31)까지 정산이 완료되지 않을 리스크가 있으며, 이에 대한 책임 소재와 추가 비용 부담 주체가 불명확함.\"\n    }\n  ]\n}",
+        "refusal": null,
+        "annotations": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [],
+        "reasoning": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "stop_reason": 129,
+      "token_ids": null,
+      "routed_experts": null
+    }
+  ],
+  "service_tier": null,
+  "system_fingerprint": "vllm-0.22.0-tp4-ep-1da25897",
+  "usage": {
+    "prompt_tokens": 47781,
+    "total_tokens": 49417,
+    "completion_tokens": 1636,
+    "prompt_tokens_details": null
+  },
+  "prompt_logprobs": null,
+  "prompt_token_ids": null,
+  "prompt_text": null,
+  "kv_transfer_params": null
+}

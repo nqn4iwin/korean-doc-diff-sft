@@ -1,0 +1,133 @@
+{
+  "case_id": "R26BD00244326_R26BK01607991-001",
+  "started_at": "2026-07-31T09:35:12.439032+00:00",
+  "requested_runs": 10,
+  "model": "solar-open2-250b",
+  "generation": {
+    "temperature": 0.2,
+    "top_p": 1.0,
+    "max_tokens": 8192,
+    "seed": null,
+    "reasoning_effort": "low"
+  },
+  "timeout_seconds": 180,
+  "max_retries": 0,
+  "inputs": {
+    "prior_spec": {
+      "block_count": 976,
+      "sha256": "4ce9d3e7094f6f60babc6b1af516cb6736d39c9deb34720ce0a4d94e801e7544"
+    },
+    "bid_notice": {
+      "block_count": 978,
+      "sha256": "586763fe08e94f5fde3ba1705b650ae83e809fb8a0f0ca23b14faf69d4bfc54d"
+    }
+  },
+  "prompt_template_sha256": "fe86c1b7fec0f4352acae1b3dd5481def768454f569252e92a5a3816660699cd",
+  "rendered_prompt_sha256": "fb9a042c853634e1ce6f7f0b431da6639982db5ba9111390724f6dfb6d446553",
+  "solar_request_file_sha256": "4f80d90ef354dda13bb32c5b8aebe770fb0d3e21d7cb3ba6373b0b2b389518c5",
+  "results": [
+    {
+      "run_number": 1,
+      "started_at": "2026-07-31T09:35:12.441644+00:00",
+      "status": "success",
+      "response_file": "response_01.json",
+      "answer_file": "answer_01.md",
+      "answer_sha256": "2fef5dd6d2a82fbcc52665cafb7fad95f30e49bc9ffcc4e8703617bf4d046511",
+      "finished_at": "2026-07-31T09:35:30.300542+00:00",
+      "elapsed_seconds": 17.858898
+    },
+    {
+      "run_number": 2,
+      "started_at": "2026-07-31T09:35:30.301213+00:00",
+      "status": "success",
+      "response_file": "response_02.json",
+      "answer_file": "answer_02.md",
+      "answer_sha256": "adeb4bd2c069ca42b25fd8982241a194779679307ce484858a67329067d92665",
+      "finished_at": "2026-07-31T09:35:42.775992+00:00",
+      "elapsed_seconds": 12.474779
+    },
+    {
+      "run_number": 3,
+      "started_at": "2026-07-31T09:35:42.777398+00:00",
+      "status": "success",
+      "response_file": "response_03.json",
+      "answer_file": "answer_03.md",
+      "answer_sha256": "ddf4fc289aa6b272c89c89b4b971de4beb7110d31a21d7b41bfb6c719f6384fd",
+      "finished_at": "2026-07-31T09:35:57.335318+00:00",
+      "elapsed_seconds": 14.55792
+    },
+    {
+      "run_number": 4,
+      "started_at": "2026-07-31T09:35:57.336141+00:00",
+      "status": "success",
+      "response_file": "response_04.json",
+      "answer_file": "answer_04.md",
+      "answer_sha256": "86a031f5f70ec902d6dfb11ae07f77e6c41958f0948c8947c411bc61b9d63af8",
+      "finished_at": "2026-07-31T09:36:11.463139+00:00",
+      "elapsed_seconds": 14.126998
+    },
+    {
+      "run_number": 5,
+      "started_at": "2026-07-31T09:36:11.464615+00:00",
+      "status": "success",
+      "response_file": "response_05.json",
+      "answer_file": "answer_05.md",
+      "answer_sha256": "1b1f5e27b40f45c9f46fa8984efd01504a844863195915482b2a2d84e8cac991",
+      "finished_at": "2026-07-31T09:36:30.300157+00:00",
+      "elapsed_seconds": 18.835542
+    },
+    {
+      "run_number": 6,
+      "started_at": "2026-07-31T09:36:30.300840+00:00",
+      "status": "success",
+      "response_file": "response_06.json",
+      "answer_file": "answer_06.md",
+      "answer_sha256": "199aa568f8ac3ffd66852983ca89fc7090208f1a9832f0e76679a2f62b76af37",
+      "finished_at": "2026-07-31T09:36:49.749193+00:00",
+      "elapsed_seconds": 19.448353
+    },
+    {
+      "run_number": 7,
+      "started_at": "2026-07-31T09:36:49.750497+00:00",
+      "status": "success",
+      "response_file": "response_07.json",
+      "answer_file": "answer_07.md",
+      "answer_sha256": "922737fe83d4d6af11ba8cea2a450ceff4120a54dd62adbe245123200b145540",
+      "finished_at": "2026-07-31T09:37:08.461473+00:00",
+      "elapsed_seconds": 18.710976
+    },
+    {
+      "run_number": 8,
+      "started_at": "2026-07-31T09:37:08.462577+00:00",
+      "status": "success",
+      "response_file": "response_08.json",
+      "answer_file": "answer_08.md",
+      "answer_sha256": "f83edfd8bdcf8551f0a6daf7182e865cadc57e7848957488d235add8d2d5567a",
+      "finished_at": "2026-07-31T09:37:26.745652+00:00",
+      "elapsed_seconds": 18.283075
+    },
+    {
+      "run_number": 9,
+      "started_at": "2026-07-31T09:37:26.746984+00:00",
+      "status": "success",
+      "response_file": "response_09.json",
+      "answer_file": "answer_09.md",
+      "answer_sha256": "1dba778ec3e597f72e819a2f13b9602dde79612d7c08ee7cfe5454849aec6265",
+      "finished_at": "2026-07-31T09:37:44.615610+00:00",
+      "elapsed_seconds": 17.868626
+    },
+    {
+      "run_number": 10,
+      "started_at": "2026-07-31T09:37:44.616295+00:00",
+      "status": "success",
+      "response_file": "response_10.json",
+      "answer_file": "answer_10.md",
+      "answer_sha256": "03c10c8f42cf16b6427bd6508f680127e5a5cd19bfae36f906e13ea432dfd7eb",
+      "finished_at": "2026-07-31T09:38:00.923175+00:00",
+      "elapsed_seconds": 16.30688
+    }
+  ],
+  "finished_at": "2026-07-31T09:38:00.924103+00:00",
+  "success_count": 10,
+  "failure_count": 0
+}

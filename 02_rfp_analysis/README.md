@@ -1,4 +1,4 @@
-# 03. 공공사업 RFP 분석 데이터
+# 02. 공공사업 RFP 분석 데이터
 
 나라장터 등에 공개된 제안요청서·과업지시서·규격서에서 요구사항, 일정, 산출물,
 평가항목과 위험조건을 구조화하는 SFT 데이터셋을 실제로 구축할 수 있는지 검증한다.
@@ -290,7 +290,7 @@ API 메타데이터 수집
 ## 목표 디렉터리 구조
 
 ```text
-03_rfp_analysis/
+02_rfp_analysis/
 ├── README.md
 ├── docs/
 │   └── PLAN.md
@@ -306,7 +306,7 @@ API 메타데이터 수집
 ├── build_dataset.py               # 예정: 태스크별 SFT 생성
 └── validate.py                    # 예정: 수치·근거·페이지·누수 검사
 
-../data/03_rfp_analysis/           # Git 제외
+../data/02_rfp_analysis/           # Git 제외
 ├── raw/
 │   ├── api/
 │   ├── attachments/
@@ -318,10 +318,10 @@ API 메타데이터 수집
 └── processed/
 
 ../manifests/
-└── 03_rfp_analysis.jsonl          # 예정: 원천·버전·체크섬·권리
+└── 02_rfp_analysis.jsonl          # 예정: 원천·버전·체크섬·권리
 
 ../reports/
-└── 03_rfp_analysis.md             # 예정: 구축 가능성 결과
+└── 02_rfp_analysis.md             # 예정: 구축 가능성 결과
 ```
 
 실제 필요성이 확인되기 전에 예정된 코드와 빈 디렉터리를 한꺼번에 만들지 않는다.
@@ -347,7 +347,7 @@ manifest, 로그와 채팅에 남기지 않는다. 포털의 Encoding·Decoding 
 두 인증키를 출력하거나 응답 원문을 저장하지 않고 서비스별 목록 1건만 호출한다.
 
 ```powershell
-python .\03_rfp_analysis\crawlers\test_connections.py
+python .\02_rfp_analysis\crawlers\test_connections.py
 ```
 
 ## 사용자 선행 작업

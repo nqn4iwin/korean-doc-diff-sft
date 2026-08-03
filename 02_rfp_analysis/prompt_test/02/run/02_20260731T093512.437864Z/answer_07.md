@@ -1,0 +1,104 @@
+{
+  "case_id": "R26BD00244326_R26BK01607991-001",
+  "project_summary": "한국마케팅진흥원이 5개 지역 29개 기수, 약 1,150명 대상 소상공인 상생협업 교육 장비 임차 및 AI 실습지원 용역을 수행하는 사업이다.",
+  "changes": [
+    {
+      "change_id": "C01",
+      "mapping": "1:1",
+      "diff_types": ["lexical", "semantic"],
+      "semantic_labels": ["deadline_changed"],
+      "prior_block_ids": ["prior_spec-B00369"],
+      "bid_block_ids": ["bid_notice-B0371"],
+      "before": "ㅇ 입찰마감일시: 2026. 07. 02.(목) 11:00까지, 나라장터 * 마감일시는 나라장터 입찰공고에 명시된 일시 ㅇ 서류 제출: 2026. 07. 02.(목) 18:00까지, 우편접수 * 방문 접수 불가, 제출 시점까지 미접수된 경우 미제출 처리",
+      "after": "ㅇ 입찰마감일시: 2026. 07. 10.(금) 14:00까지, 나라장터 * 마감일시는 나라장터 입찰공고에 명시된 일시 ㅇ 서류 제출: 2026. 07. 10.(금) 18:00까지, 우편접수 * 방문 접수 불가, 제출 시점까지 미접수된 경우 미제출 처리",
+      "changed_span": {
+        "before": "2026. 07. 02.(목) 11:00까지",
+        "after": "2026. 07. 10.(금) 14:00까지"
+      },
+      "direct_impact": "입찰 참가자의 제안서 준비 및 제출 일정이 약 8일 연장되어, 업체의 제안서 작성 및 제출 준비 기간이 확대됨.",
+      "confidence": "high"
+    },
+    {
+      "change_id": "C02",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["wording_only"],
+      "prior_block_ids": ["prior_spec-B0062", "prior_spec-B0068"],
+      "bid_block_ids": ["bid_notice-B0062", "bid_notice-B0068"],
+      "before": "7/9(목)",
+      "after": "일정 8월 이후로 변경 예정",
+      "changed_span": {
+        "before": "7/9(목)",
+        "after": "일정 8월 이후로 변경 예정"
+      },
+      "direct_impact": "1기 및 2기 교육 일정이 7월 9일에서 8월 이후로 변경되어, 해당 회차의 장비 임차 및 배송 일정 조정이 필요함.",
+      "confidence": "high"
+    },
+    {
+      "change_id": "C03",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["ambiguity_resolved"],
+      "prior_block_ids": ["prior_spec-B0225", "prior_spec-B0231"],
+      "bid_block_ids": ["bid_notice-B0225", "bid_notice-B0232"],
+      "before": "7/7·7/14·7/21·8/18 (화)",
+      "after": "7/14·7/21·8/18 (화) ※ 8월 일정 1회 추가 예정",
+      "changed_span": {
+        "before": "7/7·7/14·7/21·8/18 (화)",
+        "after": "7/14·7/21·8/18 (화) ※ 8월 일정 1회 추가 예정"
+      },
+      "direct_impact": "1기 뷰티/패션 과정의 첫 회차(7/7)가 삭제되고, 8월 일정 1회 추가가 예고되어 총 4회차 운영 구조는 유지되나 구체적인 일정이 변경됨.",
+      "confidence": "high"
+    },
+    {
+      "change_id": "C04",
+      "mapping": "1:1",
+      "diff_types": ["lexical"],
+      "semantic_labels": ["ambiguity_resolved"],
+      "prior_block_ids": ["prior_spec-B0230"],
+      "bid_block_ids": ["bid_notice-B0231"],
+      "before": "7/8·7/15·7/22·8/19 (수)",
+      "after": "7/15·7/22·8/19 (수) ※ 8월 일정 1회 추가 예정",
+      "changed_span": {
+        "before": "7/8·7/15·7/22·8/19 (수)",
+        "after": "7/15·7/22·8/19 (수) ※ 8월 일정 1회 추가 예정"
+      },
+      "direct_impact": "2기 식품 과정의 첫 회차(7/8)가 삭제되고, 8월 일정 1회 추가가 예고되어 총 4회차 운영 구조는 유지되나 구체적인 일정이 변경됨.",
+      "confidence": "high"
+    }
+  ],
+  "issuer_intent": [
+    {
+      "claim": "발주자는 1기 및 2기 교육 일정을 7월에서 8월 이후로 연기하여 여름 휴가 시즌이나 내부 사정을 고려한 일정 조정을 의도함.",
+      "basis_change_ids": ["C02"],
+      "support_level": "supported",
+      "reason": "사전규격의 7/9(목) 일정이 입찰공고에서 '일정 8월 이후로 변경 예정'으로 명시적으로 변경됨."
+    },
+    {
+      "claim": "발주자는 교육일정②의 1기 및 2기 첫 회차를 삭제하고 8월에 추가 회차를 편성하여, 전체 기수별 4회차 구조를 유지하면서 일정 밀도를 조정하려 함.",
+      "basis_change_ids": ["C03", "C04"],
+      "support_level": "supported",
+      "reason": "7/7 및 7/8 일정이 삭제되고 '8월 일정 1회 추가 예정'이라는 주석이 추가되어, 총 회차 수는 유지하되 시기 배치를 변경함."
+    },
+    {
+      "claim": "발주자는 입찰 마감일을 연장하여 업체의 제안서 준비 기간을 충분히 확보하고자 함.",
+      "basis_change_ids": ["C01"],
+      "support_level": "supported",
+      "reason": "입찰마감일시가 7월 2일에서 7월 10일로, 서류 제출 기한이 7월 2일에서 7월 10일로 명확히 연장됨."
+    }
+  ],
+  "uncertainties": [
+    {
+      "question": "교육일정① 1기 및 2기의 정확한 8월 이후 일정은 언제 확정되는가?",
+      "why_it_matters": "해당 회차의 장비 임차, 배송, 설치 일정 및 인력 배치 계획을 수립하기 위해 구체적인 날짜가 필요함."
+    },
+    {
+      "question": "교육일정② 1기 및 2기의 '8월 일정 1회 추가 예정'의 구체적인 날짜와 주제는 무엇인가?",
+      "why_it_matters": "추가 회차에 대한 노트북 및 라우터 수량, 배송 물류 계획, AI Tool 계정 운영 계획을 사전에 준비해야 함."
+    },
+    {
+      "question": "1기 및 2기 첫 회차 삭제 및 8월 추가 회차로 인해 전체 교육 운영일(약 29일) 및 노트북 임차 수량 기준에 변동이 발생하는가?",
+      "why_it_matters": "과업 규모 및 예산 집행 계획에 영향을 미칠 수 있으며, 입찰 가격 제안 시 고려해야 할 변수임."
+    }
+  ]
+}

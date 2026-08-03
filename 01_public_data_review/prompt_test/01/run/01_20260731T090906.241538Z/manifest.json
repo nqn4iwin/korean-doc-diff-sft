@@ -1,0 +1,124 @@
+{
+  "case_id": "01-naris-commercial-service-v1",
+  "started_at": "2026-07-31T09:09:06.242795+00:00",
+  "requested_runs": 10,
+  "model": "solar-open2-250b",
+  "generation": {
+    "temperature": 0.7,
+    "top_p": 1.0,
+    "max_tokens": 4096,
+    "seed": null,
+    "reasoning_effort": "low"
+  },
+  "solar_request_file_sha256": "e38cd2678681549d7de88737d51e02b1445a7bad1e9dd15bef298f345dc936e1",
+  "timeout_seconds": 180,
+  "max_retries": 0,
+  "prompt_template_sha256": "191202bac14d4153fb2e19bdeb210b798cd92b72a19773790d872767ed283938",
+  "evidence_file_sha256": "c358f81374a25aa2a0ac8ec652ca2fb4122b8b6d53d1259f90e75490b73a61ce",
+  "rendered_prompt_sha256": "6dc6930125b4dbec4fafe649a4e0c75630efb3bc4720eaf8b96c0a34cb1f07c9",
+  "results": [
+    {
+      "run_number": 1,
+      "started_at": "2026-07-31T09:09:06.244944+00:00",
+      "status": "success",
+      "response_file": "response_01.json",
+      "answer_file": "answer_01.md",
+      "answer_sha256": "3998fce63d7243379248dbeb12c49b2620cbb99e01a0b97c1af9bd7c5b4dd352",
+      "finished_at": "2026-07-31T09:09:16.960461+00:00",
+      "elapsed_seconds": 10.715517
+    },
+    {
+      "run_number": 2,
+      "started_at": "2026-07-31T09:09:16.961529+00:00",
+      "status": "success",
+      "response_file": "response_02.json",
+      "answer_file": "answer_02.md",
+      "answer_sha256": "d67657059ac48d21e2982fca0d5418c28f7d11241f8f0f1c255d7bdaf4d3c76e",
+      "finished_at": "2026-07-31T09:09:28.239943+00:00",
+      "elapsed_seconds": 11.278414
+    },
+    {
+      "run_number": 3,
+      "started_at": "2026-07-31T09:09:28.240863+00:00",
+      "status": "success",
+      "response_file": "response_03.json",
+      "answer_file": "answer_03.md",
+      "answer_sha256": "2d859508396a0ac3254a5b3906ec4a4083f5fecb571e981420fd3626e955d73b",
+      "finished_at": "2026-07-31T09:09:37.910758+00:00",
+      "elapsed_seconds": 9.669895
+    },
+    {
+      "run_number": 4,
+      "started_at": "2026-07-31T09:09:37.911695+00:00",
+      "status": "success",
+      "response_file": "response_04.json",
+      "answer_file": "answer_04.md",
+      "answer_sha256": "fce612e0e919628ceeba2bcd8bd8387326ffe667244569cc2cc02af69094c02a",
+      "finished_at": "2026-07-31T09:09:47.974851+00:00",
+      "elapsed_seconds": 10.063156
+    },
+    {
+      "run_number": 5,
+      "started_at": "2026-07-31T09:09:47.975892+00:00",
+      "status": "success",
+      "response_file": "response_05.json",
+      "answer_file": "answer_05.md",
+      "answer_sha256": "233025195ac7856fe2b4424e3004de7f473a338ff92a179dba94d7dd0152ccda",
+      "finished_at": "2026-07-31T09:09:57.371554+00:00",
+      "elapsed_seconds": 9.395662
+    },
+    {
+      "run_number": 6,
+      "started_at": "2026-07-31T09:09:57.372519+00:00",
+      "status": "success",
+      "response_file": "response_06.json",
+      "answer_file": "answer_06.md",
+      "answer_sha256": "80a0869d06e579b9690e4d9412e2a03aa07780e0d5c922e7e3bb1c1cd5fc4b71",
+      "finished_at": "2026-07-31T09:10:06.832414+00:00",
+      "elapsed_seconds": 9.459895
+    },
+    {
+      "run_number": 7,
+      "started_at": "2026-07-31T09:10:06.833267+00:00",
+      "status": "success",
+      "response_file": "response_07.json",
+      "answer_file": "answer_07.md",
+      "answer_sha256": "dfd006782e7d1b397382579953e0aaf991407a92f7e195393fcb21c63208a27b",
+      "finished_at": "2026-07-31T09:10:13.109135+00:00",
+      "elapsed_seconds": 6.275868
+    },
+    {
+      "run_number": 8,
+      "started_at": "2026-07-31T09:10:13.109926+00:00",
+      "status": "success",
+      "response_file": "response_08.json",
+      "answer_file": "answer_08.md",
+      "answer_sha256": "9bdefab0d0a03b814b1fb98b26ff5588582d4d2ba4c74952ddfa9b2f7e1d74ea",
+      "finished_at": "2026-07-31T09:10:23.999369+00:00",
+      "elapsed_seconds": 10.889443
+    },
+    {
+      "run_number": 9,
+      "started_at": "2026-07-31T09:10:24.000373+00:00",
+      "status": "success",
+      "response_file": "response_09.json",
+      "answer_file": "answer_09.md",
+      "answer_sha256": "0231b8488b5e892b352d9534c36537724f363ab5cf596a078e9762dfae727cda",
+      "finished_at": "2026-07-31T09:10:35.000736+00:00",
+      "elapsed_seconds": 11.000363
+    },
+    {
+      "run_number": 10,
+      "started_at": "2026-07-31T09:10:35.001873+00:00",
+      "status": "success",
+      "response_file": "response_10.json",
+      "answer_file": "answer_10.md",
+      "answer_sha256": "c2fc327ff1aab3d5a535d92c74a08eeb96fc64d45c88574cc628a5595fd31b96",
+      "finished_at": "2026-07-31T09:10:46.924497+00:00",
+      "elapsed_seconds": 11.922624
+    }
+  ],
+  "finished_at": "2026-07-31T09:10:46.925295+00:00",
+  "success_count": 10,
+  "failure_count": 0
+}

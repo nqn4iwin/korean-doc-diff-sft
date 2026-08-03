@@ -1,0 +1,38 @@
+{
+  "id": "chatcmpl-a404d450463e4ea3",
+  "object": "chat.completion",
+  "created": 1785490509,
+  "model": "solar-open2-250b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"case_id\": \"R26BD00244326_R26BK01607991-001\",\n  \"project_summary\": \"한국마케팅진흥원이 2026년 소상공인 상생협업교육을 위해 5개 지역 7개 교육장에서 노트북 임차, 라우터 구성, AI Tool 계정 구매 및 운영을 지원하는 용역이다. 총 29개 기수, 약 1,150명 교육 인원을 대상으로 하며, 제한경쟁입찰 및 협상에 의한 계약으로 진행된다.\",\n  \"changes\": [\n    {\n      \"change_id\": \"C01\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0062\", \"prior_spec-B0068\"],\n      \"bid_block_ids\": [\"bid_notice-B0062\", \"bid_notice-B0068\"],\n      \"before\": \"7/9(목)\",\n      \"after\": \"일정 8월 이후로 변경 예정\",\n      \"changed_span\": {\n        \"before\": \"7/9(목)\",\n        \"after\": \"일정 8월 이후로 변경 예정\"\n      },\n      \"direct_impact\": \"1기 및 2기 교육 일정이 7월 9일에서 8월 이후로 변경되어, 해당 일정에 맞춰 장비를 납품해야 하는 업체는 납품 시점을 8월 이후로 조정해야 한다. 제안서 작성 시 8월 이후 일정 변동 가능성을 고려한 물류 및 인력 운영 계획을 수립해야 한다.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"change_id\": \"C02\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0225\", \"prior_spec-B0231\"],\n      \"bid_block_ids\": [\"bid_notice-B0225\", \"bid_notice-B0231\"],\n      \"before\": \"7/7·7/14·7/21·8/18 (화)\",\n      \"after\": \"7/14·7/21·8/18 (화)\",\n      \"changed_span\": {\n        \"before\": \"7/7·7/14·7/21·8/18 (화)\",\n        \"after\": \"7/14·7/21·8/18 (화)\"\n      },\n      \"direct_impact\": \"교육일정② 1기(뷰티/패션)의 첫 번째 회차 일정이 7월 7일에서 7월 14일로 변경되었다. 7월 7일 일정은 삭제되고 7월 14일부터 시작된다. 이에 따라 해당 회차의 장비 배송 및 설치 일정도 7월 14일에 맞춰 조정해야 한다.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"change_id\": \"C03\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0230\", \"prior_spec-B0236\"],\n      \"bid_block_ids\": [\"bid_notice-B0230\", \"bid_notice-B0236\"],\n      \"before\": \"7/8·7/15·7/22·8/19 (수)\",\n      \"after\": \"7/15·7/22·8/19 (수)\",\n      \"changed_span\": {\n        \"before\": \"7/8·7/15·7/22·8/19 (수)\",\n        \"after\": \"7/15·7/22·8/19 (수)\"\n      },\n      \"direct_impact\": \"교육일정② 2기(식품)의 첫 번째 회차 일정이 7월 8일에서 7월 15일로 변경되었다. 7월 8일 일정은 삭제되고 7월 15일부터 시작된다. 해당 회차의 장비 배송 및 설치 일정도 7월 15일에 맞춰 조정해야 한다.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"change_id\": \"C04\",\n      \"mapping\": \"1:1\",\n      \"diff_types\": [\"lexical\"],\n      \"semantic_labels\": [\"ambiguity_resolved\"],\n      \"prior_block_ids\": [\"prior_spec-B0226\", \"prior_spec-B0232\"],\n      \"bid_block_ids\": [\"bid_notice-B0226\", \"bid_notice-B0232\"],\n      \"before\": \"서울 드림스퀘어(서울 마포구)\",\n      \"after\": \"※ 8월 일정 1회 추가 예정\",\n      \"changed_span\": {\n        \"before\": \"서울 드림스퀘어(서울 마포구)\",\n        \"after\": \"※ 8월 일정 1회 추가 예정\"\n      },\n      \"direct_impact\": \"교육일정② 1기 및 2기의 교육장소 정보 대신 '8월 일정 1회 추가 예정'이라는 주석이 추가되었다. 이는 8월에 해당 교육장에서 추가 회차가 진행될 수 있음을 시사하며, 업체는 8월 추가 일정에 대한 장비 및 인력 운영 계획을 예비적으로 수립해야 할 수 있다.\",\n      \"confidence\": \"medium\"\n    }\n  ],\n  \"issuer_intent\": [\n    {\n      \"claim\": \"발주자는 교육 일정을 전반적으로 8월 이후로 지연시키는 방향으로 조정하고 있다.\",\n      \"basis_change_ids\": [\"C01\", \"C02\", \"C03\"],\n      \"support_level\": \"supported\",\n      \"reason\": \"사전규격에서 7월 9일로 명시되었던 1기 및 2기 일정이 입찰공고에서 '8월 이후로 변경 예정'으로 바뀌었고, 교육일정②의 1기와 2기 첫 회차도 각각 7월 7일, 7월 8일에서 7월 14일, 7월 15일로 변경되었다. 이는 교육 시작 시점을 전반적으로 늦추려는 의도로 해석된다.\"\n    },\n    {\n      \"claim\": \"발주자는 교육일정②의 8월 추가 회차 가능성을 예고하고 있다.\",\n      \"basis_change_ids\": [\"C04\"],\n      \"support_level\": \"plausible_but_uncertain\",\n      \"reason\": \"교육장소 정보 대신 '8월 일정 1회 추가 예정'이라는 주석이 추가되었으나, 구체적인 일정이나 교육장 정보가 명시되지 않아 추가 회차의 규모나 시기를 정확히 알 수 없다. 다만, 8월에 추가 일정이 있을 가능성을 시사한다는 점에서 발주자의 의도를 추론할 수 있다.\"\n    }\n  ],\n  \"uncertainties\": [\n    {\n      \"question\": \"교육일정② 1기 및 2기의 8월 추가 일정 1회가 정확히 언제, 어느 교육장에서 진행되는지 알 수 없다.\",\n      \"why_it_matters\": \"추가 일정이 확정될 경우 장비 임차 수량, 배송·회수 횟수, 인력 투입 계획 등이 변경될 수 있으므로, 제안서 작성 시 이를 고려한 유연한 운영 계획을 수립해야 한다. 그러나 현재 문서만으로는 추가 일정의 세부 내용을 확인할 수 없어 정확한 대비가 어렵다.\"\n    },\n    {\n      \"question\": \"교육일정① 1기 및 2기의 '8월 이후로 변경 예정'이라는 표현이 구체적으로 8월 몇 일로 변경되는지 명시되지 않았다.\",\n      \"why_it_matters\": \"8월 이후의 구체적인 일정이 확정되지 않으면 업체가 장비 납품 및 회수 시점을 정확히 계획하기 어렵다. 제안서에는 일정 변동 가능성을 고려한 대응 방안을 포함해야 하지만, 구체적인 날짜가 없어 계획의 정밀도가 떨어질 수 있다.\"\n    }\n  ]\n}",
+        "refusal": null,
+        "annotations": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [],
+        "reasoning": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "stop_reason": 129,
+      "token_ids": null,
+      "routed_experts": null
+    }
+  ],
+  "service_tier": null,
+  "system_fingerprint": "vllm-0.22.0-tp4-ep-1da25897",
+  "usage": {
+    "prompt_tokens": 47781,
+    "total_tokens": 49366,
+    "completion_tokens": 1585,
+    "prompt_tokens_details": null
+  },
+  "prompt_logprobs": null,
+  "prompt_token_ids": null,
+  "prompt_text": null,
+  "kv_transfer_params": null
+}
