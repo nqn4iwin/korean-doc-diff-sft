@@ -31,7 +31,7 @@ from test_connections import load_env
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 REPOSITORY_DIR = PROJECT_DIR.parent
 ENV_PATH = PROJECT_DIR / ".env"
-DATA_DIR = REPOSITORY_DIR / "data" / "document_diff_explain"
+DATA_DIR = REPOSITORY_DIR / "data" / "raw_collection"
 RAW_PRIOR_DIR = DATA_DIR / "raw" / "사전규격"
 RAW_BID_DIR = DATA_DIR / "raw" / "입찰공고"
 CHANGE_DIR = DATA_DIR / "processed" / "변경점"
@@ -344,7 +344,7 @@ def main() -> int:
         print("[실패] 페이지·API 요청·pair·파일 상한을 확인하세요.")
         return 2
     if not ENV_PATH.is_file():
-        print("[실패] document_diff_explain/.env 파일이 없습니다.")
+        print("[실패] raw_collection/.env 파일이 없습니다.")
         return 2
     env = load_env(ENV_PATH)
     if not env.get(PRIOR_KEY_NAME) or not env.get(BID_KEY_NAME):

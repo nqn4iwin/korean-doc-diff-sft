@@ -1,31 +1,90 @@
-# data_collect
+# Document Change Interpretation Data
 
-최종 후보 두 건의 데이터 수집 가능성을 검증하는 저장소입니다. 각 프로젝트 폴더는 수집 코드, 설정 예시, 계획, Solar 파일럿 입력과 결과를 독립적으로 보관합니다.
+This repository builds training data for a Korean model that explains changes
+between two related public or business documents. The intended output is not a
+raw text diff. Each record should identify the source evidence, classify the
+change, name the affected party, describe the direct operational effect, and
+separate supported facts from uncertain interpretation.
 
-## 후보
-
-- `01_public_data_review/`: 공공데이터 활용 사전검토
-- `02_rfp_analysis/`: 공공사업 RFP·과업지시서 분석
-
-각 폴더의 `README.md`에서 데이터 출처, 환경변수, 수집 명령과 현재 상태를 확인합니다. Solar 파일럿의 입력·프롬프트·실행 결과는 각 프로젝트의 `prompt_test/`에 있습니다.
-
-## 로컬 데이터
-
-수집 결과는 Git에서 제외되는 `data/<프로젝트명>/`에 생성합니다. 현재 `data/`는 재수집을 위해 비어 있으며, 수집 코드가 필요한 하위 경로를 만듭니다. 01번의 수집 이력은 `01_public_data_review/manifests/01_public_data_review.jsonl`에 남아 있습니다.
-
-## 현재 구조
+## Repository layout
 
 ```text
 .
-├── 01_public_data_review/
-│   ├── crawlers/
-│   ├── docs/PLAN.md
-│   └── prompt_test/
-├── 02_rfp_analysis/
-│   ├── crawlers/
-│   ├── docs/PLAN.md
-│   └── prompt_test/
-├── solar.config.example.env
-├── solar_request.json
-└── docs/PLAN.md
+├── raw_collection/          # Find, download, verify, and preserve source pairs
+├── synthetic_generation/    # Create and evaluate training examples from verified patterns
+├── docs/                    # Research, source decisions, plans, and TODOs
+├── solar.config.example.env # Non-secret Solar configuration example
+└── solar_request.json       # Solar request shape used by the prompt test
 ```
+
+`raw_collection/` and `synthetic_generation/` are the two working areas. Do
+not add a project wrapper directory around them.
+
+## Data boundary
+
+Only use a document pair when both official source documents can be opened,
+their relationship can be demonstrated by a version link or stable identifier,
+and their extracted text contains a real difference. Preserve the source URL,
+collection time, MIME type, size, SHA-256 digest, and extracted text in a
+manifest. Do not use title similarity alone.
+
+The current verified material is:
+
+- Ten consecutive HTML privacy-policy pairs from the Ministry of Personnel
+  Management.
+- One prior-specification to revised bid/RFP pair for the Korea Marketing
+  Promotion Agency, retained in `synthetic_generation/prompt_test/` as the
+  initial teacher-model fixture.
+- A conditional Fair Trade Commission gift-certificate standard-terms pair:
+  the 2020 HWP and 2024 HWPX are linked by the same terms number, but the
+  2020 text extraction and paragraph diff still need to be completed.
+
+See `docs/TODO.md` for the urgent verification work and
+`docs/source_selection.md` for the source decision record.
+
+## Workflow
+
+1. **Raw collection:** collect official documents, prove the pair relationship,
+   extract text while preserving structure, and record deterministic diffs.
+2. **Pattern review:** inspect real differences before defining any synthetic
+   transformation. Do not invent document changes first.
+3. **Synthetic generation:** create controlled examples only from observed,
+   verified change patterns. Keep the original structure and wording; do not
+   rewrite full documents.
+4. **Evaluation:** keep real pairs separate from generated examples and use
+   held-out document pairs to measure evidence accuracy, change coverage, and
+   unsupported inference.
+
+## Working directories
+
+### `raw_collection/`
+
+- `crawlers/`: small, budget-limited G2B collection utilities.
+- `config.example.env`: names of the G2B variables; secrets stay in
+  `raw_collection/.env` and are never printed or committed.
+- `rfp_pair_search_memo.md`: prior search results and pair-selection lessons.
+
+Raw files belong under `data/raw_collection/` (Git-ignored), not in the
+repository.
+
+### `synthetic_generation/`
+
+`prompt_test/` contains the fixed real-pair fixture, the Solar prompt, the
+runner, and recorded outputs. Run it from the repository root:
+
+```powershell
+python .\synthetic_generation\prompt_test\run.py
+```
+
+The fixture is an experiment asset, not a license to treat every generated
+interpretation as ground truth. Teacher output must be checked against the
+source blocks before it becomes training data.
+
+## Safety
+
+- Never read, print, or commit `.env` files or API keys.
+- Do not bypass login, CAPTCHA, robots rules, download restrictions, or source
+  licensing terms.
+- Keep original files immutable and retain earlier versions separately.
+- Treat interpretation and issuer intent as distinct from directly observed
+  document facts.
