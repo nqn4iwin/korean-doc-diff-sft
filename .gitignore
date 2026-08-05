@@ -23,3 +23,13 @@ docs/TODO.md
 
 # Local source data and generated datasets
 data/
+
+# --- Claude Code safety ignore block ---
+.claude/
+CLAUDE.md
+setup-repo-claude-safety.sh
+# --- End Claude Code safety ignore block ---
+
+# --- Claude Code safety ignore block ---
+claude-repo-safety.sh
+# --- End Claude Code safety ignore block ---
