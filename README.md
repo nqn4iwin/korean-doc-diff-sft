@@ -28,19 +28,33 @@ and their extracted text contains a real difference. Preserve the source URL,
 collection time, MIME type, size, SHA-256 digest, and extracted text in a
 manifest. Do not use title similarity alone.
 
-The current verified material is:
+The current verified material covers all five source classes in `docs/PLAN.md`:
 
-- Ten consecutive HTML privacy-policy pairs from the Ministry of Personnel
-  Management.
+- Fifteen consecutive HTML privacy-policy pairs from the Ministry of Personnel
+  Management, linked by the site's own prior-version URL chain. Treat them as a
+  single document lineage, not fifteen independent samples.
+- Three Fair Trade Commission standard-terms pairs (online-game 2013-2024,
+  mobile-game 2017-2024, and gift-certificate 2020-2024), each linked by an
+  unchanged standard-terms number.
 - One prior-specification to revised bid/RFP pair for the Korea Marketing
   Promotion Agency, retained in `synthetic_generation/prompt_test/` as the
   initial teacher-model fixture.
-- A conditional Fair Trade Commission gift-certificate standard-terms pair:
-  the 2020 HWP and 2024 HWPX are linked by the same terms number, but the
-  2020 text extraction and paragraph diff still need to be completed.
+- One support-program notice pair: Ministry of SMEs and Startups TIPS notice
+  2026-40 and its corrective notice 2026-188, which cites the original notice
+  number and date in its own text.
+- One operating-guideline pair: the TIPS general operating guideline effective
+  2022-01-11 and its 2023-01-20 partial revision, linked by the effective date
+  in each document's supplementary provisions.
 
-See `docs/TODO.md` for the urgent verification work and
-`docs/source_selection.md` for the source decision record.
+Rejected: the Ministry of the Interior and Safety public-data evaluation
+handbooks for 2021 and 2024. Both official documents were obtained, but the
+evaluation framework was rebuilt between them, so no clause-level alignment
+exists. They are kept as label-definition reference material.
+
+See `docs/기획서_최종.md` for the project plan, `docs/source_selection.md` for
+the source decision record, `docs/학습데이터생성_프로세스.md` for each accepted
+pair with quoted change excerpts and for the preprocessing and label scheme, and
+`docs/TODO.md` for the remaining source-collection work.
 
 ## Workflow
 
@@ -60,6 +74,20 @@ See `docs/TODO.md` for the urgent verification work and
 ### `raw_collection/`
 
 - `crawlers/`: small, budget-limited G2B collection utilities.
+- `classify_diff.py`: block-level diff for one pair. Normalization rules decide
+  mechanically which differences carry no real change (article renumbering,
+  item markers, cross-references to a renumbered item, attachment numbers,
+  table-of-contents page numbers, quotation marks, interpuncts, spacing), so
+  those never reach a model. Blocks that survive every rule and share an
+  identical substitution are folded into one item, so a system renamed in
+  twelve places counts once. Reads `.hwpx`, `.html` and `.txt`:
+
+  ```powershell
+  python .\raw_collection\classify_diff.py `
+      .\data\raw_collection\ftc_game_terms\mobile_2017.converted.hwpx `
+      .\data\raw_collection\ftc_game_terms\mobile_2024.hwpx
+  ```
+
 - `config.example.env`: names of the G2B variables; secrets stay in
   `raw_collection/.env` and are never printed or committed.
 - `rfp_pair_search_memo.md`: prior search results and pair-selection lessons.
