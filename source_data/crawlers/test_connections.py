@@ -14,7 +14,10 @@ from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
-ENV_PATH = PROJECT_DIR / ".env"
+# Named apart from the repository-root settings file on purpose: two files both
+# called `.env` in one tree are trivial to copy over each other, and neither is
+# in Git to restore from.
+ENV_PATH = PROJECT_DIR / ".env.g2b"
 TIMEOUT_SECONDS = 20
 
 
@@ -185,7 +188,7 @@ def probe_api(probe: ApiProbe, service_key: str) -> bool:
 
 def main() -> int:
     if not ENV_PATH.is_file():
-        print("[실패] raw_collection/.env 파일이 없습니다.")
+        print("[실패] source_data/.env 파일이 없습니다.")
         return 2
 
     env = load_env(ENV_PATH)
