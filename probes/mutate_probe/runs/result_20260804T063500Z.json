@@ -1,0 +1,1369 @@
+[
+  {
+    "block_id": "B-파기",
+    "operator": "deadline_changed",
+    "variant": 1,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 다만, 다른 법령에 따라 보존하여야 하는 경우에는 그러하지 아니합니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 다른 법령에 따라 보존하여야 하는 경우에는 그러하지 아니합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 388,
+      "total_tokens": 466,
+      "completion_tokens": 78,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": false,
+      "direct_impact": "기존에는 개인정보 불필요 시 무조건 파기해야 했으나, 최신판은 다른 법령에 따른 보존 의무가 있는 경우 파기하지 않을 수 있는 예외 사유를 신설하여 의무 수준을 완화하였다. 이에 따라 인사혁신처는 법령상 보존 사유가 확인되면 파기 의무를 면제받을 수 있게 되었다.",
+      "usage": {
+        "prompt_tokens": 309,
+        "total_tokens": 378,
+        "completion_tokens": 69,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "deadline_changed",
+    "variant": 2,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 30일 이내에 지체 없이 파기합니다.",
+      "changed_span_before": "지체 없이 파기합니다.",
+      "changed_span_after": "30일 이내에 지체 없이 파기합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 388,
+      "total_tokens": 461,
+      "completion_tokens": 73,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "deadline_changed"
+      ],
+      "recovered": true,
+      "direct_impact": "개인정보 파기 기한이 '지체 없이'에서 '30일 이내'로 구체화되어 처리 시한이 명확해졌습니다. 이에 따라 파기 업무 수행 시 30일이라는 명확한 기준일이 적용되어 실무상 기한 관리가 용이해졌습니다.",
+      "usage": {
+        "prompt_tokens": 302,
+        "total_tokens": 361,
+        "completion_tokens": 59,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "deadline_changed",
+    "variant": 3,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 30일 이내에 지체 없이 파기합니다.",
+      "changed_span_before": "지체 없이 파기합니다.",
+      "changed_span_after": "30일 이내에 지체 없이 파기합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 388,
+      "total_tokens": 461,
+      "completion_tokens": 73,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "deadline_changed"
+      ],
+      "recovered": true,
+      "direct_impact": "개인정보 파기 기한이 '지체 없이'에서 '30일 이내'로 구체화되어 처리 시한이 명확해졌다. 이로 인해 파기 업무의 이행 기간이 제한되며, 기한 준수 여부에 대한 관리 및 점검이 가능해졌다.",
+      "usage": {
+        "prompt_tokens": 302,
+        "total_tokens": 359,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "obligation_weakened",
+    "variant": 1,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 다만, 다른 법령에 따라 보존하여야 하는 경우에는 그러하지 아니합니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 다른 법령에 따라 보존하여야 하는 경우에는 그러하지 아니합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 398,
+      "total_tokens": 476,
+      "completion_tokens": 78,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "다른 법령에 따른 보존 의무가 있는 경우 개인정보 파기를 면제하는 예외 조항이 신설되어, 인사혁신처의 파기 의무가 일부 완화되었다. 이에 따라 법적 보존 의무가 있는 개인정보는 파기 대상에서 제외되며, 관련 법령 준수 여부에 따라 처리 절차가 달라질 수 있다.",
+      "usage": {
+        "prompt_tokens": 309,
+        "total_tokens": 377,
+        "completion_tokens": 68,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "obligation_weakened",
+    "variant": 2,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 다만, 다른 법령에 따라 보존하여야 하는 개인정보는 그러하지 아니합니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 다른 법령에 따라 보존하여야 하는 개인정보는 그러하지 아니합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 398,
+      "total_tokens": 478,
+      "completion_tokens": 80,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "다른 법령에 따라 보존해야 하는 개인정보에 대해 파기 의무가 면제되어, 기존 무조건 파기에서 법령상 보존 사유가 있는 경우 예외가 허용된다. 이에 따라 인사혁신처는 해당 예외 사유에 해당하는 개인정보를 계속 보유할 수 있게 되었다.",
+      "usage": {
+        "prompt_tokens": 310,
+        "total_tokens": 371,
+        "completion_tokens": 61,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "obligation_weakened",
+    "variant": 3,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 다만, 다른 법령에 따라 보유가 필요한 경우 등 파기하지 아니할 수 있습니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 다른 법령에 따라 보유가 필요한 경우 등 파기하지 아니할 수 있습니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 398,
+      "total_tokens": 480,
+      "completion_tokens": 82,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "기존에는 개인정보 불필요 시 무조건 파기해야 했으나, 최신판은 다른 법령에 따른 보유 필요 시 파기하지 않을 수 있는 예외를 신설하여 의무 수준을 완화했습니다. 이에 따라 인사혁신처는 특정 법적 근거가 있는 경우 파기 의무를 면제받을 수 있게 되었습니다.",
+      "usage": {
+        "prompt_tokens": 313,
+        "total_tokens": 380,
+        "completion_tokens": 67,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "verification_added",
+    "variant": 1,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 이 경우 보유기간 경과 여부 및 처리 목적 달성 여부를 정기적으로 확인·점검하고 그 결과를 기록합니다.",
+      "changed_span_before": "",
+      "changed_span_after": " 이 경우 보유기간 경과 여부 및 처리 목적 달성 여부를 정기적으로 확인·점검하고 그 결과를 기록합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 390,
+      "total_tokens": 484,
+      "completion_tokens": 94,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "verification_added"
+      ],
+      "recovered": true,
+      "direct_impact": "인사혁신처는 개인정보 불필요 사유 발생 시 지체 없이 파기해야 하며, 보유기간 경과 및 처리목적 달성 여부를 정기적으로 확인·점검하고 그 결과를 기록해야 한다. 이로 인해 개인정보 파기 절차에 정기 점검 및 기록 의무가 추가되어 관리 책임이 강화된다.",
+      "usage": {
+        "prompt_tokens": 317,
+        "total_tokens": 382,
+        "completion_tokens": 65,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "verification_added",
+    "variant": 2,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다. 이 경우 파기 사실에 대하여 확인·점검 절차를 거치고 그 결과를 기록으로 보존합니다.",
+      "changed_span_before": "",
+      "changed_span_after": " 이 경우 파기 사실에 대하여 확인·점검 절차를 거치고 그 결과를 기록으로 보존합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 390,
+      "total_tokens": 478,
+      "completion_tokens": 88,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "verification_added"
+      ],
+      "recovered": true,
+      "direct_impact": "개인정보 파기 시 확인·점검 절차를 거치고 그 결과를 기록으로 보존해야 하므로, 파기 업무의 절차적 요건이 추가되어 실무상 관리 부담이 증가한다.",
+      "usage": {
+        "prompt_tokens": 314,
+        "total_tokens": 357,
+        "completion_tokens": 43,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-파기",
+    "operator": "verification_added",
+    "variant": 3,
+    "before": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기합니다.",
+    "gen": {
+      "after": "① 인사혁신처는 개인정보 보유기간의 경과, 처리목적 달성, 가명정보의 처리 기간 경과 등 개인정보가 불필요하게 되었을 때에는 해당 개인정보를 지체 없이 파기하고, 파기 사실과 방법 등을 기록하여 관리합니다.",
+      "changed_span_before": "지체 없이 파기합니다.",
+      "changed_span_after": "지체 없이 파기하고, 파기 사실과 방법 등을 기록하여 관리합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 390,
+      "total_tokens": 468,
+      "completion_tokens": 78,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "verification_added"
+      ],
+      "recovered": true,
+      "direct_impact": "개인정보 파기 후 파기 사실과 방법을 기록·관리하는 절차가 신설되어, 파기 이행 여부에 대한 증빙과 사후 관리가 의무화되었다. 이에 따라 인사혁신처는 파기 완료 시 관련 기록을 작성·보관해야 하는 추가 행정 부담이 발생한다.",
+      "usage": {
+        "prompt_tokens": 304,
+        "total_tokens": 363,
+        "completion_tokens": 59,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_expanded",
+    "variant": 1,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항과 개인정보 유출 사고 발생 시 통지·조치·피해구제에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고",
+      "changed_span_after": "손해배상 등 책임과 개인정보 유출 사고 발생 시 통지·조치·피해구제에 관한 사항을 계약서 등 문서에 명시하고"
+    },
+    "gen_usage": {
+      "prompt_tokens": 421,
+      "total_tokens": 551,
+      "completion_tokens": 130,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": false,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": false
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": true,
+      "direct_impact": "위탁계약서에 개인정보 유출 사고 발생 시 통지·조치·피해구제에 관한 사항을 반드시 명시해야 하므로, 기존보다 계약상 의무 기재 항목이 확대되었다. 이에 따라 수탁자와의 계약 체결 시 유출 대응 관련 조항 누락을 방지하기 위한 문서 검토 및 관리 절차가 강화된다.",
+      "usage": {
+        "prompt_tokens": 371,
+        "total_tokens": 440,
+        "completion_tokens": 69,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_expanded",
+    "variant": 2,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하며, 위탁업무 수행 과정에서 발생하는 개인정보의 처리 현황을 점검하고 있습니다.",
+      "changed_span_before": "수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_after": "수탁자가 개인정보를 안전하게 처리하는지를 감독하며, 위탁업무 수행 과정에서 발생하는 개인정보의 처리 현황을 점검하고 있습니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 421,
+      "total_tokens": 545,
+      "completion_tokens": 124,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "verification_added"
+      ],
+      "recovered": false,
+      "direct_impact": "위탁계약 체결 후 수탁자가 개인정보를 안전하게 처리하는지에 대한 기존 감독에 더해, 위탁업무 수행 과정에서 발생하는 개인정보 처리 현황을 점검하는 절차가 새로 추가되었다. 이에 따라 수탁자에 대한 관리·감독 수준이 강화되고, 개인정보 처리 실태에 대한 확인·점검 의무가 명시적으로 부과되었다.",
+      "usage": {
+        "prompt_tokens": 368,
+        "total_tokens": 436,
+        "completion_tokens": 68,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_expanded",
+    "variant": 3,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시 및 수탁자가 위탁업무 수행 중 개인정보를 처리하는 경우, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "위탁계약 체결 시,",
+      "changed_span_after": "위탁계약 체결 시 및 수탁자가 위탁업무 수행 중 개인정보를 처리하는 경우,"
+    },
+    "gen_usage": {
+      "prompt_tokens": 421,
+      "total_tokens": 537,
+      "completion_tokens": 116,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": true,
+      "direct_impact": "위탁계약 체결 시점뿐만 아니라 수탁자가 실제 업무를 수행하는 기간 중에도 동일한 보호조치 및 감독 의무가 적용되도록 범위가 확대되었다. 이에 따라 계약 체결 후 업무 수행 단계에서도 개인정보 처리 관련 문서 명시와 안전 처리 감독이 지속적으로 요구된다.",
+      "usage": {
+        "prompt_tokens": 367,
+        "total_tokens": 429,
+        "completion_tokens": 62,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_reduced",
+    "variant": 1,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독 및 손해배상에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "손해배상 등 책임에 관한 사항",
+      "changed_span_after": "손해배상에 관한 사항"
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 514,
+      "completion_tokens": 94,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": false,
+      "direct_impact": "손해배상 등 책임 사항이 손해배상으로 축소되어 계약상 명시해야 할 의무 범위가 일부 줄어들었다. 이로 인해 수탁자에 대한 책임 관련 조항의 구체성이 약화될 수 있다.",
+      "usage": {
+        "prompt_tokens": 356,
+        "total_tokens": 406,
+        "completion_tokens": 50,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_reduced",
+    "variant": 2,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "계약서 등 문서에 명시하고",
+      "changed_span_after": "계약서에 명시하고"
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 505,
+      "completion_tokens": 85,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened"
+      ],
+      "recovered": false,
+      "direct_impact": "계약서 등 문서에서 계약서로 표현이 축소되어 문서 형식의 재량이 제거되고 계약서 명시 의무가 강화되었다. 이는 위탁계약 시 개인정보 보호 관련 사항을 반드시 계약서에 포함하도록 하여 실무상 문서 작성 기준을 명확히 한다.",
+      "usage": {
+        "prompt_tokens": 355,
+        "total_tokens": 415,
+        "completion_tokens": 60,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "scope_reduced",
+    "variant": 3,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조 제1항에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "「개인정보 보호법」 제26조에 따라",
+      "changed_span_after": "「개인정보 보호법」 제26조 제1항에 따라"
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 530,
+      "completion_tokens": 110,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": false,
+      "direct_impact": "위탁계약 시 명시해야 할 법적 근거가 기존 '제26조'에서 '제26조 제1항'으로 구체화되어, 해당 조항의 특정 항에 따른 의무 사항이 더 명확하게 적용되도록 범위가 조정되었다. 이는 실무상 계약서 작성 시 참조해야 할 법령 조항이 세분화되어 의무 이행의 기준이 더 정밀해졌음을 의미한다.",
+      "usage": {
+        "prompt_tokens": 360,
+        "total_tokens": 442,
+        "completion_tokens": 82,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "responsibility_shifted",
+    "variant": 1,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+      "changed_span_before": "인사혁신처는",
+      "changed_span_after": "인사혁신처는 수탁자와 공동으로"
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 515,
+      "completion_tokens": 95,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": false,
+      "span_before_in_before": true,
+      "span_after_in_after": false,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": false
+    },
+    "roundtrip": {
+      "labels": [],
+      "recovered": false,
+      "direct_impact": "두 버전 간 조항 내용이 완전히 동일하여 실무상 변경 사항이나 영향 없음.",
+      "usage": {
+        "prompt_tokens": 357,
+        "total_tokens": 385,
+        "completion_tokens": 28,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "responsibility_shifted",
+    "variant": 2,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다. 다만, 인사혁신처가 「개인정보 보호법」 제26조 제1항에 따라 개인 정보처리 업무의 위탁에 관한 사항을 변경하거나 재위탁을 허용하는 경우, 인사혁신처는 지체 없이 이를 정보주체에게 고지하여야 합니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 인사혁신처가 「개인정보 보호법」 제26조 제1항에 따라 개인 정보처리 업무의 위탁에 관한 사항을 변경하거나 재위탁을 허용하는 경우, 인사혁신처는 지체 없이 이를 정보주체에게 고지하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 594,
+      "completion_tokens": 174,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened",
+        "verification_added"
+      ],
+      "recovered": false,
+      "direct_impact": "인사혁신처가 위탁업무 변경 또는 재위탁을 허용하는 경우 정보주체에게 지체 없이 고지해야 하는 새로운 의무가 추가되었다. 이로 인해 개인정보 처리 위탁 관련 변경 사항에 대한 정보주체 통지 절차가 신설되어 실무상 고지 이행 및 기록 관리가 필수적으로 요구된다.",
+      "usage": {
+        "prompt_tokens": 402,
+        "total_tokens": 475,
+        "completion_tokens": 73,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-위탁",
+    "operator": "responsibility_shifted",
+    "variant": 3,
+    "before": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.",
+    "gen": {
+      "after": "② 인사혁신처는 위탁계약 체결 시, 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 위탁업무 주관부서가 감독하고 있습니다.",
+      "changed_span_before": "수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다",
+      "changed_span_after": "수탁자가 개인정보를 안전하게 처리하는지를 위탁업무 주관부서가 감독하고 있습니다"
+    },
+    "gen_usage": {
+      "prompt_tokens": 420,
+      "total_tokens": 532,
+      "completion_tokens": 112,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "responsibility_shifted"
+      ],
+      "recovered": true,
+      "direct_impact": "개인정보 처리 감독 주체가 인사혁신처에서 위탁업무 주관부서로 변경되었다. 이에 따라 감독 책임 및 실무 수행 주체가 인사혁신처 소속 부서에서 해당 위탁업무를 담당하는 주관부서로 이관되었다.",
+      "usage": {
+        "prompt_tokens": 362,
+        "total_tokens": 417,
+        "completion_tokens": 55,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "scope_expanded",
+    "variant": 1,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX), 온라인 신청 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+      "changed_span_before": "서면, 전자우편, 모사전송(FAX) 등을 통하여",
+      "changed_span_after": "서면, 전자우편, 모사전송(FAX), 온라인 신청 등을 통하여"
+    },
+    "gen_usage": {
+      "prompt_tokens": 405,
+      "total_tokens": 503,
+      "completion_tokens": 98,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": true,
+      "direct_impact": "권리 행사 방법이 기존 서면, 전자우편, 모사전송에서 온라인 신청이 추가되어 더 다양해졌다. 이용자는 자신에게 편리한 방식으로 권리 행사를 할 수 있게 되었다.",
+      "usage": {
+        "prompt_tokens": 327,
+        "total_tokens": 374,
+        "completion_tokens": 47,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "scope_expanded",
+    "variant": 2,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX), 전화, 온라인 민원창구 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+      "changed_span_before": "서면, 전자우편, 모사전송(FAX) 등을",
+      "changed_span_after": "서면, 전자우편, 모사전송(FAX), 전화, 온라인 민원창구 등을"
+    },
+    "gen_usage": {
+      "prompt_tokens": 405,
+      "total_tokens": 507,
+      "completion_tokens": 102,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": true,
+      "direct_impact": "권리 행사 방법이 기존 서면, 전자우편, 모사전송에서 전화와 온라인 민원창구가 추가되어 이용자가 선택할 수 있는 채널이 확대되었다. 인사혁신처의 지체 없는 조치 의무는 동일하게 유지된다.",
+      "usage": {
+        "prompt_tokens": 330,
+        "total_tokens": 386,
+        "completion_tokens": 56,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "scope_expanded",
+    "variant": 3,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX), 온라인 민원 창구 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+      "changed_span_before": "서면, 전자우편, 모사전송(FAX) 등을",
+      "changed_span_after": "서면, 전자우편, 모사전송(FAX), 온라인 민원 창구 등을"
+    },
+    "gen_usage": {
+      "prompt_tokens": 405,
+      "total_tokens": 493,
+      "completion_tokens": 88,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": true,
+      "direct_impact": "권리 행사 방법이 기존 서면, 전자우편, 모사전송에서 온라인 민원 창구가 추가되어 다양해졌다. 이에 따라 이용자는 더 편리한 방식으로 권리를 행사할 수 있게 되었다.",
+      "usage": {
+        "prompt_tokens": 328,
+        "total_tokens": 377,
+        "completion_tokens": 49,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "deadline_changed",
+    "variant": 1,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 30일 이내에 조치하겠습니다.",
+      "changed_span_before": "지체 없이 조치하겠습니다",
+      "changed_span_after": "30일 이내에 조치하겠습니다"
+    },
+    "gen_usage": {
+      "prompt_tokens": 402,
+      "total_tokens": 485,
+      "completion_tokens": 83,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "deadline_changed"
+      ],
+      "recovered": true,
+      "direct_impact": "인사혁신처의 권리 행사 조치 기한이 '지체 없이'에서 '30일 이내'로 구체화되어 처리 시한이 명확해졌다. 이에 따라 민원 처리 기간이 예측 가능해지고, 기한 내 미이행 시 책임 소재가 명확해지는 실무적 변화가 발생한다.",
+      "usage": {
+        "prompt_tokens": 328,
+        "total_tokens": 390,
+        "completion_tokens": 62,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "deadline_changed",
+    "variant": 2,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 7일 이내에 조치하겠습니다.",
+      "changed_span_before": "지체 없이",
+      "changed_span_after": "7일 이내에"
+    },
+    "gen_usage": {
+      "prompt_tokens": 402,
+      "total_tokens": 479,
+      "completion_tokens": 77,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "deadline_changed"
+      ],
+      "recovered": true,
+      "direct_impact": "인사혁신처의 권리 행사 조치 기한이 '지체 없이'에서 '7일 이내'로 구체화되어 처리 시한이 명확해졌습니다. 이에 따라 민원인은 조치 완료 시점을 예측할 수 있게 되었고, 기관은 7일 내 처리 의무를 명확히 부담하게 됩니다.",
+      "usage": {
+        "prompt_tokens": 327,
+        "total_tokens": 390,
+        "completion_tokens": 63,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "deadline_changed",
+    "variant": 3,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다. 다만, 권리 행사 시 별도의 위임장을 제출해야 합니다.",
+      "changed_span_before": "",
+      "changed_span_after": "다만, 권리 행사 시 별도의 위임장을 제출해야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 402,
+      "total_tokens": 492,
+      "completion_tokens": 90,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened"
+      ],
+      "recovered": false,
+      "direct_impact": "권리 행사 시 별도의 위임장 제출이 새로 요구되어, 신청 절차가 강화되고 추가 증빙이 필요하게 되었다. 이로 인해 권리 행사자의 제출 부담이 증가하고, 인사혁신처의 접수 및 확인 절차도 추가된다.",
+      "usage": {
+        "prompt_tokens": 336,
+        "total_tokens": 395,
+        "completion_tokens": 59,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "obligation_weakened",
+    "variant": 1,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 정당한 사유가 없는 한 지체 없이 조치하겠습니다.",
+      "changed_span_before": "인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+      "changed_span_after": "인사혁신처는 이에 대해 정당한 사유가 없는 한 지체 없이 조치하겠습니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 412,
+      "total_tokens": 508,
+      "completion_tokens": 96,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "인사혁신처의 지체 없는 조치 의무에 '정당한 사유가 없는 한'이라는 예외 조건이 추가되어 의무 수준이 약화되었다. 이에 따라 정당한 사유가 있는 경우 조치 지연 또는 면제가 가능해져 권리 행사자의 신속한 구제 가능성이 낮아질 수 있다.",
+      "usage": {
+        "prompt_tokens": 329,
+        "total_tokens": 392,
+        "completion_tokens": 63,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "obligation_weakened",
+    "variant": 2,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다. 다만, 권리 행사의 내용이나 방법을 확인하기 위하여 추가 자료 제출이 필요한 경우에는 자료 제출 기한까지 조치를 유예할 수 있습니다.",
+      "changed_span_before": "인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+      "changed_span_after": "인사혁신처는 이에 대해 지체 없이 조치하겠습니다. 다만, 권리 행사의 내용이나 방법을 확인하기 위하여 추가 자료 제출이 필요한 경우에는 자료 제출 기한까지 조치를 유예할 수 있습니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 412,
+      "total_tokens": 548,
+      "completion_tokens": 136,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "권리 행사 시 추가 자료 제출이 필요한 경우 조치 기한을 자료 제출 기한까지 유예할 수 있도록 허용하여, 인사혁신처의 지체 없는 조치 의무를 완화하였다. 이로 인해 권리 행사자의 신속한 구제 기대가 일부 제한될 수 있다.",
+      "usage": {
+        "prompt_tokens": 349,
+        "total_tokens": 411,
+        "completion_tokens": 62,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-권리행사",
+    "operator": "obligation_weakened",
+    "variant": 3,
+    "before": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다.",
+    "gen": {
+      "after": "② 권리 행사는 인사혁신처에 대해 「개인정보 보호법」시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 할 수 있으며, 인사혁신처는 이에 대해 지체 없이 조치하겠습니다. 다만, 권리 행사가 권리의 남용에 해당하거나 관련 법령에 따라 제한되는 경우에는 그러하지 아니합니다.",
+      "changed_span_before": "",
+      "changed_span_after": " 다만, 권리 행사가 권리의 남용에 해당하거나 관련 법령에 따라 제한되는 경우에는 그러하지 아니합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 412,
+      "total_tokens": 514,
+      "completion_tokens": 102,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_weakened"
+      ],
+      "recovered": true,
+      "direct_impact": "권리 행사가 권리 남용이나 법령상 제한에 해당할 경우 인사혁신처의 지체 없는 조치 의무가 면제되어, 기관의 대응 의무가 축소되었다. 이로 인해 권리 행사자의 요청이 항상 즉시 처리되지 않을 수 있는 예외 사유가 신설되었다.",
+      "usage": {
+        "prompt_tokens": 342,
+        "total_tokens": 403,
+        "completion_tokens": 61,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "obligation_strengthened",
+    "variant": 1,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 대리인 확인을 위한 신분증 사본과 「개인정보 처리방법에 관한 고시」 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_before": "이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_after": "이 경우 대리인 확인을 위한 신분증 사본과 「개인정보 처리방법에 관한 고시」 별지 제11호 서식에 따른 위임장을 제출하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 406,
+      "total_tokens": 521,
+      "completion_tokens": 115,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "verification_added"
+      ],
+      "recovered": false,
+      "direct_impact": "대리인 권리 행사 시 신분증 사본 제출이 새로 요구되어, 대리인 자격 확인 절차가 강화되었다. 기존 위임장 제출 외에 본인 확인 증빙이 추가되어 실무상 서류 준비 부담이 증가한다.",
+      "usage": {
+        "prompt_tokens": 317,
+        "total_tokens": 367,
+        "completion_tokens": 50,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "obligation_strengthened",
+    "variant": 2,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 하며, 대리인은 그 자격을 증명할 수 있는 서류를 함께 제출하여야 합니다.",
+      "changed_span_before": "위임장을 제출하여야 합니다.",
+      "changed_span_after": "위임장을 제출하여야 하며, 대리인은 그 자격을 증명할 수 있는 서류를 함께 제출하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 406,
+      "total_tokens": 501,
+      "completion_tokens": 95,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened",
+        "verification_added"
+      ],
+      "recovered": true,
+      "direct_impact": "대리인이 권리 행사 시 위임장 외에 자격 증명 서류를 추가로 제출해야 하므로, 대리인 자격 확인 절차가 강화되어 실무상 서류 검토 부담이 증가합니다. 이로 인해 권리 행사 과정에서 대리인 적격성 검증이 보다 엄격해집니다.",
+      "usage": {
+        "prompt_tokens": 323,
+        "total_tokens": 384,
+        "completion_tokens": 61,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "obligation_strengthened",
+    "variant": 3,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 인사혁신처에 직접 방문하여 제출합니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_before": "이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_after": "인사혁신처에 직접 방문하여 제출합니다. 이 경우 “개인정보 처리방법의 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 406,
+      "total_tokens": 525,
+      "completion_tokens": 119,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": false,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": false
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened"
+      ],
+      "recovered": true,
+      "direct_impact": "위임장 제출 시 인사혁신처 직접 방문이라는 새로운 절차가 의무화되어 대리인 권리 행사 시 이용자의 부담이 증가한다. 기존 제출 방식에 대한 재량이 사라지고 특정 기관 방문 제출이 강제된다.",
+      "usage": {
+        "prompt_tokens": 320,
+        "total_tokens": 374,
+        "completion_tokens": 54,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "threshold_increased",
+    "variant": 1,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장과 가족관계증명서 등 대리인 자격을 확인할 수 있는 서류를 제출하여야 합니다.",
+      "changed_span_before": "위임장을 제출하여야 합니다.",
+      "changed_span_after": "위임장과 가족관계증명서 등 대리인 자격을 확인할 수 있는 서류를 제출하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 400,
+      "total_tokens": 489,
+      "completion_tokens": 89,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened",
+        "verification_added"
+      ],
+      "recovered": false,
+      "direct_impact": "대리인 권리 행사 시 위임장 외에 가족관계증명서 등 자격 확인 서류를 추가로 제출해야 하므로 제출 요건이 강화되었다. 이에 따라 실무에서는 대리인 자격 검증 절차가 신설되어 서류 준비 및 확인 부담이 증가한다.",
+      "usage": {
+        "prompt_tokens": 320,
+        "total_tokens": 380,
+        "completion_tokens": 60,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "threshold_increased",
+    "variant": 2,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장과 대리권을 증명하는 서류를 제출하여야 합니다.",
+      "changed_span_before": "위임장을 제출하여야 합니다.",
+      "changed_span_after": "위임장과 대리권을 증명하는 서류를 제출하여야 합니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 400,
+      "total_tokens": 479,
+      "completion_tokens": 79,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "obligation_strengthened"
+      ],
+      "recovered": false,
+      "direct_impact": "대리인 권리 행사 시 위임장 외에 대리권을 증명하는 서류 제출이 추가로 요구되어 제출 의무가 강화되었다. 이에 따라 실무에서는 대리권 입증 자료를 별도로 준비해야 하며, 미비 시 권리 행사가 제한될 수 있다.",
+      "usage": {
+        "prompt_tokens": 315,
+        "total_tokens": 373,
+        "completion_tokens": 58,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "threshold_increased",
+    "variant": 3,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.\n  다만, 정보주체가 해외에 거주하거나 거소가 불분명한 경우에는 전자적 방법으로 위임장을 제출할 수 있습니다.",
+      "changed_span_before": "",
+      "changed_span_after": "\n  다만, 정보주체가 해외에 거주하거나 거소가 불분명한 경우에는 전자적 방법으로 위임장을 제출할 수 있습니다."
+    },
+    "gen_usage": {
+      "prompt_tokens": 400,
+      "total_tokens": 499,
+      "completion_tokens": 99,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": false,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": false,
+      "direct_impact": "해외 거주 또는 거소 불분명 시 전자적 방법으로 위임장 제출이 가능해져 대리인 통한 권리 행사 절차가 유연해졌다. 이에 따라 물리적 서류 제출이 어려운 정보주체의 권리 행사 접근성이 개선되었다.",
+      "usage": {
+        "prompt_tokens": 331,
+        "total_tokens": 381,
+        "completion_tokens": 50,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "responsibility_shifted",
+    "variant": 1,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 공공기관의 개인정보 보호처리지침 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_before": "“개인정보 처리방법에 관한 고시”",
+      "changed_span_after": "공공기관의 개인정보 보호처리지침"
+    },
+    "gen_usage": {
+      "prompt_tokens": 397,
+      "total_tokens": 470,
+      "completion_tokens": 73,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": false,
+      "direct_impact": "위임장 제출 시 참조해야 하는 서식 근거 문서가 '개인정보 처리방법에 관한 고시'에서 '공공기관의 개인정보 보호처리지침'으로 변경되었다. 이로 인해 해당 조항의 적용 대상이나 서식 기준이 특정 고시에서 공공기관 내부 지침으로 범위가 조정되었다.",
+      "usage": {
+        "prompt_tokens": 309,
+        "total_tokens": 370,
+        "completion_tokens": 61,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "responsibility_shifted",
+    "variant": 2,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 「개인정보 처리방법에 관한 고시」 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_before": "“개인정보 처리방법에 관한 고시”",
+      "changed_span_after": "「개인정보 처리방법에 관한 고시」"
+    },
+    "gen_usage": {
+      "prompt_tokens": 397,
+      "total_tokens": 474,
+      "completion_tokens": 77,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [],
+      "recovered": false,
+      "direct_impact": "두 버전 간 실질적 내용 변경은 없으며, 인용 부호 표기 방식만 변경되었습니다. 실무상 권리 행사 절차나 제출 요건에 아무런 영향이 없습니다.",
+      "usage": {
+        "prompt_tokens": 311,
+        "total_tokens": 349,
+        "completion_tokens": 38,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  {
+    "block_id": "B-대리인",
+    "operator": "responsibility_shifted",
+    "variant": 3,
+    "before": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 “개인정보 처리방법에 관한 고시” 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+    "gen": {
+      "after": "③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 할 수도 있습니다. 이 경우 인사혁신처가 정하는 개인정보 처리방법에 관한 고시 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.",
+      "changed_span_before": "“개인정보 처리방법에 관한 고시”",
+      "changed_span_after": "인사혁신처가 정하는 개인정보 처리방법에 관한 고시"
+    },
+    "gen_usage": {
+      "prompt_tokens": 397,
+      "total_tokens": 478,
+      "completion_tokens": 81,
+      "prompt_tokens_details": null
+    },
+    "checks": {
+      "after_differs": true,
+      "span_before_in_before": true,
+      "span_after_in_after": true,
+      "locality_exact": true,
+      "operator_name_leaked": false,
+      "all_pass": true
+    },
+    "roundtrip": {
+      "labels": [
+        "scope_expanded"
+      ],
+      "recovered": false,
+      "direct_impact": "위임장 제출 시 참조해야 할 고시의 주체가 '인사혁신처'로 명시되어, 해당 고시의 적용 범위와 근거 기관이 구체화되었다. 이에 따라 실무에서는 인사혁신처가 정한 최신 서식을 반드시 확인하여 제출해야 한다.",
+      "usage": {
+        "prompt_tokens": 313,
+        "total_tokens": 371,
+        "completion_tokens": 58,
+        "prompt_tokens_details": null
+      }
+    }
+  }
+]
