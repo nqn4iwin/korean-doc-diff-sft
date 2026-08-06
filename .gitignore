@@ -33,3 +33,6 @@ setup-repo-claude-safety.sh
 # --- Claude Code safety ignore block ---
 claude-repo-safety.sh
 # --- End Claude Code safety ignore block ---
+
+# 역할 A·B 프롬프트 루프의 실행 출력 (프롬프트와 CHANGELOG만 추적한다)
+training_data/*/runs/

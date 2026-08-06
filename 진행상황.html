@@ -27,9 +27,14 @@
     .dot { display:inline-block; width:10px; height:10px; margin-right:5px; border-radius:50%; }
     section { margin-top:34px; }
     .gantt { padding:20px; overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card); }
-    .timeline { min-width:760px; }
-    .months { display:grid; grid-template-columns:270px 1fr; margin-bottom:8px; color:var(--muted); font-size:.82rem; }
+    .timeline { min-width:1040px; }
+    .months { display:grid; grid-template-columns:270px 1fr; gap:12px; margin-bottom:8px; color:var(--muted); font-size:.82rem; }
     .dates { display:grid; grid-template-columns:repeat(24,1fr); text-align:center; }
+    .dates > span { font-size:11px; letter-spacing:-.03em; }
+    .dates > span.holiday { color:#d92d20; font-weight:700; }
+    /* 8/15~8/17 휴일. 24칸 중 12~14번째라 왼쪽에서 45.83%~58.33% 구간이다. */
+    .track { position:relative; }
+    .track::before { content:""; position:absolute; top:0; bottom:0; left:45.833%; width:12.5%; background:#fee4e2; opacity:.55; pointer-events:none; }
     .gantt-row { display:grid; grid-template-columns:270px 1fr; gap:12px; align-items:center; margin:10px 0; }
     .task { font-size:.92rem; }
     .task small { display:block; color:var(--muted); }
@@ -65,9 +70,10 @@
 <body>
   <main>
     <header>
-      <h1>문서 변경 해석 데이터 · 진행상황</h1>
-      <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.</p>
-      <span class="updated">기준일: 2026-08-05</span>
+      <h1>문서 변경 해석 SLM · 진행상황</h1>
+      <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
+        <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a></p>
+      <span class="updated">기준일: 2026-08-06</span>
     </header>
 
     <div class="grid">
@@ -75,7 +81,7 @@
         <h2 id="progress-title">현재 진행률</h2>
         <div class="big">21%</div>
         <div class="meter" aria-label="전체 진행률 21%"><span style="width:21%"></span></div>
-        <p class="note">전처리가 완료 기준을 통과했습니다. 20 pair를 모두 돌려 결과를 파일로 남겼고, 블록마다 번호가 붙어 라벨을 붙일 대상을 가리킬 수 있게 됐습니다. 원천은 21 pair로 목표(학습 30 + 평가 30)의 3분의 1이고, 대상×방향 성립 여부 표와 연산자 표는 아직 비어 있습니다.</p>
+        <p class="note">역할 A(해석)의 프롬프트를 반복해서 다듬을 환경을 세웠습니다. 고정 평가 세트와 채점 기준을 먼저 정하고 v1 기준선까지 얻었는데, 형식과 어휘는 100%지만 <strong>해설 품질이 약 17%</strong>로 여기가 막혔습니다. 라벨 체계도 반례를 만나 한 차례 다시 세웠습니다. 원천은 21 pair로 목표(학습 30 + 평가 30)의 3분의 1입니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
@@ -94,7 +100,7 @@
       <p class="note">초록은 완료, 파랑은 현재 단계, 회색은 예정 단계입니다. 일정은 기획서의 추진 계획과 현재 PLAN을 합쳐 표시했습니다.</p>
       <div class="gantt">
         <div class="timeline">
-          <div class="months"><span>작업</span><div class="dates"><span style="grid-column:1 / span 3">8/4–8/6</span><span style="grid-column:4 / span 2">8/7–8/8</span><span style="grid-column:6 / span 5">8/9–8/13</span><span style="grid-column:15 / span 4">8/18–8/21</span><span style="grid-column:21 / span 4">8/24–8/27</span></div></div>
+          <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span>8/8</span><span>8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span>8/22</span><span>8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span></div></div>
           <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 21 / 60 pair</small></div><div class="track"><span class="bar current" style="--start:1;--span:5">계속</span></div></div>
           <div class="gantt-row"><div class="task">전처리·라벨 체계 확정<small>정규화 8종, 3단 라벨</small></div><div class="track"><span class="bar done" style="--start:1;--span:3">완료</span></div></div>
           <div class="gantt-row"><div class="task">Solar 입출력·검수 기준<small>근거와 해석의 레코드 형식 확정</small></div><div class="track"><span class="bar current" style="--start:1;--span:3">현재</span></div></div>
@@ -118,7 +124,6 @@
 
     <section aria-labelledby="daily-title">
       <h2 id="daily-title">일일 기록</h2>
-      <p class="note">날짜를 눌러 펴고 접습니다. 최근 날짜만 펼쳐 두면 기록이 쌓여도 한 화면에 들어옵니다.</p>
       <details class="day">
       <summary><time>2026-08-05</time><span class="tag">완료 — 라벨 체계 확정</span></summary>
       <article class="entry">
@@ -127,7 +132,7 @@
           <div><h3>오늘 하려던 일</h3><p class="prompt">원천데이터 유형을 넓히고, 모아 둔 원문에서 변경 유형 라벨을 정의한다.</p></div>
           <div><h3>실제로 한 일</h3><p class="prompt"><strong>오전</strong> — 팁스 지원사업 공고·정정공고 pair를 확보해 5개 분류를 모두 채웠다. 평가편람은 문서 유사도 0.016으로 반려했다.<br><strong>낮</strong> — 옛 라벨 13종을 버리고 실제 20쌍에서 3단 라벨을 다시 귀납했다. <code>학습데이터_생성_프로세스.md</code>를 새로 쓰면서 전처리 3단계, 정규화 규칙 8종, 셈 규칙을 정의했다. 수집 형식은 HWPX 우선으로 정했고, 문서를 커밋하며 로컬 전용 파일을 git에서 내렸다.<br><strong>저녁</strong> — 용어집과 문서 길잡이를 새로 썼다. 역할 A·B가 문서마다 반대로 쓰이던 것을 A=해석, B=생성으로 통일하고, 용어집 기준으로 표기 35곳을 맞췄다.</p></div>
           <div><h3>남은 일</h3><p class="prompt">조항별 적용 가능 연산자 표. 블록마다 적지 않고 블록에 무엇이 들어 있는지(숫자·날짜·주체·열거·고유명칭)로 가르는 방식을 팁스 운영지침에서 먼저 시험한다.</p></div>
-          <div><h3>근거 또는 파일</h3><p class="prompt"><code>docs/학습데이터_생성_프로세스.md</code>(신규) · <code>docs/용어_길잡이.md</code>(신규) · <code>docs/문서_길잡이.md</code>(신규) · <code>docs/기획서_최종.md</code> · <code>docs/원천데이터_선정_프로세스.md</code> · <code>docs/선행연구_분석.md</code> · <code>source_data/classify_diff.py</code></p></div>
+          <div><h3>관련 커밋</h3><p class="prompt">· <code>c3d42af</code> refactor: docs 문서 갱신 및 로컬 전용 파일 추적 해제<br>· <code>49fad3e</code> add: Add 진행상황.html, index.html, 용어_길잡이.md, 문서_길잡이.md</p></div>
         </div>
       </article>
       <article class="entry">
@@ -145,19 +150,19 @@
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt">라벨을 붙일 대상을 가리킬 수 있게 만들고, 폴더 구조를 하는 일에 맞게 정리한다.</p></div>
-          <div><h3>실제로 한 일</h3><p class="prompt"><strong>오전</strong> — <code>classify_diff.py</code>가 결과를 저장하지 않고 화면에만 뿌리고 있었다는 것을 발견했다. 블록마다 번호(<code>privacyOld14-B0007</code>)를 붙이고, 결과를 항상 파일로 남기고, 기계 negative의 원문까지 보존하도록 고쳤다. 20쌍을 전부 돌려 실질 변경 462건이 <code>PLAN.md</code>의 숫자와 일치하는 것을 파일로 확인했다.<br><strong>낮</strong> — 처리방침 14→15의 63건을 하나씩 읽었다. 정규화 규칙에 ASCII 괄호가 빠져 있는 것을 찾아 고쳤고(부등호를 삼키지 않도록 블록 전체를 감싼 경우로 한정), 대상 7종에 연락처가 없다는 것과 방향 5종이 뒤집힘을 못 담는다는 것을 확인했다. 두 문제는 새 원천에서 다시 보고 판단하기로 미뤘다.<br><strong>저녁</strong> — 저장소를 <code>source_data</code> · <code>training_data</code> · <code>probes</code>로 다시 나눴다. 실험 두 개가 <code>importlib</code>으로 다른 실험 파일을 경로째 불러 쓰던 결합과 절대경로 하드코딩을 걷어내고, Solar 호출 코드를 루트 <code>solar.py</code>로 모았다.</p></div>
-          <div><h3>남은 일</h3><p class="prompt">코덱스에서 찾고 있는 새 외부 원천. 거기서 대상 7종·방향 5종이 그대로 적용되는지 보고 라벨 체계를 고칠지 정한다.</p></div>
-          <div><h3>근거 또는 파일</h3><p class="prompt"><code>source_data/classify_diff.py</code> · <code>source_data/extract.py</code>(신규) · <code>solar.py</code>(신규) · <code>training_data/interpret/</code>·<code>mutate/</code>(자리) · <code>docs/PLAN.md</code> · <code>docs/학습데이터_생성_프로세스.md</code></p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong>역할 A(해석)와 역할 B(생성)를 반복 실험할 수 있는 환경을 만든다.</strong> Solar에게 한 번 물어보고 끝내는 것이 아니라, 프롬프트를 고칠 때마다 같은 조건으로 다시 재고 좋아졌는지 판단할 수 있어야 한다. 그러려면 세 가지가 먼저 필요하다 — 매 라운드 그대로 쓰는 고정 평가 세트, 결과를 보기 전에 확정한 채점 기준, 버전마다 무엇을 왜 바꿨는지 남는 기록. 역할 A부터 세우고 역할 B는 그 뒤에 붙인다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong>오전 — 저장소 리팩토링</strong><br>저장소를 <code>source_data</code> · <code>training_data</code> · <code>probes</code>로 다시 나눴다. 실험 간 경로 하드코딩을 걷어내고 Solar 호출 코드를 루트 <code>solar.py</code>로 모았다.<br><br><strong>낮 — 역할 A(해석) 프롬프트 환경 구축</strong><br>프롬프트를 코드에서 떼어 버전별 파일로 두고, 고정 평가 세트 9건과 채점 기준을 결과 보기 전에 확정했다. v0에서 라벨을 줄지 말지 정하고, v1 기준선을 얻었다(형식·어휘 100%, 라벨 일치 16.7%, 해설 약 17%).<br><br><strong>저녁 — 라벨 기준 재설계</strong><br>negative의 경계가 대상 7종 정의와 부딪히는 것을 발견해 기준을 다시 세웠다. 미뤄둔 판단 둘과 새 반례 둘, 합쳐 네 가지를 확정하고 판정 순서를 바꿨다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt">ChatGPT(웹)으로 찾은 새 외부 원천 후보 6건을 내려받아 검증한다. 목록은 <code>docs/TODO.md</code>에 있다.<br><br>찾는 이유 둘. 실질 변경 486건 중 해설이 나오는 것이 100건 안팎이라 <strong>씨앗이 부족하고</strong>, 오늘 다시 세운 <strong>라벨 정의가 다른 문서에서도 통하는지</strong> 봐야 한다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt">· <code>0f4e90d</code> add: Add interpret_probe, mutate_probe<br>· <code>7f07a3f</code> refactor: 폴더 이름이 하는 일을 말하도록 저장소를 다시 나눈다<br>· <code>c668e1b</code> fix: 문서 이름을 한국어로 통일하고 바뀐 경로를 반영한다<br>· <code>05e6f59</code> add: Add interpret 프롬프트 루프 환경(prompts v0~v1, evalset, rubric, run.py, CHANGELOG)</p></div>
         </div>
       </article>
       <article class="entry">
         <div class="entry-head">회고</div>
         <div class="entry-grid">
-          <div><h3>가장 어려웠던 지점</h3><p class="prompt empty">아직 적지 않음</p></div>
-          <div><h3>왜 어려웠나</h3><p class="prompt empty">아직 적지 않음</p></div>
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt">어제 라벨 정의를 끝냈다고 생각했는데, 오늘 평가 세트를 만들다가 negative의 경계가 대상 7종 정의와 정면으로 부딪히는 걸 봤다. 끝난 줄 알았던 정의를 처음부터 다시 세워야 하나 싶어 눈앞이 캄캄했다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt"><code>(2020. 12. 4. 개정)</code> → <code>(2024. 9. 27. 개정)</code>은 우리 정의대로면 “날짜가 바뀐다”라 <code>기한·시점</code>이 된다. <code>제27조</code> → <code>제28조</code>도 마찬가지다. 실질 변경이 아니라고 보려 했는데 <strong>정작 우리가 쓴 정의가 실질 변경이라고 말하고 있었다.</strong></p></div>
           <div><h3>다음에는 어떻게 할까</h3><p class="prompt empty">아직 적지 않음</p></div>
-          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt empty">아직 적지 않음</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong>지금 세운 기준(대상 7종 · 방향 5종)이 맞는지 다른 사람들 시선도 궁금하다.</strong> 결국 우리가 정한 규칙이라 안에서만 보면 맞는지 알기 어렵다. 같은 문서를 보고 다르게 나눌 사람이 있는지 듣고 싶다.</p></div>
         </div>
       </article>
       </details>
@@ -185,20 +190,16 @@
     </section>
 
     <section aria-labelledby="decision-title">
-      <h2 id="decision-title">결정·막힘 기록</h2>
+      <h2 id="decision-title">결정 기록</h2>
       <p class="note">일일 기록 외에 남기면 좋은 항목입니다. 나중에 “왜 이 방향을 택했는지”를 다시 찾지 않아도 됩니다.</p>
       <div class="card">
-        <div class="decision"><strong>날짜</strong><strong>결정 또는 막힘</strong><strong>근거 / 다시 볼 조건</strong></div>
+        <div class="decision"><strong>날짜</strong><strong>결정</strong><strong>근거 / 다시 볼 조건</strong></div>
         <div class="decision"><span>2026-08-05</span><span>앞단 A(해석 붙이기)는 Solar가 아니라 사람이 맡는다</span><span><code>interpret_probe</code>에서 라벨 일치가 6건 중 3건이었고 틀린 답에도 <code>high</code>가 붙었다. few-shot 예시에 반반 확률의 라벨을 넣을 수 없다. 몇 건만 필요하므로 사람이 쓰는 편이 싸다</span></div>
-        <div class="decision"><span>2026-08-06</span><span>대상 7종·방향 5종을 지금 고치지 않고 미룬다</span><span>처리방침 14→15에서 연락처 10건이 7종 어디에도 안 들어가고, 쿠키 조항의 “안 한다 → 한다”가 5종 어디에도 안 맞았다. 한 계열에서만 나오는 문제일 수 있어, 새 외부 원천을 같은 방식으로 훑은 뒤 판단한다</span></div>
-        <div class="decision"><span>2026-08-06</span><span>정규화 규칙의 ASCII 괄호는 블록 전체를 감싼 경우에만 벗긴다</span><span><code>&lt;</code>와 <code>&gt;</code>는 괄호이자 부등호다. 문장 어디서나 지우면 <code>기준 &lt; 10억</code> → <code>기준 &gt; 10억</code>이라는 뒤집힌 조건이 “변경 없음”이 된다</span></div>
         <div class="decision"><span class="empty">YYYY-MM-DD</span><span class="empty">예: PDF pair는 라벨링에서 보류</span><span class="empty">문단 추출 경로를 확보하면 다시 검토</span></div>
       </div>
     </section>
 
-    <footer>
-      갱신할 때는 진행률, 로드맵 상태, 일일 기록 세 곳만 먼저 바꾸면 됩니다. 이 파일은 외부 의존성 없는 정적 HTML이라 GitHub Pages 같은 정적 호스팅에 그대로 올릴 수 있습니다.
-    </footer>
+    <footer></footer>
   </main>
 </body>
 </html>
