@@ -62,14 +62,62 @@ def _reference(text: str) -> str:
         rf"(상기|위|앞)\s*(?:[{HANGUL_ITEM}]\)|[{CIRCLED}]|\d{{1,2}}\))", r"\1@", text)
     return re.sub(rf"(?<=\d)\s*\.\s*[{HANGUL_ITEM}]\s*\.", ".@.", text)
 
+
+ARTICLE = r"제\s*\d+\s*(?:조|항|호|목|장|절|편|관)"
+# A statute's name ends in one of these. The closing mark is optional and every
+# variant has to be listed: the same policy writes `「개인정보 보호법」제33조` in one
+# version and `｢개인정보 보호법｣ 제33조` (halfwidth) in the next. Accepting only
+# one of them protected the citation on one side while normalizing it on the
+# other, which turned a block the rules already filed as no-real-change into a
+# real change. `따옴표기호` deletes these marks, but it runs after this rule.
+LAW_NAME = r"[가-힣A-Za-z0-9]*(?:법|령|규칙|조례|예규|훈령|고시)\s*[」』｣〉》\"'’”]?\s*"
+# A run of citations may follow one name: `공무원임용시험령 제7조, 제34조`.
+EXTERNAL_CITATION = re.compile(rf"{LAW_NAME}(?:{ARTICLE}[\s,및·ㆍ]*)+")
+
+
+def _citation(text: str) -> str:
+    """Normalize an article number cited mid-sentence, but not one in a statute
+    reference.
+
+    `조항번호` only touches the number a block *begins* with, so a heading keeps
+    its own number normalized while `제27조 제1항의 방법으로 통지합니다` ->
+    `제28조 제1항의 ...` -- a pure consequence of inserting an article earlier --
+    counted as a real change. Measured over the whole corpus that is 10 blocks.
+
+    Dropping the anchor instead is what the `조항번호` comment warns about: it
+    also swallows `「개인정보보호법」제25조` -> `제26조`, which redirects the reader
+    to a different statute and is a real correction.
+
+    The separator is not the `「」` quoting. `공무원임용시험령 제7조, 제34조` ->
+    `제4조, 제34조` is an external statute written without them, and the second
+    citation staying put shows it is not renumbering. What actually divides the
+    two is whether a statute *name* sits in front of the citation: the ten
+    renumberings read `제27조 제1항`, `본 지침 제9조`, `제8조 제3항` -- no name.
+
+    So a name-led run of citations is held aside, the rest is normalized, and
+    the run is put back. Checked against all twelve candidates in the corpus: it
+    files ten as renumbering and leaves both statute corrections alone.
+    """
+    kept: list[str] = []
+
+    def stash(match: re.Match) -> str:
+        kept.append(match.group(0))
+        return f"\x00{len(kept) - 1}\x00"
+
+    text = EXTERNAL_CITATION.sub(stash, text)
+    text = re.sub(r"(제)\s*\d+\s*(조|항|호|목|장|절|편|관)", r"\1N\2", text)
+    for index, held in enumerate(kept):
+        text = text.replace(f"\x00{index}\x00", held)
+    return text
+
 # Order is significant: whitespace removal must come after any rule whose
 # pattern depends on spacing.
 RULES: list[tuple[str, object]] = [
     # Anchored to the start of the block, so only a heading's own number is
-    # normalized. An unanchored rule also rewrote citations inside a sentence,
-    # and `「개인정보보호법」제25조에 따라` -> `제26조에 따라` -- a correction that
-    # points the reader at a different statute -- silently became no change.
+    # normalized. Citations inside a sentence are `조문인용`'s job, which excludes
+    # the statute references an unanchored rule here would have swallowed.
     ("조항번호", lambda s: re.sub(r"^(\s*제)\s*\d+\s*(조|항|호|목|장|절|편|관)", r"\1N\2", s)),
+    ("조문인용", lambda s: _citation(s)),
     # A circled marker needs no punctuation after it; a hangul or digit marker
     # does, or ordinary prose starting with a number would be swallowed.
     # A dash bullet must be followed by a space, or `-5%p` would lose its sign.
@@ -133,11 +181,23 @@ def classify(before: str, after: str) -> tuple[str, ...] | None:
     return None
 
 
-def align(before: list[Block], after: list[Block], threshold: float = 0.55):
-    """Greedy 1:1 block pairing inside one region; leftovers are add/delete.
+def align(before: list[Block], after: list[Block], threshold: float = 0.55,
+          min_length: int = 0):
+    """Greedy 1:1 block pairing; leftovers are add/delete.
 
     Both sides are `(id, text)` pairs; only the text takes part in the
     similarity comparison.
+
+    `min_length` refuses to pair blocks shorter than it. A short string reaches
+    a high ratio by accident -- `수소차` and `수동소자` score 0.571, above the
+    threshold, while meaning nothing to each other -- and an appendix full of
+    short item names is mostly such collisions. Length is the separator here,
+    not the ratio: the junk sits at 0.55-0.58 but real matches sit there too.
+    Only the second pass sets this, because the first pass has the blocks'
+    position in the diff as corroborating evidence and can afford to be looser.
+
+    Identical text is exempt: it is unambiguous at any length, and pairing it
+    removes one spurious addition and one spurious deletion.
     """
     pairs, used = [], set()
     for b in before:
@@ -145,7 +205,20 @@ def align(before: list[Block], after: list[Block], threshold: float = 0.55):
         for j, a in enumerate(after):
             if j in used:
                 continue
-            ratio = difflib.SequenceMatcher(None, b[1], a[1], autojunk=False).ratio()
+            if a[1] == b[1]:
+                best, chosen = 1.0, j
+                break
+            if min_length and min(len(b[1]), len(a[1])) < min_length:
+                continue
+            matcher = difflib.SequenceMatcher(None, b[1], a[1], autojunk=False)
+            # quick_ratio is an upper bound on ratio and far cheaper to compute.
+            # If even the bound cannot beat the incumbent, the real ratio cannot
+            # either, so the skip is safe. This only started to matter once
+            # align() began running over a whole document's leftovers rather
+            # than one region -- that pass is thousands of comparisons.
+            if matcher.quick_ratio() <= best:
+                continue
+            ratio = matcher.ratio()
             if ratio > best:
                 best, chosen = ratio, j
         if chosen is None:
@@ -185,29 +258,57 @@ def compare(before: list[Block], after: list[Block]) -> dict:
     identical = 0
     real: dict[tuple, list[dict]] = {}
     added, deleted = [], []
+
+    def take(b: Block, a: Block) -> None:
+        """File one aligned block pair into the bucket its rule set says."""
+        nonlocal identical
+        record = {
+            "before_id": b[0], "after_id": a[0],
+            "before": b[1], "after": a[1],
+        }
+        rules = classify(b[1], a[1])
+        if rules is None:
+            real.setdefault(signature(b[1], a[1]), []).append(record)
+            return
+        if not rules:
+            # Same text on both sides, swept into a region by a neighbour.
+            # Counted only so the block totals add up.
+            identical += 1
+            return
+        negatives[rules] += 1
+        negative_items.append({"rules": list(rules), **record})
+
+    # Pass 1 is region-local, which is what keeps a block paired with its actual
+    # neighbour rather than a similar-looking one on the far side of the
+    # document. But a region is drawn by difflib over block *sequences*, so when
+    # a table is reordered the two halves of one edit land in different regions
+    # and never get compared. Measuring the leftovers showed 15.5% of them had a
+    # counterpart above the threshold that pass 1 simply never looked at -- more
+    # than the 7.3% sitting just below the threshold.
+    #
+    # So leftovers are held back rather than written off, and pass 2 aligns the
+    # whole pool at once. Locality still wins: pass 1 has already claimed every
+    # pair it could see, and pass 2 only ever sees what nothing local wanted.
+    leftover_before: list[Block] = []
+    leftover_after: list[Block] = []
     for bs, as_ in regions:
         for b, a in align(bs, as_):
             if b is None:
-                added.append({"id": a[0], "text": a[1]})
-                continue
-            if a is None:
-                deleted.append({"id": b[0], "text": b[1]})
-                continue
-            record = {
-                "before_id": b[0], "after_id": a[0],
-                "before": b[1], "after": a[1],
-            }
-            rules = classify(b[1], a[1])
-            if rules is None:
-                real.setdefault(signature(b[1], a[1]), []).append(record)
-                continue
-            if not rules:
-                # Same text on both sides, swept into a region by a neighbour.
-                # Counted only so the block totals add up.
-                identical += 1
-                continue
-            negatives[rules] += 1
-            negative_items.append({"rules": list(rules), **record})
+                leftover_after.append(a)
+            elif a is None:
+                leftover_before.append(b)
+            else:
+                take(b, a)
+
+    recovered = 0
+    for b, a in align(leftover_before, leftover_after, min_length=30):
+        if b is None:
+            added.append({"id": a[0], "text": a[1]})
+        elif a is None:
+            deleted.append({"id": b[0], "text": b[1]})
+        else:
+            take(b, a)
+            recovered += 1
     groups = sorted(real.items(), key=lambda kv: -len(kv[1]))
     real_groups = [
         {
@@ -220,6 +321,8 @@ def compare(before: list[Block], after: list[Block]) -> dict:
     return {
         "regions": len(regions),
         "similarity": round(matcher.ratio(), 4),
+        # pairs that pass 1 would have written off as add/delete
+        "recovered_by_second_pass": recovered,
         "no_real_change": {
             "blocks": sum(negatives.values()),
             "groups": {"+".join(k): v for k, v in negatives.most_common()},
