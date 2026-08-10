@@ -4,8 +4,9 @@
 위해서다. 치환은 `string.Template`(`$before` 꼴)을 쓴다 -- `str.format`은 프롬프트에
 들어 있는 JSON 스키마의 중괄호를 서식 지시자로 읽고 깨진다.
 
-채점은 `rubric.md`의 A1~A5만 한다. B1·B2(`direct_impact`가 영향 주체를 짚었는지,
-재진술이 아닌지)는 사람이 읽어야 하므로 여기서 매기지 않고, 읽을 수 있게 파일로 남긴다.
+채점은 `rubric.md`의 A1~A8을 한다. B1(재진술이 아닌지)은 사람이 읽어야 하므로 여기서
+매기지 않고, 읽을 수 있게 파일로 남긴다. 다만 개정 후 원문과 너무 닮은 것은 사람이
+읽기 전에 걸러낼 수 있으므로 유사도를 함께 기록한다.
 
 같은 항목을 여러 번 돌리는 이유는 `temperature`가 0이 아니어서다. 1회 결과로 좋아졌다고
 하면 노이즈를 붙잡을 수 있다.
@@ -17,6 +18,7 @@
 from __future__ import annotations
 
 import argparse
+import difflib
 import json
 import os
 import sys
@@ -29,9 +31,15 @@ sys.path.insert(0, str(REPOSITORY_DIR))
 import solar  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
+KEYS = ("A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8")
 TARGETS = ["기한·시점", "수치·기준", "적용 범위", "수행 주체",
            "절차·요건", "제출물·기재사항", "명칭"]
 DIRECTIONS = ["늘었다", "줄었다", "다른 값", "새로 생겼다", "없어졌다"]
+
+# rubric.md의 기계 선별기. 이 값 이상이면 사람이 읽지 않고 B1을 0으로 둔다. 합격 판정에는
+# 쓰지 않는다 -- 유사도가 낮은 실패가 실제로 있다(v1의 terms-game-renumber가 0.31에 실패).
+# 18호출에 맞춘 값이라 근거가 약하다는 것도 rubric.md에 적어 뒀다.
+RESTATEMENT_THRESHOLD = 0.60
 
 
 # 모델이 JSON 앞뒤에 붙인 군더더기를 걷어내고 객체 하나만 꺼낸다.
@@ -63,10 +71,23 @@ def label_pairs(labels) -> list[tuple[str, str]] | None:
     return pairs
 
 
-# 호출 하나를 rubric.md의 A1~A5로 채점한다. 각 항목 0 또는 1.
+# impacts 배열에서 주체 문자열만 꺼낸다. 모양이 어긋나면 빈 목록.
+def impact_subjects(impacts) -> list[str]:
+    if not isinstance(impacts, list):
+        return []
+    return [str(x.get("주체", "")) for x in impacts if isinstance(x, dict)]
+
+
+# 허용 표기 중 하나라도 안에 들어 있으면 그 주체를 담은 것으로 본다. 표기가 흔들리기
+# 때문이다 -- `연구책임자`가 `주관연구개발기관의 연구책임자`로 나와도 같은 사람이다.
+def mentions(haystack: str, forms: list[str]) -> bool:
+    return any(form and form in haystack for form in forms)
+
+
+# 호출 하나를 rubric.md의 A1~A8로 채점한다. 각 항목 0 또는 1.
 def score(item: dict, raw: str) -> dict:
-    """rubric.md의 A1~A5. B1·B2는 사람 몫이라 매기지 않는다."""
-    result = {k: 0 for k in ("A1", "A2", "A3", "A4", "A5")}
+    """rubric.md의 A1~A8. B1(재진술 아님)은 사람 몫이라 매기지 않는다."""
+    result = {k: 0 for k in KEYS}
     parsed = parse_output(raw)
     if parsed is None:
         return {**result, "parsed": None}
@@ -80,7 +101,39 @@ def score(item: dict, raw: str) -> dict:
     result["A4"] = int(str(parsed.get("judgement", "")).strip() == item["judgement"])
     expected = {(x["대상"], x["방향"]) for x in item["labels"]}
     result["A5"] = int(set(pairs) == expected)
+
+    subjects = impact_subjects(parsed.get("impacts"))
+    sentence = str(parsed.get("direct_impact") or "")
+
+    # A6 -- negative면 둘 다 비어 있어야 한다. positive면 이 항목은 자동 1점이라,
+    # negative 항목에서만 실제로 걸린다.
+    if item["judgement"] == "negative":
+        result["A6"] = int(not subjects and not sentence.strip())
+    else:
+        result["A6"] = 1
+
+    # A7 -- 정답 주체를 다 담았나. 포함 관계로만 보고 여분은 깎지 않는다(rubric.md).
+    # 정답이 빈 목록이면(negative) 자동으로 참이 된다.
+    blob = " ".join(subjects)
+    result["A7"] = int(all(mentions(blob, ref["주체"])
+                           for ref in item.get("reference_impacts", [])))
+
+    # A8 -- 자기가 낸 주체를 문장에서 흘리지 않았나. positive인데 배열이 비어 있으면
+    # 검사할 것이 없어 자동으로 참이 되므로, 그 경우는 0으로 막는다. 안 그러면 배열을
+    # 통째로 빼먹은 출력이 이 점수를 공짜로 받는다.
+    if item["judgement"] == "positive" and not subjects:
+        result["A8"] = 0
+    else:
+        result["A8"] = int(all(s in sentence for s in subjects if s))
     return {**result, "parsed": parsed}
+
+
+# B1을 사람이 읽기 전에 명백한 복사를 걸러낸다. 합격 판정이 아니라 걸러내기다.
+def restatement_ratio(item: dict, sentence: str) -> float | None:
+    if not sentence.strip():
+        return None
+    return round(difflib.SequenceMatcher(
+        None, sentence, item["after"], autojunk=False).ratio(), 3)
 
 
 # 프롬프트 하나를 고른 split에 repeat회씩 돌리고, 채점 결과를 runs/ 아래에 남긴다.
@@ -131,21 +184,32 @@ def main() -> None:
                 continue
             marked = score(item, raw)
             parsed = marked.pop("parsed")
+            sentence = (parsed or {}).get("direct_impact") or ""
+            ratio = restatement_ratio(item, sentence)
+            # impacts는 v2부터 나온다. v1 이하에는 없으므로 None으로 남는다.
+            # b1_screen이 True면 사람이 읽지 않고 B1을 0으로 둔다(rubric.md).
             record = {"item": item["id"], "turn": turn, "scores": marked,
                       "labels": (parsed or {}).get("labels"),
+                      "impacts": (parsed or {}).get("impacts"),
                       "direct_impact": (parsed or {}).get("direct_impact"),
+                      "restatement_ratio": ratio,
+                      "b1_screen": bool(ratio is not None
+                                        and ratio >= RESTATEMENT_THRESHOLD),
                       "raw": raw}
             records.append(record)
             marks.append(str(sum(marked.values())))
-        print(f"  {item['id']:<22} {item['split']:<8} A점수 {' '.join(marks)} / 5")
+        print(f"  {item['id']:<22} {item['split']:<8} A점수 {' '.join(marks)} / {len(KEYS)}")
 
     graded = [r for r in records if "scores" in r]
-    totals = {k: sum(r["scores"][k] for r in graded) for k in ("A1", "A2", "A3", "A4", "A5")}
+    totals = {k: sum(r["scores"][k] for r in graded) for k in KEYS}
+    screened = sum(1 for r in graded if r["b1_screen"])
     summary = {
         "prompt": args.prompt, "split": args.split, "repeat": args.repeat,
         "calls": len(records), "failures": failures,
         "A_rates": {k: round(v / len(graded), 3) for k, v in totals.items()} if graded else {},
-        "A_mean": round(sum(totals.values()) / (5 * len(graded)), 3) if graded else 0,
+        "A_mean": round(sum(totals.values()) / (len(KEYS) * len(graded)), 3) if graded else 0,
+        "b1_screened_out": screened,
+        "restatement_threshold": RESTATEMENT_THRESHOLD,
     }
     solar.write_json(out_dir / "summary.json", summary)
     solar.write_json(out_dir / "records.json", records)
@@ -155,7 +219,9 @@ def main() -> None:
         print(f"  {key} {rate:>6.1%}")
     print(f"  A 평균 {summary['A_mean']:.1%}   실패 {failures}건")
     print(f"\n저장: {out_dir.relative_to(REPOSITORY_DIR)}")
-    print("B1·B2는 records.json의 direct_impact를 읽고 사람이 매깁니다.")
+    print(f"B1은 records.json의 impacts·direct_impact를 읽고 사람이 매깁니다.")
+    print(f"  유사도 {RESTATEMENT_THRESHOLD} 이상이라 안 읽어도 되는 것: {screened}건"
+          f" (b1_screen이 true)")
 
 
 if __name__ == "__main__":
