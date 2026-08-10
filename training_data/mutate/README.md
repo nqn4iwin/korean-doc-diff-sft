@@ -71,3 +71,24 @@ python training_data/mutate/run.py --prompt v0.1 v0.2 v0.3
 
 생성은 temperature 0.9(같은 조합 3회가 서로 달라야 표본이 는다), 판정은 0.2(흔들리면 안
 된다)로 돈다. `solar_request.json`이 온도를 고정하고 있어 페이로드를 만든 뒤 덮어쓴다.
+
+`generate.py`는 그렇게 깎은 프롬프트를 문서 하나에 통째로 적용한다. 조항을 고르고 지시를
+정하는 일까지 기계가 한다. `--concurrency`로 요청을 여러 개 동시에 띄운다 — 한 건씩
+보내면 서버에 요청이 항상 하나만 떠 있어 GPU가 논다.
+
+```
+python training_data/mutate/generate.py DOC --prompt v1.1 --limit 180 --concurrency 16
+```
+
+`review.py`가 그 산출물을 **사람이 채점할 HTML 한 장**으로 묶는다. 기계 게이트는
+`generate.py`가 매기지만 **H1(개정문다움)은 사람이 읽어야 하고**, `pairs.json`을 그대로
+읽으면 한 건이 수십 줄이라 100건을 훑을 수 없다. 바뀐 곳에 색을 입히고, 역할 A의 해석은
+접어 두고(H1은 개정문만 보고 매긴다), 점수를 `localStorage`에 남겨 나눠서 볼 수 있게 한다.
+
+```
+python training_data/mutate/review.py runs/<실행 디렉터리>
+python training_data/mutate/review.py runs/<실행 디렉터리> --limit 160 --bucket all
+```
+
+기본값은 `학습 후보`와 `사람 확인 필요` 100건이다. 결과는 페이지 맨 아래에 탭 구분 표로
+쌓인다.

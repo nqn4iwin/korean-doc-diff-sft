@@ -18,6 +18,7 @@ block_components.py`가 이 일을 하도록 만들어졌으나 **옛 13종 어�
 
 사용:
     python training_data/mutate/generate.py DOC --prompt v1.1 --limit 20
+    python training_data/mutate/generate.py DOC --prompt v1.1 --limit 200 --concurrency 16
     python training_data/mutate/generate.py DOC --prompt v1.1 --dry-run   # 호출 없이 계획만
 """
 from __future__ import annotations
@@ -28,6 +29,7 @@ import os
 import re
 import sys
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from string import Template
 
@@ -122,6 +124,8 @@ def main() -> None:
     ap.add_argument("--prompt", required=True)
     ap.add_argument("--limit", type=int, default=20, help="생성할 pair 수 상한")
     ap.add_argument("--per-clause", type=int, default=2, help="조항 하나에 걸 지시 수")
+    ap.add_argument("--concurrency", type=int, default=8,
+                    help="동시에 띄울 요청 수. GPU가 놀지 않을 만큼 올린다")
     ap.add_argument("--dry-run", action="store_true", help="호출 없이 계획만 출력")
     args = ap.parse_args()
 
@@ -168,8 +172,10 @@ def main() -> None:
 
     out_dir = HERE / "runs" / f"{solar.timestamp()}__generate__{args.document.stem}"
     out_dir.mkdir(parents=True, exist_ok=True)
-    pairs, failures = [], 0
-    for index, job in enumerate(plan, 1):
+
+    def work(numbered: tuple[int, dict]) -> dict:
+        """계획 한 건. 생성 → 채점 → 왕복 검증까지 하고 레코드를 돌려준다."""
+        index, job = numbered
         target, direction = job["instruct"]["대상"], job["instruct"]["방향"]
         prompt = template.substitute(
             clause=job["clause"], target=target, direction=direction,
@@ -177,10 +183,8 @@ def main() -> None:
         try:
             raw = _run.call(url, api_key, prompt, _run.GENERATE_TEMPERATURE, timeout)
         except Exception as error:
-            failures += 1
             print(f"  [{index}/{len(plan)}] x 생성 실패 {job['block_id']}")
-            pairs.append({**job, "error": solar.safe_error(error)})
-            continue
+            return {**job, "error": solar.safe_error(error)}
         marked = _run.score_generation(job, raw)
         after = marked.pop("after")
         trip = {"M5": 0, "judge_labels": None, "judge_judgement": None, "judge_raw": None}
@@ -188,7 +192,6 @@ def main() -> None:
             try:
                 trip = _run.round_trip(url, api_key, timeout, judge, job, after)
             except Exception as error:
-                failures += 1
                 trip["judge_error"] = solar.safe_error(error)
         scores = {k: marked.get(k, 0) for k in ("M1", "M2", "M3", "M4")}
         scores["M5"] = trip.pop("M5")
@@ -204,18 +207,27 @@ def main() -> None:
                   else "학습 후보" if all(gates.values())
                   else "negative" if scores["M1"] and not scores["M2"]
                   else "라벨 교체 후보" if scores["M5"] == 0 and after else "폐기")
-        pairs.append({**job, "after": after, "scores": scores, "bucket": bucket,
-                      "inspect": notes,
-                      "changed_ratio": marked.get("changed_ratio"), **trip, "raw": raw})
         print(f"  [{index}/{len(plan)}] {sum(gates.values())}/5  {bucket:<12} "
               f"({target}, {direction})  {job['block_id']}")
+        return {**job, "after": after, "scores": scores, "bucket": bucket,
+                "inspect": notes,
+                "changed_ratio": marked.get("changed_ratio"), **trip, "raw": raw}
+
+    # 한 건씩 보내면 서버에 요청이 항상 하나만 떠 있어 GPU가 논다. 요청을 여러 개
+    # 동시에 띄워야 서버가 묶어서 처리한다(continuous batching). `work`가 공유하는
+    # 것은 전부 읽기 전용이고 `_run.call`은 호출마다 페이로드를 새로 만들므로
+    # 스레드로 나눠도 된다 -- 기다리는 동안 GIL을 놓는 것은 HTTP 대기뿐이다.
+    with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
+        pairs = list(pool.map(work, enumerate(plan, 1)))
 
     graded = [p for p in pairs if "scores" in p]
+    failures = sum("error" in p for p in pairs) + sum("judge_error" in p for p in pairs)
     buckets = Counter(p["bucket"] for p in graded)
     summary = {
         "document": str(args.document), "prompt": args.prompt,
         "judge_prompt": _run.JUDGE_PROMPT, "planned": len(plan),
         "generated": len(graded), "failures": failures,
+        "concurrency": args.concurrency,
         "buckets": dict(buckets),
         "M_rates": {k: round(sum(p["scores"][k] for p in graded) / len(graded), 3)
                     for k in ("M1", "M2", "M3", "M4", "M5", "M7")} if graded else {},
