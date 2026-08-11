@@ -88,7 +88,7 @@
       <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
         <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a>
         · <a href="https://rnd.dacon.kr/drive/s/uQIDDBIJxiPO3kXg_SEFVQ" target="_blank" rel="noopener">문서 모음 (공유 드라이브)</a></p>
-      <span class="updated">기준일: 2026-08-11</span>
+      <span class="updated">기준일: 2026-08-11 (18:00)</span>
     </header>
 
     <div class="grid">
@@ -96,7 +96,7 @@
         <h2 id="progress-title">현재 진행률</h2>
         <div class="big">40%</div>
         <div class="meter" aria-label="전체 진행률 40%"><span style="width:40%"></span></div>
-        <p class="note">막혀 있던 해설 품질이 풀렸습니다. 역할 A는 약 17%에서 <strong>93%</strong>가 되어 v2.2에서 잠갔고, 역할 B도 v1.1까지 세워 <strong>합성 경로가 사람 손 없이 한 바퀴 돕니다</strong>. 원천은 24 pair가 됐습니다. 역할 A·B 산출물의 평가 지표도 이번에 정의했습니다.</p>
+        <p class="note"><strong>오늘부터 학습에 들어갔습니다.</strong> 합성 6,000건을 기다리지 않고, 실제 문서의 실질 변경 697건에 해석을 붙여 <strong>학습 레코드 605건</strong>을 먼저 뽑았습니다. 그것으로 KORMo 1차 학습을 시작합니다 — 성능을 재려는 것이 아니라 <strong>이 모델에 어떤 학습 방법이 붙는지</strong>부터 확인하는 것이 목적입니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
@@ -106,11 +106,11 @@
           <tbody>
             <tr><td>원천데이터 확보</td><td>5개 분류 pair 확보, 추출·해시·블록 정렬</td><td>15</td><td>10</td></tr>
             <tr><td>전처리·라벨 체계 확정</td><td>정규화 8종, 3단 라벨 정의서 확정</td><td>15</td><td>15</td></tr>
-            <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 합성 파일럿 H1 검수</td><td>20</td><td>15</td></tr>
-            <tr class="zero"><td>학습데이터 파일럿 1,000건 생성</td><td>게이트 통과 1,000건 확보</td><td>10</td><td>0</td></tr>
-            <tr class="zero"><td>1차 학습</td><td>KORMo 학습 trial 5~10회</td><td>10</td><td>0</td></tr>
-            <tr class="zero"><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>5</td><td>0</td></tr>
-            <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>10</td><td>0</td></tr>
+            <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 홀드아웃 개방</td><td>10</td><td>10</td></tr>
+            <tr><td>학습데이터 605건 확보</td><td>실제 pair에 해석을 붙여 게이트 통과분 확보</td><td>5</td><td>5</td></tr>
+            <tr class="zero"><td>1차 학습</td><td>KORMo 학습 trial 5~10회</td><td>15</td><td>0</td></tr>
+            <tr class="zero"><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>0</td></tr>
+            <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>15</td><td>0</td></tr>
             <tr class="zero"><td>비교군·평가·분석</td><td>베이스라인 대비 가설의 채택 또는 기각 근거</td><td>15</td><td>0</td></tr>
           </tbody>
           <tfoot><tr><td colspan="2">합계</td><td>100</td><td>40</td></tr></tfoot>
@@ -125,9 +125,9 @@
           <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span class="holiday">8/8</span><span class="holiday">8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span class="holiday">8/22</span><span class="holiday">8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span><span>8/28</span><span class="holiday">8/29</span><span class="holiday">8/30</span><span>8/31</span></div></div>
           <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 24 / 60 pair. 합성 검증 뒤 재개</small></div><div class="track"><span class="bar hold" style="--start:1;--span:5">보류</span></div></div>
           <div class="gantt-row"><div class="task">전처리·라벨 체계 확정<small>정규화 8종, 3단 라벨, 2단 짝짓기</small></div><div class="track"><span class="bar done" style="--start:1;--span:3">완료</span></div></div>
-          <div class="gantt-row"><div class="task">Solar 입출력 정의·결과물 평가<small>역할 A v2.2·역할 B v1.1 잠금, 채점 항목 정의, 합성 180건 H1 검수</small></div><div class="track"><span class="bar current" style="--start:3;--span:6">현재</span></div></div>
-          <div class="gantt-row"><div class="task">학습데이터 파일럿 1,000건 생성<small>역할 B 확정 뒤 게이트 통과 1,000건</small></div><div class="track"><span class="bar current" style="--start:8;--span:2">현재</span></div></div>
-          <div class="gantt-row"><div class="task">1차 학습<small>KORMo 학습 trial 5~10회</small></div><div class="track"><span class="bar planned" style="--start:9;--span:6">예정</span></div></div>
+          <div class="gantt-row"><div class="task">Solar 입출력 정의·결과물 평가<small>역할 A 프롬프트 v2.2·역할 B 프롬프트 v1.1 잠금</small></div><div class="track"><span class="bar done" style="--start:3;--span:6">완료</span></div></div>
+          <div class="gantt-row"><div class="task">학습데이터 605건 확보<small>원천데이터 697쌍에 역할 A 해석을 붙임</small></div><div class="track"><span class="bar done" style="--start:7;--span:2">완료</span></div></div>
+          <div class="gantt-row"><div class="task">1차 학습<small>KORMo 학습 trial 5~10회</small></div><div class="track"><span class="bar current" style="--start:8;--span:7">현재</span></div></div>
           <div class="gantt-row"><div class="task">학습데이터 확대<small>실제 pair 분포를 세어 목표 비중을 맞춘 뒤 증량</small></div><div class="track"><span class="bar planned" style="--start:15;--span:2">예정</span></div></div>
           <div class="gantt-row"><div class="task">학습 고도화 (2차 학습)<small>학습 trial 20회까지</small></div><div class="track"><span class="bar planned" style="--start:16;--span:5">예정</span></div></div>
           <div class="gantt-row"><div class="task">비교군·평가·분석<small>베이스라인, 가설 검증</small></div><div class="track"><span class="bar planned" style="--start:21;--span:8">예정</span></div></div>
@@ -139,8 +139,9 @@
     <section aria-labelledby="next-title">
       <h2 id="next-title">지금 가장 중요한 다음 단계</h2>
       <div class="callout">
-        <strong>합성 160건을 사람이 읽고 H1(개정문다움)을 매깁니다. 그 숫자로 검수 비율을 정합니다.</strong><br>
-        게이트 M1~M7을 전부 통과한 것 중 3분의 1이 못 쓸 것이라는 결과가 세 번 반복됐습니다. 기획서 2.3절의 표본 검수 5%(200건마다 10건)로는 못 잡습니다. 전수 검수로 갈지 M7을 넓힐지를 정해야 하는데, 그 판단의 근거가 되는 <strong>H1이 지금까지 한 번도 안 매겨졌습니다</strong>. 채점 도구를 만들었으니 그것부터 채웁니다. 조항별 적용 가능 연산자 표는 그다음입니다.
+        <strong>605건으로 KORMo 1차 학습을 돌려, 이 모델에 어떤 학습 방법이 붙는지 확인합니다.</strong><br>
+        합성 6,000건을 기다리지 않고 실제 pair로 먼저 갑니다. 성능을 재려는 것이 아니라 <strong>무엇이 물리적으로 되는지</strong>를 보려는 것이라, 계열이 쏠리고 negative가 45%인 이 데이터로도 답이 나옵니다.<br><br>
+        그와 별개로 <strong>605건 중 100건에 사람 라벨을 붙여야 합니다.</strong> 역할 A를 6,000건에 자동으로 붙이려면 착수 기준이 있어야 하는데, 그것을 세울 유일한 경로입니다. 라벨을 붙일 사람이 하나뿐이라 검수자 간 일치도는 못 재고, <strong>라벨 정확도가 낮게 나와도 정의 문제인지 모델 문제인지 가릴 수단이 없다</strong>는 것을 감안해야 합니다.
       </div>
     </section>
 
@@ -188,7 +189,7 @@
         </div>
       </article>
       </details>
-      <details class="day" open>
+      <details class="day">
       <summary><time>2026-08-10</time><span class="tag">완료 — 합성 경로가 한 바퀴 돌았다</span></summary>
       <article class="entry">
         <div class="entry-head">진행 기록</div>
@@ -209,6 +210,28 @@
         </div>
       </article>
       </details>
+      <details class="day" open>
+      <summary><time>2026-08-11</time><span class="tag">완료 — 학습에 들어갔다</span></summary>
+      <article class="entry">
+        <div class="entry-head">진행 기록</div>
+        <div class="entry-grid">
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong>합성 데이터의 최종 품질 검수.</strong> 어제 뽑은 180건의 BH1(개정문다움)을 사람이 매겨 검수 비율을 정하고, 그 결과로 역할 B 프롬프트를 한 차례 더 손볼 계획이었다.<br><br><strong>그런데 GPU 일정이 앞당겨져 학습이 먼저가 됐다.</strong> 합성을 기다리지 않고 이미 있는 실제 pair로 학습 데이터를 만드는 쪽으로 방향을 틀었다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong>오전 — 문서 현행화</strong><br>일정과 진행률 기준을 다시 정의했다. 기획서에서 지금 방침과 반대로 적힌 곳을 고쳤다 — 출력 예시에 <code>impacts</code> 배열이 빠져 있었고, 걷어낸 라벨 개수 제한이 남아 있었다. 집계도 24쌍·697건으로 통일했다.<br><br><strong>낮 — 채점 항목 이름 변경</strong><br><code>A</code>·<code>B</code>·<code>M</code>·<code>H</code>가 역할이 아니라 문서의 절 순서와 채점자를 뒤섞어 가리키고 있었다. 앞 글자를 역할, 뒷 글자를 채점자로 잡아 <strong>AM·AH·BM·BH</strong>로 바꿨다. 15개 파일 439곳이다. 한글 조사가 정규식의 단어 경계를 막아(<code>A5는</code>·<code>B1을</code>) 두 번에 나눠 돌렸다.<br><br><strong>오후 — 교사 API 교체</strong><br>사내 서버에서 서빙중인 Solar-Open2 모델이 내려가 업스테이지 공개 API(Solar-Pro4)로 옮겼다. 모델이 바뀌면 과거 수치가 기준선 노릇을 못 하므로 tune 8건을 다시 돌려 새 기준선을 잡았다(평균 92.2%, 오히려 올랐다!).<br><br>605건에 대해 역할 A로 생성을 시켜보았는데, 속도 때문에 <code>reasoning_effort</code>를 껐다가 <strong>negative 판정이 통째로 무너졌다</strong> — AM4가 100%에서 62.5%로 떨어지고, negative 3건을 24호출이 전부 positive로 읽었다. 추론 여부는 적게(low)라도 키는 것이 필요했고, 차라리 동시 호출을 하는 방식으로 수정했다.<br><br><strong>저녁 — 홀드아웃과 학습 데이터</strong><br>홀드아웃(test set)의 유일한 negative가 프롬프트에 예시로 적혀 있는 항목이라 변경이 필요했다. <strong>97.2%로 tune보다 높아 과적합 징후가 없다.</strong> 실질 변경 697건에 해석을 붙여 <strong>학습 레코드 605건</strong>을 뽑았다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong>합성 6,000건 생성.</strong> Solar API로 먼저 시도하고, 막히면 클로드로 돌린다.<br><br>그리고 605건에 <strong>사람 라벨 100건</strong>을 붙여야 한다. A-2 착수 기준을 세울 유일한 경로인데, 라벨을 붙일 사람이 하나뿐이라 검수자 간 일치도는 못 잰다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt">· <code>1c01d08</code> fix: Fix 진행상황.html·기획서_최종.md 등 문서 현행화<br>· <code>adcfdd0</code> refactor: mutate 채점 항목 이름을 BM·BH로 바꿔 역할이 드러나게 한다<br>· <code>7587a7e</code> refactor: interpret 채점 항목 이름을 AM·AH로 바꾸고 AH1 채점 결과를 적는다<br>· <code>76cd601</code> fix: 홀드아웃의 유출된 negative를 갈아 끼운다<br>· <code>fdb37c7</code> add: Add 설계_메모.md와 rubric의 AM6s·AM8s 명명<br>· <code>bfd39be</code> add: Add annotate.py·export.py — 교사 API를 갈아 끼우고 학습 레코드 605건을 뽑는다</p></div>
+        </div>
+      </article>
+      <article class="entry">
+        <div class="entry-head">회고</div>
+        <div class="entry-grid">
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt"><strong>학습을 돌리려고 했는데 신경 쓸 것이 너무 많았다.</strong> 학습 준비에만 두세 시간이 걸렸다. 정작 학습 자체는 퇴근할 때 되어서야 시작했다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt"><strong>학습은 데이터만 있으면 되는 줄 알았는데, 그 앞에 조건을 고정하는 일이 줄줄이 있었다.</strong> 교사 모델이 바뀌면 지금까지의 수치가 기준선 노릇을 못 하고, 채점 항목 이름이 어긋나 있으면 표를 잘못 읽고, 홀드아웃에 정답이 새어 있으면 과적합을 못 잰다. 어느 하나도 학습 자체는 아닌데 빼먹으면 결과를 해석할 수 없다. 게다가 오늘은 서버가 내려가 모델이 바뀌고 속도 때문에 추론까지 끄면서 <strong>조건이 한꺼번에 흔들렸다.</strong></p></div>
+          <div><h3>다음에는 어떻게 할까</h3><p class="prompt"><strong>조건이 바뀌면 큰 실행을 하기 전에 기준선부터 다시 잡는다.</strong> 오늘 tune 8건 24호출이 정확히 그 역할을 했다. 그거 하나로 "새 모델이 옛 모델보다 낫다"와 "추론을 끄면 무너진다"가 둘 다 잡혔다. <strong>24호출은 697건에 비하면 공짜다.</strong><br><br>그리고 <strong>한 번에 하나만 바꾼다.</strong> 오늘 모델과 추론을 같이 바꿔서 원인을 가리는 데 한 판을 더 썼다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong>KORMo에 어떤 학습 방법이 붙을 수 있는지 확인해야 한다.</strong> 그걸 보려고 605건으로 파일럿 학습을 돌리는 중이다. 성능을 재려는 것이 아니라 <strong>무엇이 물리적으로 되는지</strong>를 먼저 보려는 것이다.</p></div>
+        </div>
+      </article>
+      </details>
+
       <details class="day">
       <summary><time>YYYY-MM-DD</time><span class="tag">진행 중 / 완료 / 막힘</span></summary>
       <article class="entry">
@@ -236,10 +259,12 @@
       <h2 id="decision-title">결정 기록</h2>
       <p class="note">일일 기록 외에 남기면 좋은 항목입니다. 나중에 “왜 이 방향을 택했는지”를 다시 찾지 않아도 됩니다.</p>
       <div class="card">
-        <div class="decision"><strong>날짜</strong><strong>결정</strong><strong>근거 / 다시 볼 조건</strong></div>
+        <div class="decision"><strong>날짜</strong><strong>결정</strong><strong>근거</strong></div>
         <div class="decision"><span>2026-08-05</span><span>앞단 A(해석 붙이기)는 Solar가 아니라 사람이 맡는다</span><span><code>interpret_probe</code>에서 라벨 일치가 6건 중 3건이었고 틀린 답에도 <code>high</code>가 붙었다. few-shot 예시에 반반 확률의 라벨을 넣을 수 없다. 몇 건만 필요하므로 사람이 쓰는 편이 싸다</span></div>
-        <div class="decision"><span>2026-08-10</span><span>역할 A·B 산출물의 평가 지표를 정의했다 (A·B / M·C / H)</span><span>역할 A는 기계 채점 <strong>A1~A8</strong>과 사람 채점 <strong>B1</strong>, 역할 B는 기계 채점 <strong>M1~M7</strong>과 사람 채점 <strong>H1</strong>이다. M7은 <code>text_check.py</code>의 규칙 <strong>C1~C4</strong>로 매기며 하드 게이트가 아니라 표시다. 버킷을 가르는 것은 M1~M5뿐이다. 정의는 각 역할의 <code>rubric.md</code>에, 표는 <code>학습데이터_생성_프로세스.md</code> 3절에 있다. <strong>다시 볼 조건</strong> — 새 실패 유형이 나와 항목을 또 늘리게 될 때. 지표를 고정할지 판올림할지 그때 정한다</span></div>
+        <div class="decision"><span>2026-08-10</span><span>역할 A·B 산출물의 평가 지표를 정의했다 (AM·AH / BM·BH / C)</span><span>역할 A는 기계 채점 <strong>AM1~AM8</strong>과 사람 채점 <strong>AH1</strong>, 역할 B는 기계 채점 <strong>BM1~BM7</strong>과 사람 채점 <strong>BH1</strong>이다. BM7은 <code>text_check.py</code>의 규칙 <strong>C1~C4</strong>로 매기며 하드 게이트가 아니라 표시다. 버킷을 가르는 것은 BM1~BM5뿐이다. 정의는 각 역할의 <code>rubric.md</code>에, 표는 <code>학습데이터_생성_프로세스.md</code> 3절에 있다.</span></div>
         <div class="decision"><span>2026-08-10</span><span>역할 A의 프롬프트 루프를 v2.2에서 멈추고 역할 B로 넘어간다</span><span>역할 B에게 줄 few-shot 예시를 만드는 데 필요한 것이 끝났다. 합성 pair에 해석을 붙이는 일(A-2)은 역할 B가 pair를 만든 뒤에 오므로 순서가 안 꼬인다. 6,000건에 자동으로 붙일 때 과적합이 문제가 되므로 그때 다시 본다</span></div>
+        <div class="decision"><span>2026-08-11</span><span>합성 6,000건을 기다리지 않고 실제 pair 605건으로 먼저 학습에 들어간다</span><span>GPU 일정이 앞당겨졌고, 마침 실질 변경 697건에 역할 A를 붙일 수 있는 상태였다. <strong>성능을 재려는 것이 아니라 KORMo에 어떤 학습 방법이 붙는지부터 확인하는 것이 목적</strong>이라 605건으로 충분하다. 다만 이 데이터는 계열이 쏠려 있고(처리방침 60%) negative가 45%라 목표 비중과 다르므로, <strong>여기서 나온 성능 수치를 가설 검증에 쓰지 않는다.</strong></span></div>
+        <div class="decision"><span>2026-08-11</span><span>교사 호출에서 <code>reasoning_effort</code>를 끄지 않는다</span><span>속도를 얻으려고 껐더니 negative 판정이 무너졌다 — AM4가 100%에서 62.5%로 떨어지고 negative 3건을 24호출이 전부 positive로 읽었다. 온도가 0.2인데 3회가 안 흔들린 같은 오답이라 구조적 실패다. 실질 변경이 아닌 것을 가려내는 일은 정규화 규칙으로 못 걸러 역할 A 1단계에 맡긴 몫이라, 여기가 무너지면 697건의 절반이 그대로 학습에 들어간다. <strong>속도는 동시 요청으로 얻는다.</strong> 경위는 <code>설계_메모.md</code> 5절.</span></div>
         <div class="decision"><span class="empty">YYYY-MM-DD</span><span class="empty">예: PDF pair는 라벨링에서 보류</span><span class="empty">문단 추출 경로를 확보하면 다시 검토</span></div>
       </div>
     </section>
