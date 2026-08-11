@@ -14,6 +14,7 @@
 사용:
     python training_data/interpret/run.py --prompt v1
     python training_data/interpret/run.py --prompt v1.1 --split holdout
+    python training_data/interpret/run.py --prompt v2.2 --concurrency 8
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ import difflib
 import json
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from string import Template
 
@@ -142,6 +144,9 @@ def main() -> None:
     ap.add_argument("--prompt", required=True, help="prompts/<이 값>.txt")
     ap.add_argument("--split", default="tune", choices=["tune", "holdout", "all"])
     ap.add_argument("--repeat", type=int, default=3)
+    ap.add_argument("--concurrency", type=int, default=8,
+                    help="동시에 띄울 요청 수. 한 건씩 보내면 서버에 요청이 항상 하나만 "
+                         "떠 있어 GPU가 논다(generate.py와 같은 이유)")
     args = ap.parse_args()
 
     template = Template((HERE / "prompts" / f"{args.prompt}.txt").read_text(encoding="utf-8"))
@@ -159,8 +164,9 @@ def main() -> None:
     out_dir = HERE / "runs" / f"{solar.timestamp()}__{args.prompt}__{args.split}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    records, failures = [], 0
-    print(f"프롬프트 {args.prompt} · {args.split} {len(items)}건 × {args.repeat}회")
+    # (항목, 회차)를 미리 펼쳐 두고 동시에 띄운다. 한 건씩 보내면 24호출에 몇 분이 걸린다.
+    # ThreadPoolExecutor.map은 입력 순서대로 결과를 돌려주므로 기록 순서는 전과 같다.
+    jobs = []
     for item in items:
         # given_labels는 v0.3(라벨 값을 준 조건)만 쓴다. 나머지 프롬프트에는 그 자리가
         # 없으므로 넘겨도 무시된다 -- 빠지면 substitute가 KeyError로 터진다.
@@ -170,34 +176,41 @@ def main() -> None:
             given_labels="\n".join(
                 f"- ({x['대상']}, {x['방향']})" for x in item["labels"]) or "- (없음)",
         )
-        marks = []
-        for turn in range(1, args.repeat + 1):
-            try:
-                response = solar.call_solar(
-                    url, api_key, solar.request_payload(prompt), timeout)
-                raw, _ = solar.extract_message(response)
-            except Exception as error:
-                failures += 1
-                marks.append("x")
-                records.append({"item": item["id"], "turn": turn,
-                                "error": solar.safe_error(error)})
-                continue
-            marked = score(item, raw)
-            parsed = marked.pop("parsed")
-            sentence = (parsed or {}).get("direct_impact") or ""
-            ratio = restatement_ratio(item, sentence)
-            # impacts는 v2부터 나온다. v1 이하에는 없으므로 None으로 남는다.
-            # ah1_screen이 True면 사람이 읽지 않고 AH1을 0으로 둔다(rubric.md).
-            record = {"item": item["id"], "turn": turn, "scores": marked,
-                      "labels": (parsed or {}).get("labels"),
-                      "impacts": (parsed or {}).get("impacts"),
-                      "direct_impact": (parsed or {}).get("direct_impact"),
-                      "restatement_ratio": ratio,
-                      "ah1_screen": bool(ratio is not None
-                                        and ratio >= RESTATEMENT_THRESHOLD),
-                      "raw": raw}
-            records.append(record)
-            marks.append(str(sum(marked.values())))
+        jobs.extend((item, turn, prompt) for turn in range(1, args.repeat + 1))
+
+    def work(job: tuple) -> dict:
+        item, turn, prompt = job
+        try:
+            response = solar.call_solar(
+                url, api_key, solar.request_payload(prompt), timeout)
+            raw, _ = solar.extract_message(response)
+        except Exception as error:
+            return {"item": item["id"], "turn": turn,
+                    "error": solar.safe_error(error)}
+        marked = score(item, raw)
+        parsed = marked.pop("parsed")
+        sentence = (parsed or {}).get("direct_impact") or ""
+        ratio = restatement_ratio(item, sentence)
+        # impacts는 v2부터 나온다. v1 이하에는 없으므로 None으로 남는다.
+        # ah1_screen이 True면 사람이 읽지 않고 AH1을 0으로 둔다(rubric.md).
+        return {"item": item["id"], "turn": turn, "scores": marked,
+                "labels": (parsed or {}).get("labels"),
+                "impacts": (parsed or {}).get("impacts"),
+                "direct_impact": (parsed or {}).get("direct_impact"),
+                "restatement_ratio": ratio,
+                "ah1_screen": bool(ratio is not None
+                                   and ratio >= RESTATEMENT_THRESHOLD),
+                "raw": raw}
+
+    print(f"프롬프트 {args.prompt} · {args.split} {len(items)}건 × {args.repeat}회"
+          f" = {len(jobs)}호출 (동시 {args.concurrency})")
+    with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
+        records = list(pool.map(work, jobs))
+    failures = sum(1 for r in records if "error" in r)
+
+    for item in items:
+        marks = [str(sum(r["scores"].values())) if "scores" in r else "x"
+                 for r in records if r["item"] == item["id"]]
         print(f"  {item['id']:<22} {item['split']:<8} A점수 {' '.join(marks)} / {len(KEYS)}")
 
     graded = [r for r in records if "scores" in r]
