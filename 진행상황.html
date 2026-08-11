@@ -32,9 +32,16 @@
     .dates { display:grid; grid-template-columns:repeat(28,1fr); text-align:center; }
     .dates > span { font-size:11px; letter-spacing:-.03em; }
     .dates > span.holiday { color:#d92d20; font-weight:700; }
-    /* 8/15~8/17 휴일. 28칸 중 12~14번째라 왼쪽에서 39.29%~50.00% 구간이다. */
+    /* 휴일 음영. 한 칸이 100/28 = 3.571%이므로 n번째 칸은 (n-1)*3.571% ~ n*3.571%다.
+       주말 8/8·8/9(5~6칸), 8/22·8/23(19~20칸), 8/29·8/30(26~27칸)과
+       광복절 연휴 8/15~8/17(12~14칸)을 칠한다. */
     .track { position:relative; }
-    .track::before { content:""; position:absolute; top:0; bottom:0; left:39.286%; width:10.714%; background:#fee4e2; opacity:.55; pointer-events:none; }
+    .track::before { content:""; position:absolute; inset:0; opacity:.55; pointer-events:none;
+      background:linear-gradient(90deg,
+        transparent 14.286%, #fee4e2 14.286%, #fee4e2 21.429%, transparent 21.429%,
+        transparent 39.286%, #fee4e2 39.286%, #fee4e2 50.000%, transparent 50.000%,
+        transparent 64.286%, #fee4e2 64.286%, #fee4e2 71.429%, transparent 71.429%,
+        transparent 89.286%, #fee4e2 89.286%, #fee4e2 96.429%, transparent 96.429%); }
     .gantt-row { display:grid; grid-template-columns:270px 1fr; gap:12px; align-items:center; margin:10px 0; }
     .task { font-size:.92rem; }
     .task small { display:block; color:var(--muted); }
@@ -43,6 +50,13 @@
     .done { background:var(--done); } .current { background:var(--now); } .planned { background:var(--next); } .risk { background:var(--warn); } .hold { background:var(--warn); }
     .definition ul { margin:0; padding-left:20px; }
     .definition li + li { margin-top:6px; }
+    .score { width:100%; margin-top:14px; border-collapse:collapse; font-size:.82rem; }
+    .score th, .score td { padding:6px 8px; border-top:1px solid var(--line); text-align:left; vertical-align:top; }
+    .score thead th { border-top:0; color:var(--muted); font-weight:700; }
+    .score th:nth-child(n+3), .score td:nth-child(n+3) { width:48px; text-align:right; white-space:nowrap; }
+    .score tbody td:last-child { color:var(--done); font-weight:700; }
+    .score tbody tr.zero td:last-child { color:#98a2b3; font-weight:400; }
+    .score tfoot td { border-top:2px solid var(--line); font-weight:800; }
     .callout { padding:14px 16px; border-left:4px solid var(--now); border-radius:0 8px 8px 0; background:#eff6ff; }
     .entry { margin-top:12px; padding:18px; border:1px dashed #b9c6d3; border-radius:12px; background:#fff; }
     .entry-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:12px; }
@@ -72,43 +86,51 @@
     <header>
       <h1>문서 변경 해석 SLM · 진행상황</h1>
       <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
-        <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a></p>
-      <span class="updated">기준일: 2026-08-10</span>
+        <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a>
+        · <a href="https://rnd.dacon.kr/drive/s/uQIDDBIJxiPO3kXg_SEFVQ" target="_blank" rel="noopener">문서 모음 (공유 드라이브)</a></p>
+      <span class="updated">기준일: 2026-08-11</span>
     </header>
 
     <div class="grid">
       <section class="card summary" aria-labelledby="progress-title">
         <h2 id="progress-title">현재 진행률</h2>
-        <div class="big">25%</div>
-        <div class="meter" aria-label="전체 진행률 25%"><span style="width:25%"></span></div>
-        <p class="note">막혀 있던 해설 품질이 풀렸습니다. 역할 A는 약 17%에서 <strong>93%</strong>가 되어 v2.2에서 잠갔고, 역할 B도 v1.1까지 세워 <strong>합성 경로가 사람 손 없이 한 바퀴 돕니다</strong>. 원천은 24 pair가 됐습니다. 역할 A·B 산출물의 평가 지표도 이번에 정의했습니다.<br><br>다만 산출물을 그대로 학습에 넣을 수는 없습니다 — 게이트를 다 통과한 것 중 3분의 1이 못 쓸 것입니다. 사람이 160건을 읽어 그 비율을 재는 것이 다음 일입니다.</p>
+        <div class="big">40%</div>
+        <div class="meter" aria-label="전체 진행률 40%"><span style="width:40%"></span></div>
+        <p class="note">막혀 있던 해설 품질이 풀렸습니다. 역할 A는 약 17%에서 <strong>93%</strong>가 되어 v2.2에서 잠갔고, 역할 B도 v1.1까지 세워 <strong>합성 경로가 사람 손 없이 한 바퀴 돕니다</strong>. 원천은 24 pair가 됐습니다. 역할 A·B 산출물의 평가 지표도 이번에 정의했습니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
         <h2 id="definition-title">진행률을 세는 기준</h2>
-        <ul>
-          <li>달력 날짜나 파일 수가 아니라 <strong>완료 기준을 통과한 단계</strong>로 계산합니다.</li>
-          <li>원천데이터 확보 15%, 전처리·라벨 체계 확정 15%, 이후 여섯 단계 70%로 나눕니다.</li>
-          <li>실험은 다음 결정을 돕는 근거입니다. 실제 데이터 구축이나 모델 학습이 끝난 것으로는 계산하지 않습니다.</li>
-          <li>예상 일정은 현재 계획에 따른 추정입니다. 막힘이 생기면 날짜보다 완료 기준을 먼저 갱신합니다.</li>
-        </ul>
+        <table class="score">
+          <thead><tr><th>단계</th><th>완료 기준</th><th>배점</th><th>현재</th></tr></thead>
+          <tbody>
+            <tr><td>원천데이터 확보</td><td>5개 분류 pair 확보, 추출·해시·블록 정렬</td><td>15</td><td>10</td></tr>
+            <tr><td>전처리·라벨 체계 확정</td><td>정규화 8종, 3단 라벨 정의서 확정</td><td>15</td><td>15</td></tr>
+            <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 합성 파일럿 H1 검수</td><td>20</td><td>15</td></tr>
+            <tr class="zero"><td>학습데이터 파일럿 1,000건 생성</td><td>게이트 통과 1,000건 확보</td><td>10</td><td>0</td></tr>
+            <tr class="zero"><td>1차 학습</td><td>KORMo 학습 trial 5~10회</td><td>10</td><td>0</td></tr>
+            <tr class="zero"><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>5</td><td>0</td></tr>
+            <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>10</td><td>0</td></tr>
+            <tr class="zero"><td>비교군·평가·분석</td><td>베이스라인 대비 가설의 채택 또는 기각 근거</td><td>15</td><td>0</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>40</td></tr></tfoot>
+        </table>
       </section>
     </div>
 
     <section aria-labelledby="roadmap-title">
       <h2 id="roadmap-title">로드맵</h2>
-      <p class="note">초록은 완료, 파랑은 현재 단계, 회색은 예정 단계, 주황은 보류입니다. 일정은 기획서의 추진 계획과 현재 PLAN을 합쳐 표시했습니다.</p>
       <div class="gantt">
         <div class="timeline">
-          <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span>8/8</span><span>8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span>8/22</span><span>8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span><span>8/28</span><span>8/29</span><span>8/30</span><span>8/31</span></div></div>
+          <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span class="holiday">8/8</span><span class="holiday">8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span class="holiday">8/22</span><span class="holiday">8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span><span>8/28</span><span class="holiday">8/29</span><span class="holiday">8/30</span><span>8/31</span></div></div>
           <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 24 / 60 pair. 합성 검증 뒤 재개</small></div><div class="track"><span class="bar hold" style="--start:1;--span:5">보류</span></div></div>
           <div class="gantt-row"><div class="task">전처리·라벨 체계 확정<small>정규화 8종, 3단 라벨, 2단 짝짓기</small></div><div class="track"><span class="bar done" style="--start:1;--span:3">완료</span></div></div>
-          <div class="gantt-row"><div class="task">Solar 입출력·검수 기준<small>역할 A v2.2 잠금, 평가 지표 A·B / M·C / H 정의</small></div><div class="track"><span class="bar done" style="--start:1;--span:7">완료</span></div></div>
-          <div class="gantt-row"><div class="task">실제 pair 라벨링·분포 확인<small>유형 분포는 냈고, 대응 관계·성립 여부 표·일치도가 남음</small></div><div class="track"><span class="bar current" style="--start:7;--span:2">현재</span></div></div>
-          <div class="gantt-row"><div class="task">연산자 표·합성 파일럿<small>180건 실행 완료, H1 검수 160건 진행 중</small></div><div class="track"><span class="bar current" style="--start:7;--span:2">현재</span></div></div>
-          <div class="gantt-row"><div class="task">학습데이터 생성·1차 학습<small>역할 B 확정 뒤 1,000건, KORMo trial</small></div><div class="track"><span class="bar planned" style="--start:8;--span:4">예정</span></div></div>
-          <div class="gantt-row"><div class="task">데이터 확대·학습 고도화<small>trial 20회까지</small></div><div class="track"><span class="bar planned" style="--start:15;--span:4">예정</span></div></div>
-          <div class="gantt-row"><div class="task">비교군·평가·분석<small>베이스라인, 가설 검증</small></div><div class="track"><span class="bar planned" style="--start:21;--span:4">예정</span></div></div>
+          <div class="gantt-row"><div class="task">Solar 입출력 정의·결과물 평가<small>역할 A v2.2·역할 B v1.1 잠금, 채점 항목 정의, 합성 180건 H1 검수</small></div><div class="track"><span class="bar current" style="--start:3;--span:6">현재</span></div></div>
+          <div class="gantt-row"><div class="task">학습데이터 파일럿 1,000건 생성<small>역할 B 확정 뒤 게이트 통과 1,000건</small></div><div class="track"><span class="bar current" style="--start:8;--span:2">현재</span></div></div>
+          <div class="gantt-row"><div class="task">1차 학습<small>KORMo 학습 trial 5~10회</small></div><div class="track"><span class="bar planned" style="--start:9;--span:6">예정</span></div></div>
+          <div class="gantt-row"><div class="task">학습데이터 확대<small>실제 pair 분포를 세어 목표 비중을 맞춘 뒤 증량</small></div><div class="track"><span class="bar planned" style="--start:15;--span:2">예정</span></div></div>
+          <div class="gantt-row"><div class="task">학습 고도화 (2차 학습)<small>학습 trial 20회까지</small></div><div class="track"><span class="bar planned" style="--start:16;--span:5">예정</span></div></div>
+          <div class="gantt-row"><div class="task">비교군·평가·분석<small>베이스라인, 가설 검증</small></div><div class="track"><span class="bar planned" style="--start:21;--span:8">예정</span></div></div>
         </div>
       </div>
       <p class="legend"><span><i class="dot" style="background:var(--done)"></i>완료</span><span><i class="dot" style="background:var(--now)"></i>현재</span><span><i class="dot" style="background:var(--next)"></i>예정</span><span><i class="dot" style="background:var(--warn)"></i>보류</span></p>

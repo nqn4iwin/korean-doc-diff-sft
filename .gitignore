@@ -36,3 +36,5 @@ claude-repo-safety.sh
 
 # 역할 A·B 프롬프트 루프의 실행 출력 (프롬프트와 CHANGELOG만 추적한다)
 training_data/*/runs/
+# runs/의 산출물을 사람이 채점하도록 묶은 HTML. 점수는 브라우저에 남으므로 파일에 없다
+training_data/*/H_eval/
