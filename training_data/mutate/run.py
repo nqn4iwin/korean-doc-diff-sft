@@ -4,7 +4,7 @@
 
 첫째, **정답이 하나가 아니다.** "이 조항에 이 변경을 넣은 개정문"은 여럿이므로 문자열
 대조로 채점할 수 없다. 그래서 B가 쓴 개정문을 원문과 짝지어 **역할 A에게 blind로 넣고**,
-A가 지시받은 `(대상, 방향)`을 짚는지로 판정한다(M5). A는 B가 무슨 지시를 받았는지 모른다.
+A가 지시받은 `(대상, 방향)`을 짚는지로 판정한다(BM5). A는 B가 무슨 지시를 받았는지 모른다.
 
 둘째, **호출이 두 번이다.** 생성은 다양성이 필요해 temperature를 올리고, 검증은 흔들리면
 안 되므로 내린다. `solar_request.json`이 온도를 고정하고 있어 페이로드를 만든 뒤 덮어쓴다.
@@ -87,7 +87,7 @@ def parse_output(text: str) -> dict | None:
 
 
 def changed_ratio(before: str, after: str) -> float:
-    """두 조항이 서로 얼마나 다른가. 국소 수정 여부(M4)를 재는 데 쓴다.
+    """두 조항이 서로 얼마나 다른가. 국소 수정 여부(BM4)를 재는 데 쓴다.
 
     보존된 글자를 원문 길이로 나누면 안 된다. 그러면 **삽입만 하는 개정이 0으로 나온다**
     -- 원문이 통째로 살아 있기 때문이다. `전문기관의 장은` -> `전문기관의 장과
@@ -102,36 +102,36 @@ def changed_ratio(before: str, after: str) -> float:
 
 
 def score_generation(item: dict, raw: str) -> dict:
-    """A를 부르기 전에 매길 수 있는 것들. M1~M4."""
-    result = {k: 0 for k in ("M1", "M2", "M3", "M4")}
+    """A를 부르기 전에 매길 수 있는 것들. BM1~BM4."""
+    result = {k: 0 for k in ("BM1", "BM2", "BM3", "BM4")}
     parsed = parse_output(raw)
     if parsed is None:
         return {**result, "after": None, "changed_ratio": None}
     after = str(parsed.get("after") or "").strip()
     if not after:
         return {**result, "after": None, "changed_ratio": None}
-    result["M1"] = 1
+    result["BM1"] = 1
 
     before = item["clause"]
-    # M2 -- 실제로 달라졌나. 글자가 다른 것만으로는 부족하다. classify_diff의 정규화
+    # BM2 -- 실제로 달라졌나. 글자가 다른 것만으로는 부족하다. classify_diff의 정규화
     # 규칙에 걸리면 서식 차이일 뿐이라 실질 변경이 아니다(`실질 변경 없음` negative로
     # 따로 쓸 수는 있으나 지시한 변경을 넣은 것은 아니다).
-    result["M2"] = int(classify_diff.classify(before, after) is None)
+    result["BM2"] = int(classify_diff.classify(before, after) is None)
 
-    # M3 -- 분류 어휘가 본문에 새어 들어가면 왕복 검증이 무의미해진다.
+    # BM3 -- 분류 어휘가 본문에 새어 들어가면 왕복 검증이 무의미해진다.
     leaked = [w for w in (item["instruct"]["대상"], item["instruct"]["방향"]) if w in after]
-    result["M3"] = int(not leaked)
+    result["BM3"] = int(not leaked)
 
-    # M4 -- 국소 수정. 문턱값은 아직 근거가 없다(`rubric.md`). 지금은 재서 기록만 하고,
+    # BM4 -- 국소 수정. 문턱값은 아직 근거가 없다(`rubric.md`). 지금은 재서 기록만 하고,
     # 라운드가 쌓이면 통과·실패 분포를 보고 정한다.
     ratio = changed_ratio(before, after)
-    result["M4"] = int(ratio <= 0.5)
+    result["BM4"] = int(ratio <= 0.5)
     return {**result, "after": after, "changed_ratio": ratio, "leaked": leaked}
 
 
 def round_trip(url: str, api_key: str, timeout: int, judge: Template,
                item: dict, after: str) -> dict:
-    """B의 개정문을 A에게 blind로 넣고 지시받은 라벨이 나오는지 본다. M5."""
+    """B의 개정문을 A에게 blind로 넣고 지시받은 라벨이 나오는지 본다. BM5."""
     prompt = judge.substitute(
         before_id=f'{item["block_id"]}(원문)', before=item["clause"],
         after_id=f'{item["block_id"]}(개정)', after=after, given_labels="- (없음)")
@@ -143,7 +143,7 @@ def round_trip(url: str, api_key: str, timeout: int, judge: Template,
     return {
         # 완전일치가 아니라 포함으로 본다. 한 군데를 고쳐도 두 성격을 함께 띠는 일이
         # 흔하므로, A가 라벨을 더 붙이는 것은 벌하지 않는다(`rubric.md`).
-        "M5": int(want in got),
+        "BM5": int(want in got),
         "judge_judgement": (parsed or {}).get("judgement"),
         "judge_labels": labels,
         "judge_raw": raw,
@@ -168,7 +168,7 @@ def main() -> None:
     url = solar.chat_completions_url(solar.require_env("SOLAR_BASE_URL"))
     api_key = os.environ.get("SOLAR_API_KEY", "")
     timeout = int(os.environ.get("SOLAR_TIMEOUT_SECONDS", "180"))
-    keys = ("M1", "M2", "M3", "M4", "M5")
+    keys = ("BM1", "BM2", "BM3", "BM4", "BM5")
 
     for name in args.prompt:
         template = Template((HERE / "prompts" / f"{name}.txt").read_text(encoding="utf-8"))
@@ -195,17 +195,17 @@ def main() -> None:
                     continue
                 marked = score_generation(item, raw)
                 after = marked.pop("after")
-                trip = {"M5": 0, "judge_judgement": None, "judge_labels": None,
+                trip = {"BM5": 0, "judge_judgement": None, "judge_labels": None,
                         "judge_raw": None}
                 # 개정문이 안 나왔거나 서식 차이뿐이면 A를 부를 이유가 없다.
-                if after and marked["M2"]:
+                if after and marked["BM2"]:
                     try:
                         trip = round_trip(url, api_key, timeout, judge, item, after)
                     except Exception as error:
                         failures += 1
                         trip["judge_error"] = solar.safe_error(error)
-                scores = {k: marked.get(k, 0) for k in ("M1", "M2", "M3", "M4")}
-                scores["M5"] = trip.pop("M5")
+                scores = {k: marked.get(k, 0) for k in ("BM1", "BM2", "BM3", "BM4")}
+                scores["BM5"] = trip.pop("BM5")
                 if after:
                     afters.append(after)
                 records.append({"item": item["id"], "turn": turn, "scores": scores,
@@ -213,28 +213,28 @@ def main() -> None:
                                 "changed_ratio": marked.get("changed_ratio"),
                                 "leaked": marked.get("leaked"), **trip, "raw": raw})
                 marks.append(str(sum(scores.values())))
-            # M6은 회차끼리 비교해야 나오므로 항목이 끝난 뒤에 매긴다.
+            # BM6은 회차끼리 비교해야 나오므로 항목이 끝난 뒤에 매긴다.
             distinct = len(set(afters))
             for record in records[-args.repeat:]:
                 if "scores" in record:
-                    record["scores"]["M6"] = int(distinct == len(afters) and len(afters) > 1)
+                    record["scores"]["BM6"] = int(distinct == len(afters) and len(afters) > 1)
             print(f"  {item['id']:<24} ({target}, {direction})"
                   f"  M점수 {' '.join(marks)} / {len(keys)}   서로 다른 개정문 {distinct}/{len(afters)}")
 
         graded = [r for r in records if "scores" in r]
-        all_keys = keys + ("M6",)
+        all_keys = keys + ("BM6",)
         totals = {k: sum(r["scores"].get(k, 0) for r in graded) for k in all_keys}
         summary = {
             "prompt": name, "judge_prompt": JUDGE_PROMPT, "split": args.split,
             "repeat": args.repeat, "calls": len(records), "failures": failures,
             "generate_temperature": GENERATE_TEMPERATURE,
             "judge_temperature": JUDGE_TEMPERATURE,
-            "M_rates": {k: round(v / len(graded), 3) for k, v in totals.items()} if graded else {},
+            "BM_rates": {k: round(v / len(graded), 3) for k, v in totals.items()} if graded else {},
         }
         solar.write_json(out_dir / "summary.json", summary)
         solar.write_json(out_dir / "records.json", records)
         print()
-        for key, rate in summary["M_rates"].items():
+        for key, rate in summary["BM_rates"].items():
             print(f"  {key} {rate:>6.1%}")
         print(f"  실패 {failures}건    저장: {out_dir.relative_to(REPOSITORY_DIR)}")
     print("\nH1(개정문다움)은 records.json의 after를 읽고 사람이 매깁니다.")

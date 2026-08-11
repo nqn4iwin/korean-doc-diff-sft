@@ -1,14 +1,14 @@
 """`generate.py`의 산출물을 사람이 채점할 수 있는 HTML 한 장으로 묶는다.
 
-기계 게이트 M1~M7은 `generate.py`가 매기지만 **H1(개정문다움)은 사람이 읽어야 한다.**
-`rubric.md`가 H1을 채점 항목으로 두고도 지금까지 아무도 안 매긴 이유가 도구가 없어서다.
+기계 게이트 BM1~BM7은 `generate.py`가 매기지만 **BH1(개정문다움)은 사람이 읽어야 한다.**
+`rubric.md`가 BH1을 채점 항목으로 두고도 지금까지 아무도 안 매긴 이유가 도구가 없어서다.
 `pairs.json`을 그대로 읽으면 한 건이 수십 줄이라 100건을 훑을 수 없다.
 
 그래서 이 스크립트가 하는 일은 셋이다.
 
 - **바뀐 곳만 눈에 띄게 한다.** 개정 전·후를 글자 단위로 비교해 지워진 곳과 들어간 곳에
   색을 입힌다. 변경 폭 중앙값이 0.074라 색이 없으면 어디가 바뀌었는지 못 찾는다.
-- **역할 A의 해석을 접어 둔다.** H1은 개정문만 보고 매기는 항목이라 먼저 보이면 안 된다.
+- **역할 A의 해석을 접어 둔다.** BH1은 개정문만 보고 매기는 항목이라 먼저 보이면 안 된다.
   필요할 때만 펼친다.
 - **점수를 `localStorage`에 남긴다.** 100건을 한 번에 앉아서 볼 수 없으므로, 창을 닫아도
   이어서 할 수 있어야 한다.
@@ -27,7 +27,7 @@ import html
 import json
 from pathlib import Path
 
-# 사람이 읽을 순서. 학습에 실제로 들어갈 것과 M7이 짚어 확인이 필요한 것이 앞에 온다.
+# 사람이 읽을 순서. 학습에 실제로 들어갈 것과 BM7이 짚어 확인이 필요한 것이 앞에 온다.
 BUCKET_ORDER = ["학습 후보", "사람 확인 필요", "라벨 교체 후보", "negative", "폐기"]
 DEFAULT_BUCKETS = ("학습 후보", "사람 확인 필요")
 
@@ -207,7 +207,7 @@ let marks = JSON.parse(localStorage.getItem(KEY) || "{}");
 let cur = 0;
 let mode = "tsv";
 
-// H1이 0일 때 무엇이 문제였는지. `CHANGELOG.md`의 사람 검수에서 실제로 나온 종류다.
+// BH1이 0일 때 무엇이 문제였는지. `CHANGELOG.md`의 사람 검수에서 실제로 나온 종류다.
 const PROBLEM = ["", "비문", "지어낸 사실", "지시 초과", "라벨 의심", "문체 안 맞음", "기타"];
 
 document.getElementById("meta").textContent =
@@ -223,7 +223,7 @@ function attr(s){ return esc(s).replace(/"/g, "&quot;"); }
 function render(){
   document.getElementById("list").innerHTML = DATA.items.map(it => {
     const m = marks[it.id] || {};
-    const gates = ["M1","M2","M3","M4","M5"].map(k =>
+    const gates = ["BM1","BM2","BM3","BM4","BM5"].map(k =>
       `<span class="tag ${it.scores[k] ? "" : "bad"}">${k} ${it.scores[k] ? 1 : 0}</span>`).join("");
     const notes = it.notes.length
       ? `<div class="row">${it.notes.map(n => `<span class="tag warn">${esc(n)}</span>`).join("")}</div>`
@@ -239,7 +239,7 @@ function render(){
         <span class="tag inst">(${esc(it.target)}, ${esc(it.direction)})</span>
         <span class="tag">${esc(it.bucket)}</span>
         ${gates}
-        <span class="tag ${it.scores.M7 ? "" : "warn"}">M7 ${it.scores.M7 ? 1 : 0}</span>
+        <span class="tag ${it.scores.BM7 ? "" : "warn"}">BM7 ${it.scores.BM7 ? 1 : 0}</span>
         <span class="num">변경폭 ${it.ratio}</span>
         <span class="num">${esc(it.id)}</span>
       </div>
@@ -256,7 +256,7 @@ function render(){
         </div>
       </details>
       <div class="score">
-        <span class="lbl" style="margin:0">H1 개정문다움</span>
+        <span class="lbl" style="margin:0">BH1 개정문다움</span>
         <span class="g">
           <button class="yes ${m.h1 === 1 ? "on" : ""}" data-id="${attr(it.id)}" data-v="1">1 통과</button>
           <button class="no ${m.h1 === 0 ? "on" : ""}" data-id="${attr(it.id)}" data-v="0">0 실패</button>
@@ -319,8 +319,8 @@ function dump(){
   const rows = DATA.items.map(it => {
     const m = marks[it.id] || {};
     return {id: it.id, 대상: it.target, 방향: it.direction, bucket: it.bucket,
-            M5: it.scores.M5, M7: it.scores.M7,
-            H1: m.h1 === undefined ? "" : m.h1,
+            BM5: it.scores.BM5, BM7: it.scores.BM7,
+            BH1: m.h1 === undefined ? "" : m.h1,
             문제유형: m.problem || "", 메모: (m.memo || "").replace(/\t/g, " ")};
   });
   document.getElementById("out").value = mode === "json"

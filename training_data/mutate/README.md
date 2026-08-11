@@ -81,9 +81,9 @@ python training_data/mutate/generate.py DOC --prompt v1.1 --limit 180 --concurre
 ```
 
 `review.py`가 그 산출물을 **사람이 채점할 HTML 한 장**으로 묶는다. 기계 게이트는
-`generate.py`가 매기지만 **H1(개정문다움)은 사람이 읽어야 하고**, `pairs.json`을 그대로
+`generate.py`가 매기지만 **BH1(개정문다움)은 사람이 읽어야 하고**, `pairs.json`을 그대로
 읽으면 한 건이 수십 줄이라 100건을 훑을 수 없다. 바뀐 곳에 색을 입히고, 역할 A의 해석은
-접어 두고(H1은 개정문만 보고 매긴다), 점수를 `localStorage`에 남겨 나눠서 볼 수 있게 한다.
+접어 두고(BH1은 개정문만 보고 매긴다), 점수를 `localStorage`에 남겨 나눠서 볼 수 있게 한다.
 
 ```
 python training_data/mutate/review.py runs/<실행 디렉터리>

@@ -187,26 +187,26 @@ def main() -> None:
             return {**job, "error": solar.safe_error(error)}
         marked = _run.score_generation(job, raw)
         after = marked.pop("after")
-        trip = {"M5": 0, "judge_labels": None, "judge_judgement": None, "judge_raw": None}
-        if after and marked["M2"]:
+        trip = {"BM5": 0, "judge_labels": None, "judge_judgement": None, "judge_raw": None}
+        if after and marked["BM2"]:
             try:
                 trip = _run.round_trip(url, api_key, timeout, judge, job, after)
             except Exception as error:
                 trip["judge_error"] = solar.safe_error(error)
-        scores = {k: marked.get(k, 0) for k in ("M1", "M2", "M3", "M4")}
-        scores["M5"] = trip.pop("M5")
-        # M7 -- 문장이 문서에 실릴 수 있는가. 하드 게이트가 아니라 표시다(`inspect.py`).
+        scores = {k: marked.get(k, 0) for k in ("BM1", "BM2", "BM3", "BM4")}
+        scores["BM5"] = trip.pop("BM5")
+        # BM7 -- 문장이 문서에 실릴 수 있는가. 하드 게이트가 아니라 표시다(`inspect.py`).
         notes = text_check.inspect(job["clause"], after or "",
                                       job["instruct"]["대상"], whole_document) if after else []
-        scores["M7"] = int(not notes)
-        # 게이트를 다 통과한 것만 학습 후보다. M5에서 떨어진 것은 폐기하지 않고 A가 준
+        scores["BM7"] = int(not notes)
+        # 게이트를 다 통과한 것만 학습 후보다. BM5에서 떨어진 것은 폐기하지 않고 A가 준
         # 라벨로 갈아 끼울 수 있다(`docs/기획서_최종.md` 2.3절). 서식 차이만 남은 것은
         # negative 표본으로 보낸다.
-        gates = {k: v for k, v in scores.items() if k != "M7"}
+        gates = {k: v for k, v in scores.items() if k != "BM7"}
         bucket = ("사람 확인 필요" if after and notes
                   else "학습 후보" if all(gates.values())
-                  else "negative" if scores["M1"] and not scores["M2"]
-                  else "라벨 교체 후보" if scores["M5"] == 0 and after else "폐기")
+                  else "negative" if scores["BM1"] and not scores["BM2"]
+                  else "라벨 교체 후보" if scores["BM5"] == 0 and after else "폐기")
         print(f"  [{index}/{len(plan)}] {sum(gates.values())}/5  {bucket:<12} "
               f"({target}, {direction})  {job['block_id']}")
         return {**job, "after": after, "scores": scores, "bucket": bucket,
@@ -229,13 +229,13 @@ def main() -> None:
         "generated": len(graded), "failures": failures,
         "concurrency": args.concurrency,
         "buckets": dict(buckets),
-        "M_rates": {k: round(sum(p["scores"][k] for p in graded) / len(graded), 3)
-                    for k in ("M1", "M2", "M3", "M4", "M5", "M7")} if graded else {},
+        "BM_rates": {k: round(sum(p["scores"][k] for p in graded) / len(graded), 3)
+                    for k in ("BM1", "BM2", "BM3", "BM4", "BM5", "BM7")} if graded else {},
     }
     solar.write_json(out_dir / "summary.json", summary)
     solar.write_json(out_dir / "pairs.json", pairs)
     print()
-    for key, rate in summary["M_rates"].items():
+    for key, rate in summary["BM_rates"].items():
         print(f"  {key} {rate:>6.1%}")
     for bucket, count in buckets.most_common():
         print(f"  {bucket:<14} {count}")
