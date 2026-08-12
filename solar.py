@@ -152,6 +152,15 @@ def extract_message(response: dict[str, Any]) -> tuple[str, str | None]:
     if not isinstance(message, dict):
         raise ValueError("Solar response has no assistant message")
     content = message.get("content", "")
+    # A reasoning model does not always put its answer in a plain string. Two shapes turn
+    # up: `null`, when the reply went entirely into the reasoning trace, and a list of
+    # content blocks. Both used to raise, losing the call -- one of 60 in the 2026-08-12
+    # role B run. Coerce those two and keep the raise for anything genuinely unexpected.
+    if content is None:
+        content = ""
+    elif isinstance(content, list):
+        content = "".join(
+            block.get("text", "") for block in content if isinstance(block, dict))
     if not isinstance(content, str):
         raise ValueError("Solar assistant content is not a string")
     reasoning = message.get("reasoning")
