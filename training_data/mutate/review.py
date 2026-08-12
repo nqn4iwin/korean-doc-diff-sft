@@ -27,9 +27,13 @@ import html
 import json
 from pathlib import Path
 
-# 사람이 읽을 순서. 학습에 실제로 들어갈 것과 BM7이 짚어 확인이 필요한 것이 앞에 온다.
-BUCKET_ORDER = ["학습 후보", "사람 확인 필요", "라벨 교체 후보", "negative", "폐기"]
-DEFAULT_BUCKETS = ("학습 후보", "사람 확인 필요")
+# 사람이 읽을 순서. 학습에 실제로 들어갈 둘이 앞에 온다.
+#
+# `사람 확인 필요`는 2026-08-12부터 `generate.py`가 만들지 않는다 -- BM7이 버킷을 가르지
+# 않게 되돌렸기 때문이다(`rubric.md`). 옛 실행을 읽을 수 있도록 순서 목록에는 남긴다.
+# **기본값에서는 뺐다.** 그대로 두면 새 실행에서 `학습 후보` 하나만 열린다.
+BUCKET_ORDER = ["학습 후보", "라벨 교체 후보", "사람 확인 필요", "negative", "폐기"]
+DEFAULT_BUCKETS = ("학습 후보", "라벨 교체 후보")
 
 
 def diff_html(before: str, after: str) -> tuple[str, str]:
@@ -97,7 +101,11 @@ def build(run_dir: Path, limit: int, buckets: tuple[str, ...]) -> tuple[str, int
             "target": pair["instruct"]["대상"],
             "direction": pair["instruct"]["방향"],
             "bucket": pair["bucket"],
-            "scores": pair["scores"],
+            # 채점 항목 이름을 `M1~M7`에서 `BM1~BM7`로 바꾼 것이 2026-08-10 실행보다 뒤라,
+            # 그때 저장된 `pairs.json`은 옛 이름으로 남아 있다. 그대로 넘기면 화면의 게이트
+            # 칸이 전부 0으로 보인다. `rejudge.py`와 같은 방식으로 두 이름을 다 읽는다.
+            "scores": {("BM" + k[1:] if k[0] == "M" and k[1:].isdigit() else k): v
+                       for k, v in pair["scores"].items()},
             "ratio": pair.get("changed_ratio"),
             "notes": pair.get("inspect") or [],
             "beforeHtml": before_html,
@@ -174,6 +182,10 @@ TEMPLATE = r"""<!doctype html>
   input[type=text]{flex:1;min-width:200px}
   #out{width:100%;height:230px;font:12px/1.5 ui-monospace,monospace;margin-top:10px}
   .hint{color:var(--muted);font-size:12.5px}
+  /* 「무엇을 했나」를 스스로 판단하려면 지시가 보이면 안 된다. 답을 보고 답을 맞히는
+     셈이 된다 -- 왕복 검증이 셜록에게 지시를 안 알려주는 것과 같은 이유다. */
+  body.blind .blind{display:none}
+  body:not(.blind) .onlyblind{display:none}
   kbd{background:#eef1f5;border:1px solid var(--line);border-radius:4px;
       padding:1px 5px;font:12px ui-monospace,monospace}
 </style>
@@ -183,6 +195,7 @@ TEMPLATE = r"""<!doctype html>
   <h1>역할 B 산출물 검수</h1>
   <span class="meta" id="meta"></span>
   <span class="hint"><kbd>1</kbd> 통과 <kbd>0</kbd> 실패 <kbd>j</kbd>/<kbd>k</kbd> 이동</span>
+  <label class="hint"><input type="checkbox" id="blind" checked> 지시 가리기</label>
   <button id="export">내보내기</button>
   <span class="prog" id="prog"></span>
 </header>
@@ -190,12 +203,16 @@ TEMPLATE = r"""<!doctype html>
   <div id="list"></div>
   <div class="card">
     <b>결과 내보내기</b>
-    <div class="hint">아래 상자의 내용을 복사하면 된다. 점수는 브라우저에 자동
-      저장되므로 창을 닫았다 열어도 남아 있다.</div>
-    <textarea id="out" readonly></textarea>
+    <div class="hint">점수는 브라우저에 자동 저장되므로 창을 닫았다 열어도 남아 있다.
+      <b>다만 브라우저 저장소를 비우면 사라지니, 중간중간 「파일로 저장」을 눌러 두자.</b></div>
+    <div class="hint onlyblind"><b>지시를 가리는 동안은 아래 상자를 숨긴다</b> — 상자에
+      `대상`·`방향` 열이 그대로 찍혀 거기서 지시가 보이기 때문이다. 「파일로 저장」은
+      그대로 동작한다.</div>
+    <textarea id="out" class="blind" readonly></textarea>
     <div class="row" style="margin-top:8px">
       <button id="tsv">표로 보기</button>
       <button id="json">JSON으로 보기</button>
+      <button id="download">파일로 저장</button>
       <button id="reset">점수 전부 지우기</button>
     </div>
   </div>
@@ -207,8 +224,17 @@ let marks = JSON.parse(localStorage.getItem(KEY) || "{}");
 let cur = 0;
 let mode = "tsv";
 
-// BH1이 0일 때 무엇이 문제였는지. `CHANGELOG.md`의 사람 검수에서 실제로 나온 종류다.
-const PROBLEM = ["", "비문", "지어낸 사실", "지시 초과", "라벨 의심", "문체 안 맞음", "기타"];
+// BH1이 0일 때 무엇이 문제였는지. 2026-08-12에 BH1을 "비합리 없음"으로 좁히면서
+// `문체 안 맞음`을 뺐다 -- 문체는 채점자 간 합의가 안 되는 칸이라 BH1에서 빠졌다(`rubric.md`).
+const PROBLEM = ["", "비문", "앞뒤가 어긋남", "가리키는 것이 없음", "이미 성립한 것을 또 함",
+                 "지어낸 사실", "지시 초과", "라벨 의심", "기타"];
+
+// 모리아티가 **무엇을 했는지**. 잘했는지가 아니라 어떤 수를 뒀는지를 적는 칸이다.
+// 다음 프롬프트 판본이 무엇을 가르쳐야 하는지는 이 분포에서 나온다 -- 2026-08-12
+// 실측에서 `절차·요건` 12건이 전부 "명사 목록에 항목 하나 끼워넣기" 한 수였고,
+// 그것이 목록의 성격에 따라 `절차·요건`으로도 `적용 범위`로도 읽혀 라벨이 샜다.
+const MOVE = ["", "목록에 항목 추가", "절차 단계 추가", "주체 나란히 추가", "주체 교체",
+              "값·기한 변경", "단서·예외 추가", "문구만 다듬음", "기타"];
 
 document.getElementById("meta").textContent =
   DATA.doc.split("/").pop() + " · 역할 B " + DATA.prompt + " · 판정 역할 A " + DATA.judge;
@@ -223,8 +249,10 @@ function attr(s){ return esc(s).replace(/"/g, "&quot;"); }
 function render(){
   document.getElementById("list").innerHTML = DATA.items.map(it => {
     const m = marks[it.id] || {};
+    // BM5는 "셜록이 지시받은 라벨을 짚었나"이므로 지시를 역산할 수 있다. 버킷도 같다 --
+    // `라벨 교체 후보`는 BM5 실패라는 뜻이다. 블라인드로 볼 때는 셋 다 가린다.
     const gates = ["BM1","BM2","BM3","BM4","BM5"].map(k =>
-      `<span class="tag ${it.scores[k] ? "" : "bad"}">${k} ${it.scores[k] ? 1 : 0}</span>`).join("");
+      `<span class="tag ${k === "BM5" ? "blind " : ""}${it.scores[k] ? "" : "bad"}">${k} ${it.scores[k] ? 1 : 0}</span>`).join("");
     const notes = it.notes.length
       ? `<div class="row">${it.notes.map(n => `<span class="tag warn">${esc(n)}</span>`).join("")}</div>`
       : "";
@@ -236,8 +264,8 @@ function render(){
     <div class="card ${m.h1 !== undefined ? "done" : ""} ${it.i === cur ? "cur" : ""}" id="c${it.i}">
       <div class="row">
         <span class="num">#${it.i + 1}</span>
-        <span class="tag inst">(${esc(it.target)}, ${esc(it.direction)})</span>
-        <span class="tag">${esc(it.bucket)}</span>
+        <span class="tag inst blind">(${esc(it.target)}, ${esc(it.direction)})</span>
+        <span class="tag blind">${esc(it.bucket)}</span>
         ${gates}
         <span class="tag ${it.scores.BM7 ? "" : "warn"}">BM7 ${it.scores.BM7 ? 1 : 0}</span>
         <span class="num">변경폭 ${it.ratio}</span>
@@ -256,7 +284,7 @@ function render(){
         </div>
       </details>
       <div class="score">
-        <span class="lbl" style="margin:0">BH1 개정문다움</span>
+        <span class="lbl" style="margin:0" title="말이 안 되는 곳이 있으면 0. 문체가 어색하다는 이유로는 0을 주지 않는다">BH1 비합리 없음</span>
         <span class="g">
           <button class="yes ${m.h1 === 1 ? "on" : ""}" data-id="${attr(it.id)}" data-v="1">1 통과</button>
           <button class="no ${m.h1 === 0 ? "on" : ""}" data-id="${attr(it.id)}" data-v="0">0 실패</button>
@@ -264,6 +292,11 @@ function render(){
         <select data-id="${attr(it.id)}" class="prob">
           ${PROBLEM.map(p =>
             `<option value="${attr(p)}" ${m.problem === p ? "selected" : ""}>${esc(p) || "문제 유형 —"}</option>`
+          ).join("")}
+        </select>
+        <select data-id="${attr(it.id)}" class="move">
+          ${MOVE.map(p =>
+            `<option value="${attr(p)}" ${m.move === p ? "selected" : ""}>${esc(p) || "무엇을 했나 —"}</option>`
           ).join("")}
         </select>
         <input type="text" data-id="${attr(it.id)}" class="memo" placeholder="메모"
@@ -279,6 +312,16 @@ function render(){
     (scored.length ? `  ·  통과 ${passed} (${Math.round(passed / scored.length * 100)}%)` : "");
   dump();
 }
+
+// 가림 여부도 남긴다. 60건을 한 번에 앉아서 볼 수 없으므로 창을 다시 열었을 때 조건이
+// 바뀌어 있으면 앞뒤 판정의 기준이 달라진다.
+const BLIND_KEY = KEY + "-blind";
+function setBlind(on){
+  document.body.classList.toggle("blind", on);
+  document.getElementById("blind").checked = on;
+  localStorage.setItem(BLIND_KEY, on ? "1" : "0");
+}
+document.getElementById("blind").onchange = e => setBlind(e.target.checked);
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(marks)); }
 function set(id, patch){ marks[id] = Object.assign({}, marks[id], patch); save(); render(); }
@@ -296,6 +339,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("change", e => {
   if (e.target.classList.contains("prob")) set(e.target.dataset.id, {problem: e.target.value});
+  if (e.target.classList.contains("move")) set(e.target.dataset.id, {move: e.target.value});
 });
 document.addEventListener("input", e => {
   // 메모는 글자마다 다시 그리면 포커스를 잃는다. 저장만 하고 화면은 그대로 둔다.
@@ -321,7 +365,8 @@ function dump(){
     return {id: it.id, 대상: it.target, 방향: it.direction, bucket: it.bucket,
             BM5: it.scores.BM5, BM7: it.scores.BM7,
             BH1: m.h1 === undefined ? "" : m.h1,
-            문제유형: m.problem || "", 메모: (m.memo || "").replace(/\t/g, " ")};
+            문제유형: m.problem || "", 동작유형: m.move || "",
+            메모: (m.memo || "").replace(/\t/g, " ")};
   });
   document.getElementById("out").value = mode === "json"
     ? JSON.stringify(rows, null, 1)
@@ -335,9 +380,22 @@ document.getElementById("export").onclick = () => {
   out.scrollIntoView({behavior: "smooth"});
   out.select();
 };
+// 브라우저 저장소만으로는 부족하다. 저장소를 비우거나 다른 기기에서 열면 사라지고,
+// 실제로 검수하던 것을 한 번 잃었다. 눌러서 파일로 떨어뜨려 두면 그때 남는다.
+document.getElementById("download").onclick = () => {
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  const blob = new Blob([document.getElementById("out").value],
+                        {type: mode === "json" ? "application/json" : "text/tab-separated-values"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `review__${DATA.run}__${stamp}.${mode === "json" ? "json" : "tsv"}`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+};
 document.getElementById("reset").onclick = () => {
   if (confirm("점수를 전부 지웁니다. 계속할까요?")) { marks = {}; save(); render(); }
 };
+setBlind(localStorage.getItem(BLIND_KEY) !== "0");
 render();
 </script>
 </body>

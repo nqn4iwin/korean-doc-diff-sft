@@ -144,6 +144,12 @@ def round_trip(url: str, api_key: str, timeout: int, judge: Template,
         # 완전일치가 아니라 포함으로 본다. 한 군데를 고쳐도 두 성격을 함께 띠는 일이
         # 흔하므로, A가 라벨을 더 붙이는 것은 벌하지 않는다(`rubric.md`).
         "BM5": int(want in got),
+        # BM5a -- 대상만 본다. 대상을 짚는 일과 방향을 정하는 일은 다른 능력인데 BM5가
+        # 한 칸에 뭉쳐 재고 있었다. 2026-08-12 재판정에서 판정 모델을 바꾸자 대상 일치는
+        # 68.4%에서 73.7%로 올랐는데 BM5는 54.4%에서 52.6%로 내렸다 -- 둘이 서로 지워
+        # "변화 없음"으로 보였다. 나눠 두면 프롬프트를 고쳤을 때 어느 쪽이 움직였는지
+        # 보이고, 대상이 맞고 방향만 다른 건은 A의 라벨로 갈아 끼워도 안전하다.
+        "BM5a": int(want[0] in {target for target, _ in got}),
         "judge_judgement": (parsed or {}).get("judgement"),
         "judge_labels": labels,
         "judge_raw": raw,
@@ -195,8 +201,8 @@ def main() -> None:
                     continue
                 marked = score_generation(item, raw)
                 after = marked.pop("after")
-                trip = {"BM5": 0, "judge_judgement": None, "judge_labels": None,
-                        "judge_raw": None}
+                trip = {"BM5": 0, "BM5a": 0, "judge_judgement": None,
+                        "judge_labels": None, "judge_raw": None}
                 # 개정문이 안 나왔거나 서식 차이뿐이면 A를 부를 이유가 없다.
                 if after and marked["BM2"]:
                     try:
@@ -206,13 +212,15 @@ def main() -> None:
                         trip["judge_error"] = solar.safe_error(error)
                 scores = {k: marked.get(k, 0) for k in ("BM1", "BM2", "BM3", "BM4")}
                 scores["BM5"] = trip.pop("BM5")
+                scores["BM5a"] = trip.pop("BM5a")
                 if after:
                     afters.append(after)
                 records.append({"item": item["id"], "turn": turn, "scores": scores,
                                 "instruct": item["instruct"], "after": after,
                                 "changed_ratio": marked.get("changed_ratio"),
                                 "leaked": marked.get("leaked"), **trip, "raw": raw})
-                marks.append(str(sum(scores.values())))
+                # BM5a는 게이트가 아니라 BM5를 갈라 보는 칸이므로 합계에 넣지 않는다.
+                marks.append(str(sum(scores[k] for k in keys)))
             # BM6은 회차끼리 비교해야 나오므로 항목이 끝난 뒤에 매긴다.
             distinct = len(set(afters))
             for record in records[-args.repeat:]:
@@ -222,7 +230,7 @@ def main() -> None:
                   f"  M점수 {' '.join(marks)} / {len(keys)}   서로 다른 개정문 {distinct}/{len(afters)}")
 
         graded = [r for r in records if "scores" in r]
-        all_keys = keys + ("BM6",)
+        all_keys = keys + ("BM5a", "BM6")
         totals = {k: sum(r["scores"].get(k, 0) for r in graded) for k in all_keys}
         summary = {
             "prompt": name, "judge_prompt": JUDGE_PROMPT, "split": args.split,

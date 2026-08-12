@@ -16,10 +16,17 @@
 block_components.py`가 이 일을 하도록 만들어졌으나 **옛 13종 어휘로 키가 잡혀 있어**
 아직 못 쓴다(`README.md`). 그때까지는 여기 있는 표층 판정으로 대신한다.
 
+**그 표층 판정이 버틸 만하다는 것이 2026-08-12에 확인됐다.** 새 교사 모델 60건에서
+`수행 주체` 19/20·18/20, `기한·시점` 2/2, `제출물` 2/2가 나왔다 -- 자리 없는 지시를
+걸고 있었다면 이렇게 안 나온다. **막고 있는 것은 성립 판정이 아니라 `allowed[:2]`로
+앞 둘만 집는 것이다.** 목록 맨 앞의 `수행 주체`가 두 자리를 늘 먹어 전체 코퍼스에서
+59.6%가 되고 `수치·기준`은 1.5%밖에 안 나온다.
+
 사용:
-    python training_data/mutate/generate.py DOC --prompt v1.1 --limit 20
-    python training_data/mutate/generate.py DOC --prompt v1.1 --limit 200 --concurrency 16
-    python training_data/mutate/generate.py DOC --prompt v1.1 --dry-run   # 호출 없이 계획만
+    python3 training_data/mutate/generate.py DOC --prompt v1.1 --limit 20
+    python3 training_data/mutate/generate.py DOC --prompt v1.1 --limit 200 --concurrency 16
+    python3 training_data/mutate/generate.py DOC --prompt v1.1 --dry-run   # 호출 없이 계획만
+    python3 training_data/mutate/generate.py DOC --prompt v1.1 --plan plans/sample60.json
 """
 from __future__ import annotations
 
@@ -77,7 +84,14 @@ PURPOSE = re.compile(r"제\s*\d+\s*조\s*\(\s*(?:목적|정의|적용\s*범위)\
 # 조항이 담은 것 -> 걸 수 있는 (대상, 방향). 방향 판정 기준은
 # `docs/학습데이터_생성_프로세스.md` 2절이다 -- 개정 전 조항에 그 대상이 있으면
 # `늘었다/줄었다/다른 값`이고, 없어야 `새로 생겼다`다. 여기서는 있는 것만 보므로
-# `새로 생겼다`를 내지 않는다.
+# 원칙적으로 `새로 생겼다`를 내지 않는다.
+#
+# **`절차·요건`만 예외다.** 절차에 단계를 더하면 그 단계 자체는 개정 전에 없던 것이라
+# 역할 A가 `새로 생겼다`로 읽는다. 2026-08-12에 같은 12개 조항으로 확인했다 --
+# `늘었다`로 지시하면 BM5가 0/12인데 셜록이 붙인 라벨은 10건이 `새로 생겼다`였고,
+# 지시를 `새로 생겼다`로 바꾸자 **10/12**가 됐다. `rubric.md`의 회수율 실측에서도
+# `(절차·요건, 새로 생겼다)`가 3/3인데 `(절차·요건, 늘었다)`는 3/6이다.
+# **정의로 정한 것이 아니라 A가 실제로 어떻게 읽는지로 정했다.**
 def applicable(clause: str) -> list[tuple[str, str]]:
     # 정의·목적 조항은 무엇을 규정하는 것이 아니라 무엇을 가리키는지 정하는 조항이다.
     # 넓히고 좁히는 것만 성립하고, 절차나 주체를 고칠 자리가 없다.
@@ -87,7 +101,7 @@ def applicable(clause: str) -> list[tuple[str, str]]:
     if ACTOR.search(clause):
         out += [("수행 주체", "늘었다"), ("수행 주체", "다른 값")]
     if PREDICATE.search(clause):
-        out += [("절차·요건", "늘었다")]
+        out += [("절차·요건", "새로 생겼다")]
     if ENUM.search(clause):
         out += [("적용 범위", "늘었다"), ("적용 범위", "줄었다")]
     if NUMBER.search(clause):
@@ -124,35 +138,48 @@ def main() -> None:
     ap.add_argument("--prompt", required=True)
     ap.add_argument("--limit", type=int, default=20, help="생성할 pair 수 상한")
     ap.add_argument("--per-clause", type=int, default=2, help="조항 하나에 걸 지시 수")
+    ap.add_argument("--plan", type=Path,
+                    help="계획을 세우지 말고 JSON으로 받은 것을 그대로 돌린다. 같은 조항·"
+                         "같은 지시를 다른 모델로 다시 돌려 건별로 짝지어 비교할 때 쓴다. "
+                         "`--limit`과 `--per-clause`는 무시한다")
     ap.add_argument("--concurrency", type=int, default=8,
                     help="동시에 띄울 요청 수. GPU가 놀지 않을 만큼 올린다")
     ap.add_argument("--dry-run", action="store_true", help="호출 없이 계획만 출력")
     args = ap.parse_args()
 
     whole_document = " ".join(text for _, text in indexed(args.document, args.document.stem))
-    candidates = clause_candidates(args.document)
-    by_instruct: dict[tuple[str, str], list[dict]] = {}
-    for block_id, clause in candidates:
-        allowed = [c for c in applicable(clause) if c not in BLOCKED]
-        for target, direction in allowed[:args.per_clause]:
-            by_instruct.setdefault((target, direction), []).append(
-                {"block_id": block_id, "clause": clause,
-                 "instruct": {"대상": target, "방향": direction}})
-
-    # 문서 순서대로 자르면 한 지시가 몰린다 -- 서술어는 거의 모든 조항에 있고 수치나
-    # 기한은 드물기 때문이다. 실제로 20건 중 12건이 `(절차·요건, 늘었다)`로 나왔다.
-    # `docs/기획서_최종.md` 2.3절이 단일 변경 유형 비중을 25%로 제한하므로, 지시별로
-    # 돌아가며 하나씩 뽑아 상한에 걸리지 않게 한다.
-    plan, pools = [], [list(v) for v in by_instruct.values()]
-    while len(plan) < args.limit and any(pools):
-        for pool in pools:
-            if not pool or len(plan) >= args.limit:
-                continue
-            plan.append(pool.pop(0))
 
     print(f"문서 {args.document.name}")
-    print(f"  조항 후보      {len(candidates)}개  ({MIN_CHARS}~{MAX_CHARS}자, 서술어 있음)")
-    print(f"  생성 계획      {len(plan)}건  (조항당 최대 {args.per_clause}개 지시)")
+    if args.plan:
+        # 계획을 밖에서 받는 경로. 조항 추리기와 지시 배분을 건너뛰므로, 옛 실행과 **같은
+        # 조항 × 같은 지시**가 그대로 다시 돈다. 모델을 바꿔 놓고 건별로 짝지어 비교할 때
+        # 이것이 필요하다 -- 계획을 새로 세우면 조항이 달라져 두 실행을 맞댈 수 없다.
+        plan = json.loads(args.plan.read_text(encoding="utf-8"))
+        print(f"  계획 파일      {args.plan.name}")
+        print(f"  생성 계획      {len(plan)}건  (밖에서 받았다. --limit 무시)")
+    else:
+        candidates = clause_candidates(args.document)
+        by_instruct: dict[tuple[str, str], list[dict]] = {}
+        for block_id, clause in candidates:
+            allowed = [c for c in applicable(clause) if c not in BLOCKED]
+            for target, direction in allowed[:args.per_clause]:
+                by_instruct.setdefault((target, direction), []).append(
+                    {"block_id": block_id, "clause": clause,
+                     "instruct": {"대상": target, "방향": direction}})
+
+        # 문서 순서대로 자르면 한 지시가 몰린다 -- 서술어는 거의 모든 조항에 있고 수치나
+        # 기한은 드물기 때문이다. 실제로 20건 중 12건이 `(절차·요건, 늘었다)`로 나왔다.
+        # `docs/기획서_최종.md` 2.3절이 단일 변경 유형 비중을 25%로 제한하므로, 지시별로
+        # 돌아가며 하나씩 뽑아 상한에 걸리지 않게 한다.
+        plan, pools = [], [list(v) for v in by_instruct.values()]
+        while len(plan) < args.limit and any(pools):
+            for pool in pools:
+                if not pool or len(plan) >= args.limit:
+                    continue
+                plan.append(pool.pop(0))
+
+        print(f"  조항 후보      {len(candidates)}개  ({MIN_CHARS}~{MAX_CHARS}자, 서술어 있음)")
+        print(f"  생성 계획      {len(plan)}건  (조항당 최대 {args.per_clause}개 지시)")
     spread = Counter(f'({p["instruct"]["대상"]}, {p["instruct"]["방향"]})' for p in plan)
     for label, count in spread.most_common():
         print(f"      {count:>3}  {label}")
@@ -170,7 +197,8 @@ def main() -> None:
     api_key = os.environ.get("SOLAR_API_KEY", "")
     timeout = int(os.environ.get("SOLAR_TIMEOUT_SECONDS", "180"))
 
-    out_dir = HERE / "runs" / f"{solar.timestamp()}__generate__{args.document.stem}"
+    tag = f"__plan_{args.plan.stem}" if args.plan else ""
+    out_dir = HERE / "runs" / f"{solar.timestamp()}__generate__{args.document.stem}{tag}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     def work(numbered: tuple[int, dict]) -> dict:
@@ -187,7 +215,8 @@ def main() -> None:
             return {**job, "error": solar.safe_error(error)}
         marked = _run.score_generation(job, raw)
         after = marked.pop("after")
-        trip = {"BM5": 0, "judge_labels": None, "judge_judgement": None, "judge_raw": None}
+        trip = {"BM5": 0, "BM5a": 0, "judge_labels": None,
+                "judge_judgement": None, "judge_raw": None}
         if after and marked["BM2"]:
             try:
                 trip = _run.round_trip(url, api_key, timeout, judge, job, after)
@@ -195,6 +224,7 @@ def main() -> None:
                 trip["judge_error"] = solar.safe_error(error)
         scores = {k: marked.get(k, 0) for k in ("BM1", "BM2", "BM3", "BM4")}
         scores["BM5"] = trip.pop("BM5")
+        scores["BM5a"] = trip.pop("BM5a")
         # BM7 -- 문장이 문서에 실릴 수 있는가. 하드 게이트가 아니라 표시다(`inspect.py`).
         notes = text_check.inspect(job["clause"], after or "",
                                       job["instruct"]["대상"], whole_document) if after else []
@@ -202,9 +232,14 @@ def main() -> None:
         # 게이트를 다 통과한 것만 학습 후보다. BM5에서 떨어진 것은 폐기하지 않고 A가 준
         # 라벨로 갈아 끼울 수 있다(`docs/기획서_최종.md` 2.3절). 서식 차이만 남은 것은
         # negative 표본으로 보낸다.
-        gates = {k: v for k, v in scores.items() if k != "BM7"}
-        bucket = ("사람 확인 필요" if after and notes
-                  else "학습 후보" if all(gates.values())
+        # BM7과 BM5a는 게이트가 아니다. BM7은 `rubric.md`가 "하드 게이트가 아니라 표시"로
+        # 정해 뒀는데도 여기서 맨 앞에 서서 버킷을 갈랐다 -- 2026-08-12 60건에서
+        # `사람 확인 필요` 18건 중 12건이 C2·C4 오탐이었고 11건은 원래 `라벨 교체 후보`였다.
+        # 6,000건이면 1,800건이 사람 검수로 빠지고 그 절반 이상이 헛알람이 된다.
+        # 걸린 것은 `inspect`와 `scores["BM7"]`에 그대로 남으므로 검수 순서를 정하는 데는
+        # 계속 쓸 수 있다. BM5a는 BM5를 갈라 보는 칸이라 애초에 게이트가 아니다.
+        gates = {k: v for k, v in scores.items() if k not in ("BM7", "BM5a")}
+        bucket = ("학습 후보" if all(gates.values())
                   else "negative" if scores["BM1"] and not scores["BM2"]
                   else "라벨 교체 후보" if scores["BM5"] == 0 and after else "폐기")
         print(f"  [{index}/{len(plan)}] {sum(gates.values())}/5  {bucket:<12} "
@@ -225,12 +260,16 @@ def main() -> None:
     buckets = Counter(p["bucket"] for p in graded)
     summary = {
         "document": str(args.document), "prompt": args.prompt,
+        "plan": str(args.plan) if args.plan else None,
+        # 어느 모델이 생성하고 판정했는지. 교사 모델이 바뀌면 같은 프롬프트라도 점수가
+        # 달라지므로, 판본만 적어두면 나중에 두 실행을 잘못 맞대게 된다.
+        "model": os.environ.get("SOLAR_MODEL"),
         "judge_prompt": _run.JUDGE_PROMPT, "planned": len(plan),
         "generated": len(graded), "failures": failures,
         "concurrency": args.concurrency,
         "buckets": dict(buckets),
         "BM_rates": {k: round(sum(p["scores"][k] for p in graded) / len(graded), 3)
-                    for k in ("BM1", "BM2", "BM3", "BM4", "BM5", "BM7")} if graded else {},
+                    for k in ("BM1", "BM2", "BM3", "BM4", "BM5a", "BM5", "BM7")} if graded else {},
     }
     solar.write_json(out_dir / "summary.json", summary)
     solar.write_json(out_dir / "pairs.json", pairs)
