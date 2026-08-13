@@ -119,6 +119,8 @@ def main() -> None:
     ap.add_argument("--min", type=int, default=1, help="이 건수 미만인 지시는 표에서 접는다")
     ap.add_argument("--by-series", action="store_true",
                     help="계열별로 갈라 낸다. 대상 회수가 계열에 따라 뒤집히는 지시가 있다")
+    ap.add_argument("--pairs", action="store_true",
+                    help="같은 조항에 `늘었다`·`줄었다`를 둘 다 건 짝을 맞대어 본다")
     args = ap.parse_args()
 
     loaded = load(args.runs)
@@ -149,6 +151,56 @@ def main() -> None:
             for pair_label in got:
                 rows[want][f"{pair_label[0]} / {pair_label[1]}"] += 1
         return rows, stats
+
+    if args.pairs:
+        # **같은 조항에 방향만 다르게 건 짝은 한 변수 실험이다.** 조항·프롬프트가 같고
+        # 지시 방향만 다르므로, 셜록의 답이 갈리면 지시가 듣는 것이고 안 갈리면 조항이
+        # 방향을 정하는 것이다. BM5로는 이 둘이 구별되지 않는다 -- 둘 다 실패로 나온다.
+        both: dict[tuple[str, str], dict[str, list]] = defaultdict(dict)
+        for pair, _ in loaded:
+            want = instructed(pair)
+            if want is None or want[1] not in ("늘었다", "줄었다"):
+                continue
+            got, _blank = judged(pair)
+            key = (str(pair.get("block_id")), want[0])
+            both[key][want[1]] = [d for t, d in got if t == want[0]]
+
+        verdicts, examples = Counter(), defaultdict(list)
+        for (block, target), sides in both.items():
+            if len(sides) < 2:
+                verdicts[f"{target}: 홑 (짝 없음)"] += 1
+                continue
+            up, down = sides.get("늘었다", []), sides.get("줄었다", [])
+            hit_up, hit_down = "늘었다" in up, "줄었다" in down
+            if hit_up and hit_down:
+                label = "지시대로 갈렸다"
+            elif not up or not down:
+                label = "한쪽이 라벨 없음"
+            elif set(up) == set(down):
+                label = "조항이 방향을 정한다"
+            elif hit_up or hit_down:
+                label = "한쪽만 맞다"
+            else:
+                label = "둘 다 어긋났다"
+            verdicts[f"{target}: {label}"] += 1
+            if len(examples[label]) < 3:
+                examples[label].append((block, target, up, down))
+
+        print(f"\n짝 {sum(1 for s in both.values() if len(s) >= 2)}쌍 "
+              f"· 홑 {sum(1 for s in both.values() if len(s) < 2)}개\n")
+        for name, count in sorted(verdicts.items()):
+            print(f"  {count:>3}  {name}")
+        print("\n읽는 법 — `지시대로 갈렸다`가 많으면 쪼개기가 듣는다."
+              " `조항이 방향을 정한다`가 많으면\n지시가 무력하므로 프롬프트에"
+              " \"무엇을 기준으로 늘고 줄었다고 하는가\"를 넣어야 한다.")
+        for label, rows_ in examples.items():
+            if label == "지시대로 갈렸다":
+                continue
+            print(f"\n[{label}]")
+            for block, target, up, down in rows_:
+                print(f"  {block} · {target}   늘었다 지시 -> {up or '없음'}"
+                      f"   줄었다 지시 -> {down or '없음'}")
+        return
 
     if args.by_series:
         by_series: dict[str, list] = defaultdict(list)
