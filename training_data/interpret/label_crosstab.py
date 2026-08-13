@@ -200,7 +200,11 @@ def main() -> None:
             verdicts[f"{target}: {label}"] += 1
             count = numbers.get((block, target))
             if count is not None:
-                by_count[label]["수치 1개" if count <= 1 else "수치 2개+"] += 1
+                # **0개와 1개를 뭉치면 안 된다.** `NUMBER`는 시간 단위를 일부러 빼므로
+                # `기한·시점` 조항은 대개 0개로 나온다. 그것을 "수치 하나"로 세면
+                # 애매하지 않은 조항이 애매한 쪽에 섞여 처방이 흐려진다.
+                by_count[label]["0개" if count == 0 else
+                                "1개" if count == 1 else "2개+"] += 1
             if len(examples[label]) < 3:
                 examples[label].append((block, target, up, down, count))
 
@@ -212,12 +216,14 @@ def main() -> None:
               " `조항이 방향을 정한다`가 많으면\n지시가 무력하므로 프롬프트에"
               " \"무엇을 기준으로 늘고 줄었다고 하는가\"를 넣어야 한다.")
         if by_count:
-            print("\n조항 안의 수치 개수로 가르면 — **처방이 여기서 갈린다**")
-            print(f"  {'판정':<22}{'수치 1개':>10}{'수치 2개+':>10}")
+            print("\n조항 안의 수치 개수(`generate.NUMBER`)로 가르면 — **처방이 여기서 갈린다**")
+            print(f"  {'판정':<22}{'0개':>8}{'1개':>8}{'2개+':>8}")
             for label, counts in sorted(by_count.items()):
-                print(f"  {label:<22}{counts['수치 1개']:>10}{counts['수치 2개+']:>10}")
-            print("  실패가 `수치 2개+`에만 몰리면 그런 조항을 안 고르는 것이 답이고,")
-            print("  `수치 1개`에서도 나면 프롬프트에 기준을 넣어야 한다.")
+                print(f"  {label:<22}{counts['0개']:>8}{counts['1개']:>8}{counts['2개+']:>8}")
+            print("  실패가 `2개+`에만 몰리면 그런 조항을 안 고르는 것이 답이고,")
+            print("  `1개`에서도 나면 프롬프트에 기준을 넣어야 한다.")
+            print("  **`0개`는 대개 `기한·시점` 조항이다** — NUMBER가 시간 단위를 일부러")
+            print("  빼므로, 이 열은 수치 애매성과 무관하니 따로 읽는다.")
 
         for label, rows_ in examples.items():
             if label == "지시대로 갈렸다":
