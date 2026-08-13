@@ -160,12 +160,16 @@ def main() -> None:
         # 안 정해진다** -- `과제의 수가 3개를 초과하고 5개 이하` 같은 조항이다. 실패가
         # 수치 여럿인 조항에만 몰리면 처방이 `applicable()`에서 그런 조항을 빼는 것이고,
         # 수치 하나인 조항에서도 나면 프롬프트에 기준을 넣어야 한다. 처방이 갈린다.
+        # **대상마다 애매함의 원인이 다른 값이다.** `수치·기준`이 애매해지는 것은 조항에
+        # 수치가 여럿일 때이고, `기한·시점`이 애매해지는 것은 기한이 여럿일 때다. 둘 다
+        # `NUMBER`로 재면 `기한·시점`은 대개 0개로 잡혀 **그 대상의 애매함을 아예 안 재게
+        # 된다.** 그래서 대상별로 다른 정규식을 쓴다. 원본을 가져다 쓴다 -- 베끼면 갈라진다.
         try:
             sys.path.insert(0, str(REPOSITORY_DIR / "training_data" / "mutate"))
             import generate as _gen  # noqa: PLC0415
-            number_re = _gen.NUMBER          # 원본을 가져다 쓴다. 베끼면 갈라진다
+            counters = {"수치·기준": _gen.NUMBER, "기한·시점": _gen.DEADLINE}
         except Exception:
-            number_re = None
+            counters = {}
 
         both: dict[tuple[str, str], dict[str, list]] = defaultdict(dict)
         numbers: dict[tuple[str, str], int] = {}
@@ -176,8 +180,9 @@ def main() -> None:
             got, _blank = judged(pair)
             key = (str(pair.get("block_id")), want[0])
             both[key][want[1]] = [d for t, d in got if t == want[0]]
-            if number_re is not None:
-                numbers[key] = len(number_re.findall(pair.get("clause") or ""))
+            counter = counters.get(want[0])
+            if counter is not None:
+                numbers[key] = len(counter.findall(pair.get("clause") or ""))
 
         verdicts, examples = Counter(), defaultdict(list)
         by_count: dict[str, Counter] = defaultdict(Counter)
@@ -200,11 +205,8 @@ def main() -> None:
             verdicts[f"{target}: {label}"] += 1
             count = numbers.get((block, target))
             if count is not None:
-                # **0개와 1개를 뭉치면 안 된다.** `NUMBER`는 시간 단위를 일부러 빼므로
-                # `기한·시점` 조항은 대개 0개로 나온다. 그것을 "수치 하나"로 세면
-                # 애매하지 않은 조항이 애매한 쪽에 섞여 처방이 흐려진다.
-                by_count[label]["0개" if count == 0 else
-                                "1개" if count == 1 else "2개+"] += 1
+                by_count[target][(f"{min(count, 2)}개" if count < 2 else "2개+",
+                                  label)] += 1
             if len(examples[label]) < 3:
                 examples[label].append((block, target, up, down, count))
 
@@ -215,15 +217,22 @@ def main() -> None:
         print("\n읽는 법 — `지시대로 갈렸다`가 많으면 쪼개기가 듣는다."
               " `조항이 방향을 정한다`가 많으면\n지시가 무력하므로 프롬프트에"
               " \"무엇을 기준으로 늘고 줄었다고 하는가\"를 넣어야 한다.")
-        if by_count:
-            print("\n조항 안의 수치 개수(`generate.NUMBER`)로 가르면 — **처방이 여기서 갈린다**")
-            print(f"  {'판정':<22}{'0개':>8}{'1개':>8}{'2개+':>8}")
-            for label, counts in sorted(by_count.items()):
-                print(f"  {label:<22}{counts['0개']:>8}{counts['1개']:>8}{counts['2개+']:>8}")
+        for target, counts in sorted(by_count.items()):
+            unit = "수치" if target == "수치·기준" else "기한"
+            print(f"\n[{target}] 조항 안의 {unit} 개수로 가르면 — **처방이 여기서 갈린다**")
+            buckets = sorted({b for b, _ in counts})
+            print(f"  {'판정':<22}" + "".join(f"{b:>8}" for b in buckets))
+            for label in sorted({lb for _, lb in counts}):
+                print(f"  {label:<22}"
+                      + "".join(f"{counts[(b, label)]:>8}" for b in buckets))
+            for bucket in buckets:
+                hit = counts[(bucket, "지시대로 갈렸다")]
+                decid = sum(v for (b, lb), v in counts.items()
+                            if b == bucket and lb != "한쪽이 라벨 없음")
+                if decid:
+                    print(f"  → {bucket}: 판정가능 {hit}/{decid} = {hit / decid * 100:.0f}%")
             print("  실패가 `2개+`에만 몰리면 그런 조항을 안 고르는 것이 답이고,")
             print("  `1개`에서도 나면 프롬프트에 기준을 넣어야 한다.")
-            print("  **`0개`는 대개 `기한·시점` 조항이다** — NUMBER가 시간 단위를 일부러")
-            print("  빼므로, 이 열은 수치 애매성과 무관하니 따로 읽는다.")
 
         for label, rows_ in examples.items():
             if label == "지시대로 갈렸다":
