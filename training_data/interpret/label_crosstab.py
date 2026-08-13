@@ -156,7 +156,19 @@ def main() -> None:
         # **같은 조항에 방향만 다르게 건 짝은 한 변수 실험이다.** 조항·프롬프트가 같고
         # 지시 방향만 다르므로, 셜록의 답이 갈리면 지시가 듣는 것이고 안 갈리면 조항이
         # 방향을 정하는 것이다. BM5로는 이 둘이 구별되지 않는다 -- 둘 다 실패로 나온다.
+        # 조항에 든 수치 개수를 함께 센다. **수치가 여럿이면 "무엇이 늘었나"가 애초에
+        # 안 정해진다** -- `과제의 수가 3개를 초과하고 5개 이하` 같은 조항이다. 실패가
+        # 수치 여럿인 조항에만 몰리면 처방이 `applicable()`에서 그런 조항을 빼는 것이고,
+        # 수치 하나인 조항에서도 나면 프롬프트에 기준을 넣어야 한다. 처방이 갈린다.
+        try:
+            sys.path.insert(0, str(REPOSITORY_DIR / "training_data" / "mutate"))
+            import generate as _gen  # noqa: PLC0415
+            number_re = _gen.NUMBER          # 원본을 가져다 쓴다. 베끼면 갈라진다
+        except Exception:
+            number_re = None
+
         both: dict[tuple[str, str], dict[str, list]] = defaultdict(dict)
+        numbers: dict[tuple[str, str], int] = {}
         for pair, _ in loaded:
             want = instructed(pair)
             if want is None or want[1] not in ("늘었다", "줄었다"):
@@ -164,8 +176,11 @@ def main() -> None:
             got, _blank = judged(pair)
             key = (str(pair.get("block_id")), want[0])
             both[key][want[1]] = [d for t, d in got if t == want[0]]
+            if number_re is not None:
+                numbers[key] = len(number_re.findall(pair.get("clause") or ""))
 
         verdicts, examples = Counter(), defaultdict(list)
+        by_count: dict[str, Counter] = defaultdict(Counter)
         for (block, target), sides in both.items():
             if len(sides) < 2:
                 verdicts[f"{target}: 홑 (짝 없음)"] += 1
@@ -183,8 +198,11 @@ def main() -> None:
             else:
                 label = "둘 다 어긋났다"
             verdicts[f"{target}: {label}"] += 1
+            count = numbers.get((block, target))
+            if count is not None:
+                by_count[label]["수치 1개" if count <= 1 else "수치 2개+"] += 1
             if len(examples[label]) < 3:
-                examples[label].append((block, target, up, down))
+                examples[label].append((block, target, up, down, count))
 
         print(f"\n짝 {sum(1 for s in both.values() if len(s) >= 2)}쌍 "
               f"· 홑 {sum(1 for s in both.values() if len(s) < 2)}개\n")
@@ -193,12 +211,21 @@ def main() -> None:
         print("\n읽는 법 — `지시대로 갈렸다`가 많으면 쪼개기가 듣는다."
               " `조항이 방향을 정한다`가 많으면\n지시가 무력하므로 프롬프트에"
               " \"무엇을 기준으로 늘고 줄었다고 하는가\"를 넣어야 한다.")
+        if by_count:
+            print("\n조항 안의 수치 개수로 가르면 — **처방이 여기서 갈린다**")
+            print(f"  {'판정':<22}{'수치 1개':>10}{'수치 2개+':>10}")
+            for label, counts in sorted(by_count.items()):
+                print(f"  {label:<22}{counts['수치 1개']:>10}{counts['수치 2개+']:>10}")
+            print("  실패가 `수치 2개+`에만 몰리면 그런 조항을 안 고르는 것이 답이고,")
+            print("  `수치 1개`에서도 나면 프롬프트에 기준을 넣어야 한다.")
+
         for label, rows_ in examples.items():
             if label == "지시대로 갈렸다":
                 continue
             print(f"\n[{label}]")
-            for block, target, up, down in rows_:
-                print(f"  {block} · {target}   늘었다 지시 -> {up or '없음'}"
+            for block, target, up, down, count in rows_:
+                mark = f" (수치 {count}개)" if count is not None else ""
+                print(f"  {block} · {target}{mark}   늘었다 지시 -> {up or '없음'}"
                       f"   줄었다 지시 -> {down or '없음'}")
         return
 
