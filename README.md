@@ -61,9 +61,10 @@ evaluation framework was rebuilt between them, so no clause-level alignment
 exists. They are kept as label-definition reference material.
 
 See `docs/기획서_최종.md` for the project plan, `docs/원천데이터_선정_프로세스.md` for
-the source decision record, `docs/학습데이터_생성_프로세스.md` for each accepted
-pair with quoted change excerpts and for the preprocessing and label scheme, and
-`docs/TODO.md` for the remaining source-collection work.
+the source decision record and each accepted pair,
+`docs/학습데이터_생성_프로세스.md` for the preprocessing, label scheme and synthesis
+pipeline, `docs/세션_브리프.md` to pick the work back up, and `docs/TODO.md` for
+the remaining source-collection work.
 
 ## Workflow
 
