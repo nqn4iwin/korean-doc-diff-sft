@@ -39,26 +39,17 @@ sys.path.insert(0, str(REPOSITORY_DIR))
 import solar  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+
+import run as _run  # noqa: E402
 
 TARGETS = ("기한·시점", "수치·기준", "적용 범위", "수행 주체",
            "절차·요건", "제출물·기재사항", "명칭")
 DIRECTIONS = ("늘었다", "줄었다", "다른 값", "새로 생겼다", "없어졌다")
 
-# 주체를 문장에서 찾을 때 쓰는 어절 하한. 한 글자는 우연히 걸리므로 뺀다.
-SUBJECT_WORD = re.compile(r"[\s,·ㆍ()]+")
-SUBJECT_KEPT = 0.5
-
-
-def subject_survives(subject: str, sentence: str) -> bool:
-    """주체가 문장에 남아 있는가. 통째로 있으면 참, 줄여 썼으면 어절 비율로 본다."""
-    if not subject:
-        return True
-    if subject in sentence:
-        return True
-    words = [w for w in SUBJECT_WORD.split(subject) if len(w) >= 2]
-    if not words:
-        return False
-    return sum(1 for w in words if w in sentence) / len(words) >= SUBJECT_KEPT
+# 주체 대조는 run.py의 AM8과 **같은 함수여야 한다.** 여기서 버리는 기준과 채점하는
+# 기준이 다르면, 채점에서 통과한 레코드가 내보내기에서 버려지는 일이 생긴다.
+subject_survives = _run.subject_survives
 
 
 def verdict(record: dict) -> str:

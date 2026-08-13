@@ -159,7 +159,8 @@ def score_blind(raw: str) -> dict:
     if judgement == "positive" and not subjects:
         result["AM8s"] = 0
     else:
-        result["AM8s"] = int(all(s in sentence for s in subjects if s))
+        result["AM8s"] = int(all(_run.subject_survives(s, sentence)
+                                 for s in subjects if s))
     return {**result, "parsed": parsed}
 
 

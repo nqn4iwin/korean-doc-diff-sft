@@ -22,6 +22,7 @@ import argparse
 import difflib
 import json
 import os
+import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -86,6 +87,33 @@ def mentions(haystack: str, forms: list[str]) -> bool:
     return any(form and form in haystack for form in forms)
 
 
+# AM8이 쓰는 주체 대조. 어절로 쪼개 절반 이상 남았으면 같은 주체로 본다.
+SUBJECT_WORD = re.compile(r"[\s,·ㆍ()]+")
+SUBJECT_KEPT = 0.5
+
+
+def subject_survives(subject: str, sentence: str) -> bool:
+    """주체가 문장에 남아 있는가. 통째로 있으면 참, 줄여 썼으면 어절 비율로 본다.
+
+    **글자 그대로 대조하면 흘린 것과 줄여 쓴 것이 구별되지 않는다.** 모델이 배열에
+    `연구개발성과의 활용 촉진을 수행하는 기관`이라 적고 문장에서 `촉진을 수행하는
+    기관`으로 줄이면 같은 주체인데도 실패로 잡힌다. 697건에서 엄격 대조 실패 109건 중
+    56건이 이 종류였다. AM8이 잡으려는 것은 주체를 **빠뜨린** 출력이지 짧게 쓴 출력이
+    아니다.
+
+    문턱을 절반으로 둔 대가는 재봤다. 56건 중 `사람`·`기관` 같은 흔한 낱말 하나로만
+    통과하는 것이 3건이다. 그 정도는 감수한다.
+    """
+    if not subject:
+        return True
+    if subject in sentence:
+        return True
+    words = [w for w in SUBJECT_WORD.split(subject) if len(w) >= 2]
+    if not words:
+        return False
+    return sum(1 for w in words if w in sentence) / len(words) >= SUBJECT_KEPT
+
+
 # 호출 하나를 rubric.md의 AM1~AM8로 채점한다. 각 항목 0 또는 1.
 def score(item: dict, raw: str) -> dict:
     """rubric.md의 AM1~AM8. AH1(재진술 아님)은 사람 몫이라 매기지 않는다."""
@@ -126,7 +154,7 @@ def score(item: dict, raw: str) -> dict:
     if item["judgement"] == "positive" and not subjects:
         result["AM8"] = 0
     else:
-        result["AM8"] = int(all(s in sentence for s in subjects if s))
+        result["AM8"] = int(all(subject_survives(s, sentence) for s in subjects if s))
     return {**result, "parsed": parsed}
 
 
