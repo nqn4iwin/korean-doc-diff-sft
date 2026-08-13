@@ -34,7 +34,7 @@ sys.path.insert(0, str(REPOSITORY_DIR))
 import solar  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
-KEYS = ("AM1", "AM2", "AM3", "AM4", "AM5", "AM6", "AM7", "AM8")
+KEYS = ("AM1", "AM2", "AM3", "AM4", "AM5", "AM6", "AM7", "AM8", "AM9")
 TARGETS = ["기한·시점", "수치·기준", "적용 범위", "수행 주체",
            "절차·요건", "제출물·기재사항", "명칭"]
 DIRECTIONS = ["늘었다", "줄었다", "다른 값", "새로 생겼다", "없어졌다"]
@@ -90,6 +90,35 @@ def mentions(haystack: str, forms: list[str]) -> bool:
 # AM8이 쓰는 주체 대조. 어절로 쪼개 절반 이상 남았으면 같은 주체로 본다.
 SUBJECT_WORD = re.compile(r"[\s,·ㆍ()]+")
 SUBJECT_KEPT = 0.5
+
+
+# AM9가 쓰는 근거 방향 대조. `근거`는 `이전 → 이후`로 적기로 되어 있으므로, 화살표
+# 양쪽을 실제 원문·개정문에 대고 맞춰 보면 뒤집어 적은 것을 기계로 잡을 수 있다.
+EVIDENCE_ARROW = re.compile(r"\s*(?:→|->|=>|⇒)\s*")
+EVIDENCE_STRIP = re.compile(r"[\s\"“”‘’'`]+")
+
+
+def evidence_direction(before: str, after: str, evidence: str) -> str:
+    """근거의 화살표 방향이 맞나. `정상` / `뒤집힘` / `판정불가` 중 하나.
+
+    **판정불가를 넉넉히 둔다.** 모델이 근거를 원문 그대로 옮기지 않고 줄여 쓰면 문자열로
+    못 찾는데, 그것은 방향이 틀렸다는 뜻이 아니다. 한쪽에만 있고 다른 쪽에 없다는 것이
+    양쪽 다 확인될 때만 판정한다.
+    """
+    parts = EVIDENCE_ARROW.split(evidence or "")
+    if len(parts) != 2:
+        return "판정불가"
+    old, new = (EVIDENCE_STRIP.sub("", p) for p in parts)
+    if len(old) < 2 or len(new) < 2:
+        return "판정불가"
+    before_n, after_n = EVIDENCE_STRIP.sub("", before), EVIDENCE_STRIP.sub("", after)
+    old_b, old_a = old in before_n, old in after_n
+    new_b, new_a = new in before_n, new in after_n
+    if old_b and new_a and not (old_a and new_b):
+        return "정상"
+    if old_a and new_b and not (old_b and new_a):
+        return "뒤집힘"
+    return "판정불가"
 
 
 def subject_survives(subject: str, sentence: str) -> bool:
@@ -155,7 +184,15 @@ def score(item: dict, raw: str) -> dict:
         result["AM8"] = 0
     else:
         result["AM8"] = int(all(subject_survives(s, sentence) for s in subjects if s))
-    return {**result, "parsed": parsed}
+
+    # AM9 -- 근거를 `이전 → 이후`로 적어야 하는데 뒤집어 적지 않았나. 라벨 하나라도
+    # 뒤집혔으면 0이다. **판정불가는 통과로 센다** -- 못 찾은 것과 틀린 것은 다르다.
+    # 대신 몇 건을 실제로 판정했는지는 summary에 따로 남긴다.
+    directions = [evidence_direction(item["before"], item["after"],
+                                     str(x.get("근거", "")))
+                  for x in parsed.get("labels", []) if isinstance(x, dict)]
+    result["AM9"] = int("뒤집힘" not in directions)
+    return {**result, "parsed": parsed, "evidence_directions": directions}
 
 
 # AH1을 사람이 읽기 전에 명백한 복사를 걸러낸다. 합격 판정이 아니라 걸러내기다.

@@ -130,9 +130,15 @@ def sample(items: list[dict], limit: int) -> list[dict]:
 
 # -------------------------------------------------------------------- 채점
 
-def score_blind(raw: str) -> dict:
-    """정답키 없이 되는 것만 매긴다. AM4·AM5·AM7은 사람 라벨이 있어야 하므로 없다."""
+def score_blind(raw: str, item: dict | None = None) -> dict:
+    """정답키 없이 되는 것만 매긴다. AM4·AM5·AM7은 사람 라벨이 있어야 하므로 없다.
+
+    **AM9에는 `s` 변형이 없다.** 다른 항목과 달리 정답키가 아니라 **원문·개정문**에
+    대고 재기 때문에, 평가 세트든 실제 데이터든 같은 잣대다. `item`을 주면 매긴다.
+    """
     result = {"AM1": 0, "AM2": 0, "AM3": 0, "AM6s": 0, "AM8s": 0}
+    if item is not None:
+        result["AM9"] = 1
     parsed = _run.parse_output(raw)
     if parsed is None:
         return {**result, "parsed": None}
@@ -161,7 +167,14 @@ def score_blind(raw: str) -> dict:
     else:
         result["AM8s"] = int(all(_run.subject_survives(s, sentence)
                                  for s in subjects if s))
-    return {**result, "parsed": parsed}
+
+    directions = []
+    if item is not None:
+        directions = [_run.evidence_direction(item["before"], item["after"],
+                                              str(x.get("근거", "")))
+                      for x in parsed.get("labels", []) if isinstance(x, dict)]
+        result["AM9"] = int("뒤집힘" not in directions)
+    return {**result, "parsed": parsed, "evidence_directions": directions}
 
 
 def quantiles(values: list[float]) -> dict[str, float]:
@@ -259,17 +272,19 @@ def main() -> None:
             print(f"  [{index}/{len(plan)}] x 실패  {item['id']}")
             return emit({**item, "error": solar.safe_error(error)})
 
-        marked = score_blind(raw)
+        marked = score_blind(raw, item)
         parsed = marked.pop("parsed") or {}
+        directions = marked.pop("evidence_directions")
         sentence = parsed.get("direct_impact") or ""
         ratio = restatement_ratio(item["after"], sentence)
         judgement = str(parsed.get("judgement", "")).strip()
-        print(f"  [{index}/{len(plan)}] {sum(marked.values())}/5  {judgement or '?':<9}"
+        print(f"  [{index}/{len(plan)}] {sum(marked.values())}/6  {judgement or '?':<9}"
               f" {item['id']}")
         return emit({**item, "judgement": judgement,
                      "labels": parsed.get("labels"), "impacts": parsed.get("impacts"),
                      "direct_impact": parsed.get("direct_impact"),
                      "scores": marked, "restatement_ratio": ratio,
+                     "evidence_directions": directions,
                      # True면 개정문을 그대로 옮긴 것에 가까워 사람이 읽기 전에 걸러낸다.
                      "ah1_screen": bool(ratio is not None
                                         and ratio >= _run.RESTATEMENT_THRESHOLD),
@@ -282,7 +297,7 @@ def main() -> None:
         stream.close()
 
     graded = [r for r in records if "scores" in r]
-    keys = ("AM1", "AM2", "AM3", "AM6s", "AM8s")
+    keys = ("AM1", "AM2", "AM3", "AM6s", "AM8s", "AM9")
     verdicts = Counter(r["judgement"] or "(파싱 실패)" for r in graded)
     summary = {
         "prompt": args.prompt,
