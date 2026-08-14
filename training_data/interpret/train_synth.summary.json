@@ -1,0 +1,206 @@
+{
+  "runs": [
+    "training_data/mutate/runs/20260813T101111.875385Z__generate__mobile_2017.converted",
+    "training_data/mutate/runs/20260813T102626.103384Z__generate__mobile_2024",
+    "training_data/mutate/runs/20260813T104300.242739Z__generate__online_2013.converted",
+    "training_data/mutate/runs/20260813T110008.484275Z__generate__online_2024",
+    "training_data/mutate/runs/20260813T111719.502732Z__generate__2020_standard_terms.converted",
+    "training_data/mutate/runs/20260813T112654.590288Z__generate__2024_standard_terms",
+    "training_data/mutate/runs/20260813T121219.335687Z__generate__2021_eval_manual",
+    "training_data/mutate/runs/20260813T121931.636553Z__generate__after_2025",
+    "training_data/mutate/runs/20260813T123925.565467Z__generate__before_2024",
+    "training_data/mutate/runs/20260813T125819.117122Z__generate__after_2026",
+    "training_data/mutate/runs/20260813T131954.568294Z__generate__before_2023",
+    "training_data/mutate/runs/20260813T134349.834913Z__generate__after_2023_partial_revision",
+    "training_data/mutate/runs/20260813T140839.240670Z__generate__before_2022",
+    "training_data/mutate/runs/20260814T000658.990991Z__generate__mobile_2017.converted__plan_ftc_game_terms__mobile_2017.converted",
+    "training_data/mutate/runs/20260814T002027.274871Z__generate__mobile_2024__plan_ftc_game_terms__mobile_2024",
+    "training_data/mutate/runs/20260814T003400.000695Z__generate__online_2013.converted__plan_ftc_game_terms__online_2013.converted",
+    "training_data/mutate/runs/20260814T004300.236136Z__generate__online_2024__plan_ftc_game_terms__online_2024",
+    "training_data/mutate/runs/20260814T010145.531943Z__generate__2020_standard_terms.converted__plan_ftc_gift_certificate_terms__2020_standard_terms.converted",
+    "training_data/mutate/runs/20260814T011646.925794Z__generate__2024_standard_terms__plan_ftc_gift_certificate_terms__2024_standard_terms",
+    "training_data/mutate/runs/20260814T021401.938222Z__generate__2021_eval_manual__plan_mois_opendata_eval_manual__2021_eval_manual",
+    "training_data/mutate/runs/20260814T022539.752308Z__generate__after_2025__plan_mss_rd_guideline_pair__after_2025",
+    "training_data/mutate/runs/20260814T025100.858798Z__generate__before_2024__plan_mss_rd_guideline_pair__before_2024",
+    "training_data/mutate/runs/20260814T030108.596927Z__generate__after_2026__plan_regional_industry_guideline_pair__after_2026",
+    "training_data/mutate/runs/20260814T032113.219076Z__generate__before_2023__plan_regional_industry_guideline_pair__before_2023",
+    "training_data/mutate/runs/20260814T034843.972023Z__generate__after_2023_partial_revision__plan_tips_operating_guideline_pair__after_2023_partial_revision",
+    "training_data/mutate/runs/20260814T041702.506586Z__generate__before_2022__plan_tips_operating_guideline_pair__before_2022"
+  ],
+  "input": 1413,
+  "kept": 1093,
+  "dropped": {
+    "평가 세트 11건과 겹침": 5,
+    "호출 실패": 191,
+    "판정 없음": 16,
+    "주체 흘림": 7,
+    "파싱 실패": 3,
+    "원문·개정문이 앞의 것과 같음": 97,
+    "어휘 위반": 1
+  },
+  "judgements": {
+    "positive": 1087,
+    "negative": 6
+  },
+  "buckets": {
+    "학습 후보": 925,
+    "라벨 교체 후보": 168
+  },
+  "series": {
+    "ftc_game_terms": 368,
+    "regional_industry_guideline_pair": 218,
+    "mss_rd_guideline_pair": 207,
+    "tips_operating_guideline_pair": 201,
+    "ftc_gift_certificate_terms": 63,
+    "mois_opendata_eval_manual": 36
+  },
+  "labels_per_record": {
+    "0": 6,
+    "1": 1043,
+    "2": 43,
+    "3": 1
+  },
+  "targets": {
+    "절차·요건": 326,
+    "수행 주체": 209,
+    "기한·시점": 196,
+    "적용 범위": 167,
+    "제출물·기재사항": 112,
+    "수치·기준": 110,
+    "명칭": 12
+  },
+  "label_conflicts": [
+    {
+      "남김": "synth:ftc_gift_certificate_terms:2020_standard_terms.converted-B0044#20260813T111719-18",
+      "버림": "synth:ftc_gift_certificate_terms:2024_standard_terms-B0044#20260813T112654-19",
+      "남긴 라벨": [
+        [
+          "수행 주체",
+          "다른 값"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "명칭",
+          "다른 값"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:mss_rd_guideline_pair:after_2025-B0104#20260813T121931-3",
+      "버림": "synth:mss_rd_guideline_pair:before_2024-B0097#20260813T123925-3",
+      "남긴 라벨": [
+        [
+          "수치·기준",
+          "늘었다"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "적용 범위",
+          "늘었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:mss_rd_guideline_pair:after_2025-B0104#20260813T121931-4",
+      "버림": "synth:mss_rd_guideline_pair:before_2024-B0097#20260813T123925-4",
+      "남긴 라벨": [
+        [
+          "수치·기준",
+          "줄었다"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "적용 범위",
+          "줄었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:mss_rd_guideline_pair:after_2025-B0120#20260813T121931-33",
+      "버림": "synth:mss_rd_guideline_pair:before_2024-B0113#20260813T123925-33",
+      "남긴 라벨": [
+        [
+          "제출물·기재사항",
+          "늘었다"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "적용 범위",
+          "늘었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:mss_rd_guideline_pair:after_2025-B0288#20260813T121931-28",
+      "버림": "synth:mss_rd_guideline_pair:before_2024-B0279#20260813T123925-37",
+      "남긴 라벨": [
+        [
+          "수치·기준",
+          "늘었다"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "수치·기준",
+          "늘었다"
+        ],
+        [
+          "적용 범위",
+          "줄었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:regional_industry_guideline_pair:after_2026-B0680#20260813T125819-85",
+      "버림": "synth:regional_industry_guideline_pair:before_2023-B0695#20260814T032113-13",
+      "남긴 라벨": [
+        [
+          "기한·시점",
+          "다른 값"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "기한·시점",
+          "줄었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:tips_operating_guideline_pair:after_2023_partial_revision-B0829#20260813T134349-74",
+      "버림": "synth:tips_operating_guideline_pair:after_2023_partial_revision-B0829#20260814T034843-20",
+      "남긴 라벨": [
+        [
+          "기한·시점",
+          "다른 값"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "기한·시점",
+          "줄었다"
+        ]
+      ]
+    },
+    {
+      "남김": "synth:tips_operating_guideline_pair:after_2023_partial_revision-B0829#20260813T134349-74",
+      "버림": "synth:tips_operating_guideline_pair:before_2022-B0828#20260814T041702-53",
+      "남긴 라벨": [
+        [
+          "기한·시점",
+          "다른 값"
+        ]
+      ],
+      "버린 라벨": [
+        [
+          "기한·시점",
+          "줄었다"
+        ]
+      ]
+    }
+  ]
+}
