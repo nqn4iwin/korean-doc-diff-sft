@@ -18,9 +18,29 @@ block_components.py`가 이 일을 하도록 만들어졌으나 **옛 13종 어�
 
 **그 표층 판정이 버틸 만하다는 것이 2026-08-12에 확인됐다.** 새 교사 모델 60건에서
 `수행 주체` 19/20·18/20, `기한·시점` 2/2, `제출물` 2/2가 나왔다 -- 자리 없는 지시를
-걸고 있었다면 이렇게 안 나온다. **막고 있는 것은 성립 판정이 아니라 `allowed[:2]`로
-앞 둘만 집는 것이다.** 목록 맨 앞의 `수행 주체`가 두 자리를 늘 먹어 전체 코퍼스에서
-59.6%가 되고 `수치·기준`은 1.5%밖에 안 나온다.
+걸고 있었다면 이렇게 안 나온다. **막고 있던 것은 성립 판정이 아니라 `allowed[:2]`로
+앞 둘만 집는 것이었다.** 목록 맨 앞의 `수행 주체`가 두 자리를 늘 먹어 전체 코퍼스에서
+59.6%가 되고 `수치·기준`은 1.5%밖에 안 나왔다.
+
+**2026-08-13에 고쳤다.** 성립하는 지시를 전부 후보에 담고, 조항당 상한은 뽑을 때 걸며,
+공급이 적은 지시부터 고르게 했다. 계획 총량(5,423건)과 조항당 상한은 그대로다.
+
+| 대상 | 고치기 전 | 전량 5,423건 | 문서당 120건(1,461건) |
+| --- | ---: | ---: | ---: |
+| 수행 주체 | 59.6% | 38.6% | 25.1% |
+| 절차·요건 | 25.5% | 28.1% | 29.8% |
+| 제출물·기재사항 | 2.3% | 12.2% | 12.2% |
+| 수치·기준 | 1.5% | 5.2% | 8.3% |
+| 기한·시점 | 1.3% | 5.0% | 10.7% |
+
+**적게 뽑을수록 고르다.** 드문 지시부터 집으므로 공급이 큰 `절차·요건`은 뒤로 밀리고,
+많이 뽑을수록 남는 것이 그쪽뿐이라 다시 쏠린다.
+
+**여기서 25% 상한을 강제하지는 않는다.** 상한이 걸리는 것은 지시가 아니라 셜록이 붙인
+**산출 라벨**인데 셜록이 라벨을 갈아 끼우므로 둘이 다르다(옛 180건에서 `(절차·요건,
+늘었다)` 지시 34건 중 6건만 그 라벨로 남았다). 게다가 문서 하나에 성립하는 대상이
+두셋뿐인 것이 있어, 문서 단위로 25%를 강제하면 그런 문서는 계획이 거의 안 잡힌다.
+**상한은 산출을 보고 합본할 때 잘라 맞춘다.**
 
 사용:
     python3 training_data/mutate/generate.py DOC --prompt v1.1 --limit 20
@@ -70,7 +90,12 @@ PREDICATE = re.compile(r"(하여야 한다|해야 한다|하여야 합니다|한
 ACTOR = re.compile(r"[가-힣]{2,}(?:의 장|기관|위원회|담당관|장관|처|부|사|자)"
                    r"(?:은|는|이|가|으로 하여금)\s")
 ENUM = re.compile(r"(다음 각 호|각 호의|어느 하나에 해당)")
-NUMBER = re.compile(r"\d+\s*(?:퍼센트|%|원|억|만원|배|개|명|점|등급)")
+# `개`에 `(?!월)`이 붙은 이유 -- 경계가 없으면 `3개월`이 `3개`로 걸려 기한 조항이
+# `수치·기준` 후보가 된다. 2026-08-13 탐침에서 `수치·기준` 지시가 다른 대상으로 읽힌
+# 8건이 **예외 없이** 이것이었다(`3개` 6건, `1개` 2건). 붙이면 8건이 전부 사라진다.
+# 대신 맞았던 3건도 후보에서 빠지고 성립 조항이 305개에서 183개로 준다 -- 필요량
+# (1,500건의 8~12%면 120~175건)에는 남는다.
+NUMBER = re.compile(r"\d+\s*(?:퍼센트|%|원|억|만원|배|개(?!월)|명|점|등급)")
 DEADLINE = re.compile(r"\d+\s*(?:일|개월|년|주|시간)\s*(?:이내|이전|전까지|까지)")
 SUBMIT = re.compile(r"(제출|첨부|기재|보고|통보|신고)")
 # 정의 조항(`"사업단"이란 … 말한다`)과 목적 조항. 서술어가 있어 후보에 들어오지만
@@ -104,10 +129,16 @@ def applicable(clause: str) -> list[tuple[str, str]]:
         out += [("절차·요건", "새로 생겼다")]
     if ENUM.search(clause):
         out += [("적용 범위", "늘었다"), ("적용 범위", "줄었다")]
+    # **`다른 값`이 아니라 `늘었다`·`줄었다`로 건다.** 2026-08-13 탐침에서 두 지시 다
+    # 대상은 잘 회수되는데(기한 17/19, 수치는 운영지침 계열 9/11) BM5가 11%·6%였다.
+    # 셜록이 붙인 방향이 늘었다/줄었다로 갈렸고 `다른 값`은 대상이 맞은 건 중 0건이다.
+    # 수가 바뀌면 늘거나 줄지 "다른 값"이 되지 않는다 -- `10명 → 12명`은 늘었고
+    # `1개월 → 30일`은 줄었다. `(절차·요건, 늘었다)` → `새로 생겼다`와 같은 자리이며,
+    # **정의로 정한 것이 아니라 A가 실제로 어떻게 읽는지로 정했다.**
     if NUMBER.search(clause):
-        out += [("수치·기준", "다른 값")]
+        out += [("수치·기준", "늘었다"), ("수치·기준", "줄었다")]
     if DEADLINE.search(clause):
-        out += [("기한·시점", "다른 값")]
+        out += [("기한·시점", "늘었다"), ("기한·시점", "줄었다")]
     if SUBMIT.search(clause):
         out += [("제출물·기재사항", "늘었다")]
     return out
@@ -159,10 +190,16 @@ def main() -> None:
         print(f"  생성 계획      {len(plan)}건  (밖에서 받았다. --limit 무시)")
     else:
         candidates = clause_candidates(args.document)
+        # 성립하는 지시를 **전부** 담는다. 조항당 상한(`--per-clause`)은 여기서 자르지
+        # 않고 아래 뽑기에서 건다 -- 여기서 자르면 `applicable()`이 적어 놓은 순서가
+        # 그대로 배분이 되어 버린다. 맨 위의 `수행 주체`가 두 자리를 늘 먼저 먹어서
+        # 전 문서 기준 59.6%가 되고, `기한·시점`은 공급 271건 중 68건만 후보에 올라
+        # 대상 6종 균등 배분(1,400건이면 종당 233건)이 아예 불가능했다.
         by_instruct: dict[tuple[str, str], list[dict]] = {}
         for block_id, clause in candidates:
-            allowed = [c for c in applicable(clause) if c not in BLOCKED]
-            for target, direction in allowed[:args.per_clause]:
+            for target, direction in applicable(clause):
+                if (target, direction) in BLOCKED:
+                    continue
                 by_instruct.setdefault((target, direction), []).append(
                     {"block_id": block_id, "clause": clause,
                      "instruct": {"대상": target, "방향": direction}})
@@ -171,12 +208,25 @@ def main() -> None:
         # 기한은 드물기 때문이다. 실제로 20건 중 12건이 `(절차·요건, 늘었다)`로 나왔다.
         # `docs/기획서_최종.md` 2.3절이 단일 변경 유형 비중을 25%로 제한하므로, 지시별로
         # 돌아가며 하나씩 뽑아 상한에 걸리지 않게 한다.
-        plan, pools = [], [list(v) for v in by_instruct.values()]
+        #
+        # **드문 지시가 먼저 고른다.** 조항 하나에 걸 수 있는 지시가 `--per-clause`개로
+        # 묶여 있어 자리를 두고 경쟁하는데, 흔한 지시가 먼저 집으면 드문 지시는 걸 조항이
+        # 남지 않는다. 공급이 적은 지시부터 뽑아야 그 몫이 지켜진다.
+        plan: list[dict] = []
+        pools = [list(v) for v in sorted(by_instruct.values(), key=len)]
+        per_clause_used: Counter[str] = Counter()
         while len(plan) < args.limit and any(pools):
             for pool in pools:
-                if not pool or len(plan) >= args.limit:
-                    continue
-                plan.append(pool.pop(0))
+                if len(plan) >= args.limit:
+                    break
+                # 조항 상한에 이미 걸린 것은 앞으로도 못 쓴다(쓴 횟수는 늘기만 한다).
+                # 버리면서 쓸 수 있는 첫 건까지 내려간다.
+                while pool:
+                    item = pool.pop(0)
+                    if per_clause_used[item["block_id"]] < args.per_clause:
+                        per_clause_used[item["block_id"]] += 1
+                        plan.append(item)
+                        break
 
         print(f"  조항 후보      {len(candidates)}개  ({MIN_CHARS}~{MAX_CHARS}자, 서술어 있음)")
         print(f"  생성 계획      {len(plan)}건  (조항당 최대 {args.per_clause}개 지시)")
