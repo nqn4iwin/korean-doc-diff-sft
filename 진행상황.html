@@ -91,15 +91,15 @@
       <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
         <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a>
         · <a href="https://rnd.dacon.kr/drive/s/uQIDDBIJxiPO3kXg_SEFVQ" target="_blank" rel="noopener">문서 모음 (공유 드라이브)</a></p>
-      <span class="updated">기준일: 2026-08-14 (18:00)</span>
+      <span class="updated">기준일: 2026-08-18 (18:00)</span>
     </header>
 
     <div class="grid">
       <section class="card summary" aria-labelledby="progress-title">
         <h2 id="progress-title">현재 진행률</h2>
-        <div class="big">50%</div>
-        <div class="meter" aria-label="전체 진행률 50%"><span style="width:50%"></span></div>
-        <p class="note"><strong>오늘부터가 실제 1차 학습입니다.</strong> 605건으로 설정 74개를 훑은 것은 어떤 학습 방법이 붙는지 확인하고 에폭을 3으로 정하기 위한 중간 과정이었습니다. <code>data_collect</code>에서 합성 학습 레코드 1,093건을 만들고, <code>model_train</code>에서 기존 데이터와 합쳐 <strong>학습 1,655건·홀드아웃 37건</strong>을 고정했습니다. 이 데이터로 설정 66개를 8월 17일까지 학습한 뒤 결과물을 확인합니다.</p>
+        <div class="big">55%</div>
+        <div class="meter" aria-label="전체 진행률 55%"><span style="width:55%"></span></div>
+        <p class="note"><strong>학습 1,655건으로 돌린 2차 스윕 66개가 끝났습니다.</strong> 결과가 나온 62개 중 24개가 통과했고, 1차에서 붕괴했던 43개 중 26개가 살아났습니다. 데이터만 바꿔 확인한 결과라 1차의 붕괴 상당수는 학습 방법보다 negative 비율이 높은 데이터가 만든 함정이었습니다. 이제 문장 품질을 사람 눈가림 평가로 확인하고, 채점 기준을 보완한 뒤 3,000건 증량으로 넘어갑니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
@@ -111,12 +111,12 @@
             <tr><td>전처리·라벨 체계 확정</td><td>정규화 8종, 3단 라벨 정의서 확정</td><td>15</td><td>15</td></tr>
             <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 홀드아웃 개방</td><td>10</td><td>10</td></tr>
             <tr><td>학습데이터 605건 확보</td><td>실제 pair에 해석을 붙여 게이트 통과분 확보</td><td>5</td><td>5</td></tr>
-            <tr><td>1차 학습</td><td>pre-run(605건) → 본 학습(1,655건)·결과 확인</td><td>15</td><td>10</td></tr>
+            <tr><td>1차 학습</td><td>pre-run(605건) → 본 학습(1,655건)·결과 확인</td><td>15</td><td>15</td></tr>
             <tr class="zero"><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>0</td></tr>
             <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>15</td><td>0</td></tr>
             <tr class="zero"><td>비교군·평가·분석</td><td>베이스라인 대비 가설의 채택 또는 기각 근거</td><td>15</td><td>0</td></tr>
           </tbody>
-          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>50</td></tr></tfoot>
+          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>55</td></tr></tfoot>
         </table>
       </section>
     </div>
@@ -126,12 +126,12 @@
       <div class="gantt">
         <div class="timeline">
           <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span class="holiday">8/8</span><span class="holiday">8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span class="holiday">8/22</span><span class="holiday">8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span><span>8/28</span><span class="holiday">8/29</span><span class="holiday">8/30</span><span>8/31</span></div></div>
-          <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 24 / 60 pair. 합성 검증 뒤 재개</small></div><div class="track"><span class="bar hold" style="--start:1;--span:5">보류</span></div></div>
+          <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 25 / 60 pair. 후보 중복 검사기를 두고 수집 재개</small></div><div class="track"><span class="bar done" style="--start:1;--span:5">1차 확보</span><span class="bar current" style="--start:15;--span:4">재개</span></div></div>
           <div class="gantt-row"><div class="task">전처리·라벨 체계 확정<small>정규화 8종, 3단 라벨, 2단 짝짓기</small></div><div class="track"><span class="bar done" style="--start:1;--span:3">완료</span></div></div>
           <div class="gantt-row"><div class="task">Solar 입출력 정의·결과물 평가<small>역할 A 프롬프트 v2.2·역할 B 프롬프트 v1.2 잠금</small></div><div class="track"><span class="bar done" style="--start:3;--span:6">완료</span></div></div>
           <div class="gantt-row"><div class="task">학습데이터 605건 확보<small>원천데이터 697쌍에 역할 A 해석을 붙임</small></div><div class="track"><span class="bar done" style="--start:7;--span:2">완료</span></div></div>
-          <div class="gantt-row"><div class="task">1차 학습<small>pre-run(605건)으로 조건을 고정하고 본 학습(1,655건) 설정 66개 실행</small></div><div class="track"><span class="bar current" style="--start:8;--span:7">현재</span></div></div>
-          <div class="gantt-row"><div class="task">학습데이터 확대<small>1차 학습 결과를 확인한 뒤 6,000건 증량 여부와 구성을 결정</small></div><div class="track"><span class="bar planned" style="--start:15;--span:2">예정</span></div></div>
+          <div class="gantt-row"><div class="task">1차 학습<small>pre-run 70개와 본 학습 66개를 같은 홀드아웃에서 비교</small></div><div class="track"><span class="bar done" style="--start:8;--span:8">완료</span></div></div>
+          <div class="gantt-row"><div class="task">학습데이터 확대<small>복합 수정 비율·방법을 설계하고 3,000건으로 증량</small></div><div class="track"><span class="bar current" style="--start:15;--span:4">현재</span></div></div>
           <div class="gantt-row"><div class="task">학습 고도화 (2차 학습)<small>학습 trial 20회까지</small></div><div class="track"><span class="bar planned" style="--start:16;--span:5">예정</span></div></div>
           <div class="gantt-row"><div class="task">비교군·평가·분석<small>베이스라인, 가설 검증</small></div><div class="track"><span class="bar planned" style="--start:21;--span:8">예정</span></div></div>
         </div>
@@ -142,8 +142,8 @@
     <section aria-labelledby="next-title">
       <h2 id="next-title">지금 가장 중요한 다음 단계</h2>
       <div class="callout">
-        <strong>8월 17일에 1차 학습이 끝나면 결과물을 확인합니다.</strong><br><br>
-        설정 66개가 끝까지 실행됐는지 먼저 확인하고, 얼려 둔 홀드아웃 37건에서 <code>judgement</code> 판정과 <code>(대상, 방향)</code> 라벨 일치를 따로 읽습니다. 그 결과를 실제 데이터 605건과 합성 데이터 1,093건의 구성에 맞대어, 차이가 학습 방법에서 왔는지 데이터의 계열·라벨 분포에서 왔는지 가릅니다. 이 확인이 끝나면 6,000건 증량 여부와 구성을 결정합니다.
+        <strong>채점 기준을 보완한 뒤 3,000건 데이터 증강으로 넘어갑니다.</strong><br><br>
+        먼저 높은 학습률로 다시 돌리는 여섯 설정의 3라운드 결과를 확인합니다. 이어 교사 대 모델과 1차 대 2차의 <code>direct_impact</code> 문장을 조문별 상한 2건으로 눈가림 평가합니다. 라벨 일치는 문장 품질의 대리값일 뿐이므로 사람이 읽은 결과로 채점 기준을 고정하고, 실제 데이터보다 부족한 복합 수정을 어떤 비율과 방법으로 넣을지 설계합니다.
       </div>
     </section>
 
@@ -238,7 +238,7 @@
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 전날 밤 걸어둔 6에폭 실험 세 건의 결과 확인.<br><br><strong class="who">data_collect</strong> 역할 B(모리아티)를 인수인계받아 합성 6,000건의 방법론 세우기. 교사 모델이 바뀌어 기준선부터 다시 잡아야 했다.</p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 전날 밤 걸어둔 6에폭 실험 세 건의 결과 확인.<br><br><strong class="who">data_collect</strong> 역할 B(모리아티)를 인수인계받아 합성 3,000건의 방법론 세우기. 교사 모델이 바뀌어 기준선부터 다시 잡아야 했다.</p></div>
           <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 6에폭 세 건과 체크포인트 10건을 추가 채점했다. <code>delora-sentence-e3</code>를 새로 돌려 빈 칸을 메웠다. <code>붕괴</code> 43건을 유형별로 갈랐다. venv를 <code>model_train</code> 전용으로 분리하고 W&amp;B를 붙였다.<br><br><strong class="who">data_collect</strong> 새 교사 모델로 기준선 60건을 다시 잡았다. 판정 효과와 생성 효과를 갈라 쟀다. 채점 항목 셋(C2·BM7 라우팅·BM5a)을 고쳤다. 같은 60건을 사람과 기계 채점자가 각각 매겼다. 프롬프트 v1.2를 내고 <code>절차·요건</code> 지시를 고쳤다. 도구 다섯을 만들고 문서를 갱신했다.</p></div>
           <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 채점기에 라벨일치 열 넣기. <code>sentence</code> 조건의 AM8s 처리 정하기. 밤사이 걸어둔 여섯 건 확인. 커밋 세 건.<br><br><strong class="who">data_collect</strong> 합성에 복수 변경을 넣을지 정하기. 지시 배분 고치기. v1.2 60건 재채점. 판정 잡음 바닥 재기.</p></div>
           <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>aa68b11</code> · <code>91f2343</code> · <code>4a7b057</code> · <code>a7a5b72</code><br>문서는 <code>docs/에폭_결과.md</code> · <code>docs/스윕_결과.md</code> 9절 · <code>docs/서버환경.md</code>.<br><br><strong class="who">data_collect</strong> <code>f60bd4a</code> · <code>4608b17</code> · <code>0cbb242</code> · <code>103f03b</code> · <code>4e7cc3f</code><br>문서는 <code>mutate/CHANGELOG.md</code> · <code>rubric.md</code> · <code>설계_메모.md</code> 7절 · <code>docs/학습데이터_생성_프로세스.md</code> 3절.</p></div>
@@ -250,7 +250,7 @@
           <div><h3>가장 어려웠던 지점</h3><p class="prompt"><strong class="who">model_train</strong> 43개짜리 <code>붕괴</code> 칸을 숫자만 보고 넘겼다. 그 안에 아무것도 안 배운 6개가 들어 있었다.<br><br><strong class="who">data_collect</strong> v1.2를 돌렸더니 점수가 내려갔다(78.3% → 68.3%). 프롬프트를 고쳤는데 나빠진 것이라 되돌릴 뻔했다.</p></div>
           <div><h3>왜 어려웠나</h3><p class="prompt"><strong class="who">model_train</strong> 요약된 숫자만 보고 원본을 안 열었다. 같은 실수를 <code>스윕_결과.md</code> 8절에 이미 적어두고도 반복했다.<br><br><strong class="who">data_collect</strong> 지표 한 칸이 두 가지를 뭉쳐 재고 있었다. 갈라 보니 대상 회수는 5/12 → 10/12로 두 배가 됐고, 방향이 어긋나 최종 점수만 0이 된 것이었다. 틀린 것은 모델이 아니라 우리 지시였다.</p></div>
           <div><h3>다음에는 어떻게 할까</h3><p class="prompt"><strong class="who">model_train</strong> 한 칸이 여러 건을 묶고 있으면 그 칸을 연다. 숫자를 인용하기 전에 어느 실행에서 나온 것인지 확인한다.<br><br><strong class="who">data_collect</strong> 점수가 안 나오면 모델보다 지시를 먼저 의심한다. 그리고 합쳐진 지표는 실패의 성격을 가린다 — 두 능력이 서로 상쇄해 “변화 없음”으로 보인다.</p></div>
-          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong class="who">model_train</strong> AM8s와 둥근 따옴표를 고칠지 판단이 필요하다. 지금 생각은 합격선은 안 건드리고 열만 늘리는 쪽이다. 6,000건 본 학습에 방법을 몇 개 데려갈지도 정해야 한다.<br><br><strong class="who">data_collect</strong> 합성에 복수 변경을 넣을지 정해야 한다(실제 18% 대 합성 2%). 그리고 6,000건이 정말 필요한지 605 → 2,000 → 6,000으로 재보고 싶다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong class="who">model_train</strong> AM8s와 둥근 따옴표를 고칠지 판단이 필요하다. 지금 생각은 합격선은 안 건드리고 열만 늘리는 쪽이다. 3,000건 본 학습에 방법을 몇 개 데려갈지도 정해야 한다.<br><br><strong class="who">data_collect</strong> 합성에 복수 변경을 넣을지 정해야 한다(실제 18% 대 합성 2%). 그리고 3,000건이 정말 필요한지 605 → 2,000 → 3,000으로 재보고 싶다.</p></div>
         </div>
       </article>
       </details>
@@ -277,8 +277,8 @@
       </article>
       </details>
 
-      <details class="day" open>
-      <summary><time>2026-08-14</time><span class="tag">진행 중 — 본 학습을 시작했다</span></summary>
+      <details class="day">
+      <summary><time>2026-08-14</time><span class="tag">완료 — 본 학습을 시작했다</span></summary>
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
@@ -294,7 +294,29 @@
           <div><h3>가장 어려웠던 지점</h3><p class="prompt">두 저장소의 산출물을 연결하면서 평가 데이터가 학습에 섞이지 않게 하는 일이 가장 까다로웠다.</p></div>
           <div><h3>왜 어려웠나</h3><p class="prompt">합성 데이터의 <code>synth:</code> 접두와 서로 다른 채점 필드 때문에, 오류 없이도 홀드아웃이 새거나 레코드가 전부 버려질 수 있었다.</p></div>
           <div><h3>다음에는 어떻게 할까</h3><p class="prompt">학습을 걸기 전에 건수·계열·negative 비율·홀드아웃 겹침을 실제 출력 파일에서 확인한다.</p></div>
-          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt">1차 학습 결과를 본 뒤 6,000건까지 늘릴지, 합성 데이터에 복수 변경을 넣을지 결정한다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt">1차 학습 결과를 본 뒤 3,000건까지 늘릴지, 합성 데이터에 복수 변경을 넣을지 결정한다.</p></div>
+        </div>
+      </article>
+      </details>
+
+      <details class="day" open>
+      <summary><time>2026-08-18</time><span class="tag">진행 중 — 2차 스윕을 마치고 다음 라운드를 준비했다</span></summary>
+      <article class="entry">
+        <div class="entry-head">진행 기록</div>
+        <div class="entry-grid">
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 학습 1,655건으로 돌린 2차 스윕을 정리하고, 다음 데이터 증강 전에 무엇을 더 확인할지 정한다.<br><br><strong class="who">data_collect</strong> 원천 수집을 다시 열되 기존 계열과 겹치는 후보를 앞에서 막고, 새 홀드아웃이 합성 씨앗에 섞이지 않게 한다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 설정 66개의 2차 스윕을 마쳤다. 결과가 나온 62개 중 24개가 통과했고, 1차 붕괴 43개 중 26개가 벗어났다. 라벨 일치를 140줄 표에 소급하고, 부족한 기록과 에폭 혼입을 막았다. <code>run/</code>을 <code>cli/</code>로 바꾸고, 문장을 직접 비교하는 눈가림 판을 만들었다. VeRA에서 학습률을 <code>2e-4</code>에서 <code>1e-2</code>로 올리자 파싱률이 10.8%에서 91.9%로 올라, 같은 조건을 여섯 방식에 적용할 3라운드 설정을 준비했다.<br><br><strong class="who">data_collect</strong> 후보의 유사도·실질 변경·중복을 자동 판정하는 <code>check_candidate.py</code>와 수집 지시서 둘을 만들었다. 산업기술혁신사업 공통 운영요령 pair를 25번째 원천이자 새 홀드아웃으로 받았다. 재시도·재개 기능으로 Solar 응답 유실을 막고, 두 홀드아웃 계열을 합성 씨앗 단계에서 제외했다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 높은 학습률을 적용한 여섯 설정을 돌려 확인하고, 교사 대 모델과 1차 대 2차 문장을 사람 눈가림으로 채점한다.<br><br><strong class="who">data_collect</strong> 새 홀드아웃에 해석을 붙이고 원천 수집을 이어간다. 3,000건 증강에 넣을 복합 수정의 비율과 생성 방법을 설계한다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>96a8ea8</code> · <code>61cdce7</code> · <code>8798238</code> · <code>9c63272</code> · <code>4c90ded</code> · <code>bb2159d</code> · <code>0097142</code> · <code>a1fa8ae</code> · <code>cbf6297</code> · <code>4da3427</code><br><br><strong class="who">data_collect</strong> <code>ca5a378</code> · <code>eb23a5e</code> · <code>cc39c98</code></p></div>
+        </div>
+      </article>
+      <article class="entry">
+        <div class="entry-head">회고</div>
+        <div class="entry-grid">
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt">모델 negative에 대한 결정이 어려웠다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt">원천을 더 모아도 모델 negative가 예상만큼 나오지 않았다. 기존 계획량을 그대로 합성하면 negative 비율이 약 2%까지 내려가 평가에 영향을 줄 수 있었다. 역할 B(모리아티)가 negative를 의도적으로 만들도록 프롬프트를 고치자니, 이미 만든 합성 약 1,000건과 다른 프롬프트를 쓰게 되어 같은 데이터로 묶어도 되는지 고민이 생겼다.</p></div>
+          <div><h3>다음에는 어떻게 할까</h3><p class="prompt">학습데이터 증량 목표를 절반인 3,000건으로 줄였다. 현재 수집분 기준으로 negative가 약 9%가 되고, 원천을 조금 더 찾아 자연 발생분을 보태면 10%를 넘길 수 있다고 판단했다. 다음 생성부터는 시작 전에 목표 건수에 따른 라벨 분포를 먼저 계산한다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt">실제 라벨 분포가 예상과 다를 때, 특정 라벨을 의도적으로 살리기 위한 생성 작업을 추가하는 것이 맞는지 의문이 남는다.</p></div>
         </div>
       </article>
       </details>
@@ -330,12 +352,13 @@
         <div class="decision"><span>2026-08-05</span><span>앞단 A(해석 붙이기)는 Solar가 아니라 사람이 맡는다</span><span><code>interpret_probe</code>에서 라벨 일치가 6건 중 3건이었고 틀린 답에도 <code>high</code>가 붙었다. few-shot 예시에 반반 확률의 라벨을 넣을 수 없다. 몇 건만 필요하므로 사람이 쓰는 편이 싸다</span></div>
         <div class="decision"><span>2026-08-10</span><span>역할 A·B 산출물의 평가 지표를 정의했다 (AM·AH / BM·BH / C)</span><span>역할과 채점자를 구분하고, 자동 게이트와 사람 검수를 같은 이름 체계로 관리하기 위해서다. 역할 B의 버킷은 BM1~BM5로 가르고 BM7·C는 문제 표시로만 쓴다.</span></div>
         <div class="decision"><span>2026-08-10</span><span>역할 A의 프롬프트 루프를 v2.2에서 멈추고 역할 B로 넘어간다</span><span>역할 B의 few-shot 예시를 만들 수준까지 역할 A가 안정됐다. 합성 pair에 해석을 붙이는 A-2는 pair가 만들어진 뒤 다시 연다.</span></div>
-        <div class="decision"><span>2026-08-11</span><span>합성 6,000건을 기다리지 않고 실제 pair 605건으로 먼저 학습에 들어간다</span><span>GPU 일정에 맞춰 KORMo에 붙는 학습 방법부터 확인한다. 계열과 negative가 쏠린 데이터이므로 이 결과는 성능 검증이 아니라 pre-run으로만 쓴다.</span></div>
+        <div class="decision"><span>2026-08-11</span><span>합성 3,000건을 기다리지 않고 실제 pair 605건으로 먼저 학습에 들어간다</span><span>GPU 일정에 맞춰 KORMo에 붙는 학습 방법부터 확인한다. 계열과 negative가 쏠린 데이터이므로 이 결과는 성능 검증이 아니라 pre-run으로만 쓴다.</span></div>
         <div class="decision"><span>2026-08-11</span><span>교사 호출에서 <code>reasoning_effort</code>를 끄지 않는다</span><span>끄자 AM4가 100%에서 62.5%로 떨어지고 negative 3건을 모두 positive로 읽었다. 추론은 유지하고 속도는 동시 요청으로 확보한다.</span></div>
         <div class="decision"><span>2026-08-12</span><span>학습 에폭은 3으로 고정한다</span><span><code>full</code>은 3에폭에서 91.9%로 정점을 찍고 이후 하락했으며, 6에폭에서는 과적합이 확인됐다. 본 학습은 에폭별 체크포인트를 남겨 1에폭부터 확인한다.</span></div>
         <div class="decision"><span>2026-08-12</span><span>BH1을 “비합리 없음”으로 좁힌다 — 문체는 재지 않는다</span><span>“개정문다운가”는 사람과 기계의 카파가 0.00이었지만, 말이 안 되는 문장에는 이유까지 일치했다. 합의 가능한 비합리만 재도록 범위를 좁힌다.</span></div>
         <div class="decision"><span>2026-08-13</span><span>이번 생성·학습에서는 한 블록쌍에 복수 변경을 넣지 않는다</span><span>605건에서 1,655건으로 양을 늘린 효과를 먼저 보기 위해 데이터 구성은 바꾸지 않는다. 복수 변경은 이번 학습 결과를 본 뒤 다시 검토한다.</span></div>
         <div class="decision"><span>2026-08-14</span><span>본 학습 데이터 1,655건과 홀드아웃 37건을 고정한다</span><span>학습 중 데이터가 바뀌면 설정별 결과를 같은 조건에서 비교할 수 없다. 홀드아웃은 pre-run과 동일하게 유지한다.</span></div>
+        <div class="decision"><span>2026-08-18</span><span>산업기술혁신사업 운영요령 pair는 새 홀드아웃으로만 쓴다</span><span>기존 홀드아웃이 단일 문서라 현재 결과가 그 문서에 특화된 것인지 보편적인 경향인지 가르기 어려웠다. 별도 문서인 산업기술혁신사업 운영요령을 추가 홀드아웃으로 마련해 함께 확인한다.</span></div>
         <div class="decision"><span class="empty">YYYY-MM-DD</span><span class="empty">예: PDF pair는 라벨링에서 보류</span><span class="empty">문단 추출 경로를 확보하면 다시 검토</span></div>
       </div>
     </section>
