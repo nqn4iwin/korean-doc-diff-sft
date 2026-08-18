@@ -38,6 +38,25 @@ _spec.loader.exec_module(_generate)
 READABLE = (".hwpx", ".hwp", ".txt")
 DERIVED = {"changed_blocks.txt"}
 
+# **홀드아웃 계열은 씨앗에서 뺀다.** 합성 pair는 원천 조항을 그대로 가져다 개정문만 새로
+# 쓰므로, 홀드아웃 문서로 합성을 만들면 채점에 쓸 조항을 모델이 학습에서 이미 본 셈이 되어
+# 점수가 부풀려진다. 2026-08-13 본 생성에서 `mof_rd_regulation_pair` 씨앗이 240건 나왔고
+# 2026-08-14에 전량 버렸다 -- 생성에 5시간과 판정 호출을 다 쓰고 난 뒤였다.
+# 뒤에서 거르면 그 비용이 그대로 나가므로 앞에서 막는다.
+#
+# 계열 이름은 `data/raw_collection/<계열>/`의 폴더 이름이고, `export_synth.series_of`와
+# `model_train`의 `HOLDOUT_SERIES`가 같은 문자열을 쓴다. **세 곳이 한 이름으로 맞물리므로
+# 여기 이름을 바꾸면 나머지 둘도 함께 본다.**
+#
+# **새 홀드아웃 원천을 받으면 파일을 `data/raw_collection/`에 놓는 그 자리에서 여기에
+# 적는다.** 생성을 한 번 돌리고 나서 적으면 이미 늦다.
+HOLDOUT_SERIES = {
+    "mof_rd_regulation_pair",
+    # 2026-08-18에 홀드아웃을 늘리려고 받았다. 처음부터 채점용이라 한 번도 씨앗이 된 적이
+    # 없다 -- `mof`처럼 나중에 걷어내는 일이 없다.
+    "motie_industrial_tech_guideline_pair",
+}
+
 
 def _clauses(path: Path) -> int:
     try:
@@ -57,6 +76,8 @@ def unique(root: Path) -> list[Path]:
     groups: dict[tuple[str, str], list[Path]] = {}
     for path in sorted(root.rglob("*")):
         if path.suffix.lower() not in READABLE or path.name in DERIVED:
+            continue
+        if path.relative_to(root).parts[0] in HOLDOUT_SERIES:
             continue
         # `2020_standard_terms.converted.hwpx`와 `2020_standard_terms.txt`는 같은 문서다.
         key = (path.parent.name, path.stem.replace(".converted", ""))
@@ -94,6 +115,10 @@ def main() -> None:
         print(f"  {len(candidates):>5}  {path.relative_to(args.root)}")
 
     print(f"\n문서 {len(documents)}개, 조항 후보 {total}개")
+    # 뺐다는 것을 적는다. 조용히 빠지면 다음 사람이 계열 하나가 통째로 없는 것을
+    # 산출이 준 것으로 읽는다.
+    if HOLDOUT_SERIES:
+        print(f"  홀드아웃이라 뺀 계열: {', '.join(sorted(HOLDOUT_SERIES))}")
     # 조항 × 지시 수가 아니라 **성립하는 지시만큼만** 걸린다. 조항 하나에 지시가 하나뿐인
     # 것이 절반 가까이라, 곱셈으로 어림하면 실제보다 크게 나온다.
     for per in (2, 3, 4):

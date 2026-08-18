@@ -26,10 +26,27 @@ rubric.md의 AM6·AM8과 이름이 다른 이유가 이것이다 -- **같은 잣
 **입력은 블록쌍만 준다.** 상위 제목이나 인접 조항을 붙이는 것은 모델이 받는 정보를
 바꾸는 major 판올림이라 별도 라운드로 남아 있다. v2.2를 잰 조건을 그대로 유지한다.
 
+**긴 실행은 끊긴다는 전제로 쓴다.** 1,000건이면 한 시간 가까이 도는데 그동안 타임아웃·
+끊긴 연결·429가 반드시 몇 건은 난다. 2026-08-13 본 생성에서 227건이 `TimeoutError`로
+날아갔고, 그때는 다시 붙일 방법이 없어 실행을 통째로 버렸다. 그래서 둘을 둔다.
+
+    --retry     한 건이 실패하면 그 건만 몇 번 더 부른다 (기본 3회)
+    --resume    앞 실행에서 성공한 것을 그대로 가져오고 **못 받은 것만** 부른다
+
+`--resume`은 앞 실행의 성공분을 새 실행 디렉터리에 **베껴 넣고** 시작한다. 그래야 나온
+디렉터리 하나가 그 자체로 완전해서 `export.py`에 그대로 넘길 수 있다.
+
+**파싱 실패는 다시 부르지 않는다.** 호출은 성공했는데 모델이 JSON을 안 지킨 경우이고,
+이것은 끊긴 것이 아니라 그 블록에서 나온 결과다(짧은 블록을 역할 A가 거부하는 것이 대부분
+이다). 다시 부르면 AM1 수치가 올라가 앞 라운드와 나란히 못 놓는다. `--resume`이 다시
+부르는 것은 **`error`가 적힌 레코드뿐**이다.
+
 사용:
     python training_data/interpret/annotate.py --prompt v2.2 --limit 100 --dry-run
     python training_data/interpret/annotate.py --prompt v2.2 --limit 100 --concurrency 16
     python training_data/interpret/annotate.py --prompt v2.2 --limit 0   # 0 = 전체
+    python training_data/interpret/annotate.py --prompt v2.2 --limit 0 \
+        --resume training_data/interpret/runs/<끊긴 실행>
 """
 from __future__ import annotations
 
@@ -37,8 +54,11 @@ import argparse
 import difflib
 import json
 import os
+import random
 import sys
 import threading
+import time
+import urllib.error
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -59,6 +79,14 @@ COLLECTION_DIR = REPOSITORY_DIR / "data" / "raw_collection"
 # 판정은 흔들리면 안 된다(`학습데이터_생성_프로세스.md` 3-2절). solar_request.json이
 # 온도를 고정하므로 페이로드를 받은 뒤 덮어쓴다 -- mutate/run.py의 call()과 같은 이유다.
 INTERPRET_TEMPERATURE = 0.2
+
+# 다시 불러 볼 만한 HTTP 상태. 429는 "너무 빨리 부른다", 5xx는 서버 쪽 일시 장애라
+# 잠깐 기다리면 대개 통한다. 400·401·403은 요청 자체가 틀린 것이라 몇 번을 불러도 같다.
+RETRYABLE_STATUS = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
+
+# 재시도 사이에 기다리는 시간. 곱절로 늘리고 흔들림을 섞는다 -- 여러 스레드가 429를
+# 동시에 맞으면 대기 시간도 같아져서 다 함께 다시 몰려가기 때문이다.
+RETRY_WAIT_SECONDS = 5.0
 
 
 # ------------------------------------------------------------------ 원천 읽기
@@ -194,6 +222,73 @@ def restatement_ratio(after: str, sentence: str) -> float | None:
         None, sentence, after, autojunk=False).ratio(), 3)
 
 
+# ------------------------------------------------------- 재시도와 이어붙이기
+
+def retryable(error: Exception) -> bool:
+    """끊긴 것인가, 틀린 것인가. 끊긴 것만 다시 부른다."""
+    if isinstance(error, solar.SolarAPIError):
+        return error.status_code in RETRYABLE_STATUS
+    # 소켓 타임아웃은 파이썬 3.10부터 TimeoutError다. URLError는 DNS·연결 거부처럼
+    # 요청이 서버에 닿지도 못한 경우다. ValueError는 200을 받았는데 본문이 이상한
+    # 경우인데(잘린 응답 등) 그것도 대개 한 번 더 부르면 통한다.
+    return isinstance(error, (TimeoutError, urllib.error.URLError,
+                              ConnectionError, ValueError))
+
+
+def call_with_retry(url: str, api_key: str, payload: dict, timeout: int,
+                    attempts: int, wait: float) -> tuple[str, int]:
+    """성공할 때까지 최대 `attempts`번 부른다. (응답 본문, 실제 호출 횟수)를 낸다.
+
+    마지막까지 실패하면 마지막 예외를 그대로 올린다 -- 부르는 쪽이 그것을 잡아
+    `error` 레코드로 적는다. 여기서 삼켜 버리면 무엇 때문에 실패했는지가 사라진다.
+    """
+    last: Exception | None = None
+    for attempt in range(1, max(1, attempts) + 1):
+        try:
+            response = solar.call_solar(url, api_key, payload, timeout)
+            return solar.extract_message(response)[0], attempt
+        except Exception as error:  # noqa: BLE001 -- 종류는 retryable()이 가린다
+            last = error
+            if attempt >= attempts or not retryable(error):
+                break
+            time.sleep(wait * (2 ** (attempt - 1)) * (1.0 + random.random() * 0.5))
+    raise last  # type: ignore[misc]
+
+
+def load_previous(run_dir: Path) -> tuple[dict[tuple, dict], int, int]:
+    """앞 실행에서 **호출이 성공한** 레코드를 모은다. (레코드, 실패분, 깨진 줄)을 낸다.
+
+    `records.json`이 아니라 `records.jsonl`을 읽는다. 앞 실행이 끝까지 갔다면 둘 다
+    있지만, 중간에 죽었다면 `.json`은 아예 안 쓰였고 `.jsonl`만 남아 있다.
+    **이어붙이기가 필요한 상황이 바로 그 상황이다.**
+
+    `scores`가 있으면 가져온다 -- 판정이 비어 있어도(파싱 실패) 호출은 성공한 것이므로
+    다시 부르지 않는다. `error`가 적힌 것만 다시 부를 대상으로 남긴다.
+    """
+    path = run_dir / "records.jsonl"
+    if not path.exists():
+        raise SystemExit(f"{path}가 없습니다. --resume에는 annotate.py 실행 디렉터리를 줍니다.")
+    done: dict[tuple, dict] = {}
+    failed = 0
+    broken = 0
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            # 프로세스가 줄 한가운데서 죽으면 마지막 한 줄이 잘려 있다. 그 한 줄만
+            # 버리고 앞은 그대로 쓴다 -- JSONL을 쓰는 이유가 이것이다.
+            broken += 1
+            continue
+        if "scores" in record:
+            done[(record.get("id"), record.get("pair"))] = record
+        else:
+            failed += 1
+    return done, failed, broken
+
+
 # --------------------------------------------------------------------- 실행
 
 def main() -> None:
@@ -205,6 +300,12 @@ def main() -> None:
                     help="평가용으로 빼둘 계열. 여러 번 줄 수 있다")
     ap.add_argument("--concurrency", type=int, default=8,
                     help="동시에 띄울 요청 수. 한 건씩 보내면 서버가 논다")
+    ap.add_argument("--retry", type=int, default=3,
+                    help="한 건이 끊겼을 때 다시 부를 총 횟수. 1이면 재시도 없음")
+    ap.add_argument("--retry-wait", type=float, default=RETRY_WAIT_SECONDS,
+                    help="첫 재시도까지 기다리는 초. 다음부터 곱절로 는다")
+    ap.add_argument("--resume", type=Path, default=None,
+                    help="앞 실행 디렉터리. 거기서 성공한 것은 가져오고 못 받은 것만 부른다")
     ap.add_argument("--dry-run", action="store_true", help="호출 없이 표본 구성만 출력")
     args = ap.parse_args()
 
@@ -217,13 +318,36 @@ def main() -> None:
           f"{'  (평가용 제외: ' + ', '.join(args.exclude_series) + ')' if args.exclude_series else ''}")
     picked = Counter(x["series"] for x in plan)
     whole = Counter(x["series"] for x in items)
+    planned_total = len(plan)   # 이어붙이기가 plan을 줄이기 전의 수. 요약은 이쪽을 쓴다.
     print(f"  {'계열':<34}{'표본':>6}{'전체':>7}{'비중':>7}")
     for name, count in picked.most_common():
         print(f"  {name:<34}{count:>6}{whole[name]:>7}{count / len(plan):>6.0%}")
+
+    # **표본을 고른 다음에 걸러낸다.** 이어붙이기는 표본 구성을 바꾸면 안 된다 --
+    # 앞 실행과 같은 `--limit`를 주면 sample()이 같은 표본을 내므로, 거기서 이미
+    # 받은 것만 빼야 두 실행을 합쳐 하나의 실행처럼 볼 수 있다.
+    carried: list[dict] = []
+    if args.resume:
+        done, failed_before, broken = load_previous(args.resume)
+        carried = [done[k] for k in
+                   ({(x["id"], x["pair"]) for x in plan} & done.keys())]
+        plan = [x for x in plan if (x["id"], x["pair"]) not in done]
+        print(f"\n이어붙이기: {args.resume}")
+        print(f"  가져옴   {len(carried)}건   (앞 실행에서 호출이 성공한 것)")
+        print(f"  다시 부름 {len(plan)}건   (앞 실행 실패 {failed_before}건 + 아예 안 부른 것)")
+        if broken:
+            print(f"  깨진 줄  {broken}줄  -- 프로세스가 줄 도중에 죽은 자국이다. 다시 부른다.")
+        stale = len(done) - len(carried)
+        if stale:
+            print(f"  [경고] 앞 실행에는 있는데 이번 표본에는 없는 것이 {stale}건이다. "
+                  f"--limit나 --exclude-series가 그때와 다른지 본다. 이 {stale}건은 버려진다.")
+
     if args.dry_run:
         print("\n--dry-run 이므로 호출하지 않았습니다.")
         return
     if not plan:
+        if carried:
+            raise SystemExit("다시 부를 것이 없습니다. 앞 실행이 이미 끝난 것으로 보입니다.")
         raise SystemExit("붙일 것이 없습니다.")
 
     template = Template((HERE / "prompts" / f"{args.prompt}.txt").read_text(encoding="utf-8"))
@@ -256,6 +380,15 @@ def main() -> None:
             stream.flush()
         return record
 
+    # 가져온 것을 **먼저 새 디렉터리에 베껴 넣는다.** 이 실행이 또 끊기더라도 이
+    # 디렉터리 하나만 --resume에 주면 되고, 끝까지 가면 그 자체로 완전한 실행이라
+    # export.py에 그대로 넘길 수 있다. 앞 디렉터리를 계속 달고 다니지 않는다.
+    for record in carried:
+        emit(record)
+
+    # 몇 건이 한 번에 안 됐는지는 다음 실행의 --concurrency·--retry를 정하는 근거다.
+    retried: list[str] = []
+
     def work(numbered: tuple[int, dict]) -> dict:
         index, item = numbered
         # v2.2가 쓰는 자리는 넷뿐이다. given_labels는 v0.3 전용이라 여기서는 주지 않는다
@@ -266,11 +399,16 @@ def main() -> None:
         payload = solar.request_payload(prompt)
         payload["temperature"] = INTERPRET_TEMPERATURE
         try:
-            response = solar.call_solar(url, api_key, payload, timeout)
-            raw, _ = solar.extract_message(response)
+            raw, tries = call_with_retry(url, api_key, payload, timeout,
+                                         args.retry, args.retry_wait)
         except Exception as error:
-            print(f"  [{index}/{len(plan)}] x 실패  {item['id']}")
-            return emit({**item, "error": solar.safe_error(error)})
+            print(f"  [{index}/{len(plan)}] x 실패({args.retry}회)  {item['id']}"
+                  f"  {solar.safe_error(error)}")
+            return emit({**item, "error": solar.safe_error(error),
+                         "attempts": args.retry})
+        if tries > 1:
+            with stream_lock:
+                retried.append(item["id"])
 
         marked = score_blind(raw, item)
         parsed = marked.pop("parsed") or {}
@@ -284,7 +422,7 @@ def main() -> None:
                      "labels": parsed.get("labels"), "impacts": parsed.get("impacts"),
                      "direct_impact": parsed.get("direct_impact"),
                      "scores": marked, "restatement_ratio": ratio,
-                     "evidence_directions": directions,
+                     "evidence_directions": directions, "attempts": tries,
                      # True면 개정문을 그대로 옮긴 것에 가까워 사람이 읽기 전에 걸러낸다.
                      "ah1_screen": bool(ratio is not None
                                         and ratio >= _run.RESTATEMENT_THRESHOLD),
@@ -292,9 +430,12 @@ def main() -> None:
 
     try:
         with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
-            records = list(pool.map(work, enumerate(plan, 1)))
+            fresh = list(pool.map(work, enumerate(plan, 1)))
     finally:
         stream.close()
+
+    # 가져온 것과 이번에 부른 것을 합쳐야 요약이 실행 전체를 가리킨다.
+    records = carried + fresh
 
     graded = [r for r in records if "scores" in r]
     keys = ("AM1", "AM2", "AM3", "AM6s", "AM8s", "AM9")
@@ -302,10 +443,17 @@ def main() -> None:
     summary = {
         "prompt": args.prompt,
         "request": sent,
-        "population": len(items), "planned": len(plan),
+        "population": len(items), "planned": planned_total,
         "annotated": len(graded), "failures": len(records) - len(graded),
         "excluded_series": args.exclude_series,
         "concurrency": args.concurrency,
+        # 이어붙였다면 이 실행의 산출은 두 번의 호출을 합친 것이다. 어느 쪽이 얼마인지
+        # 안 적으면 나중에 이 디렉터리만 보고는 알 수 없다.
+        "resumed_from": str(args.resume) if args.resume else None,
+        "carried_over": len(carried),
+        "called_now": len(plan),
+        "retry": {"attempts": args.retry, "wait_seconds": args.retry_wait,
+                  "items_needing_retry": len(retried)},
         "series": dict(picked),
         "judgements": dict(verdicts),
         "AM_rates": {k: round(sum(r["scores"][k] for r in graded) / len(graded), 3)
@@ -326,6 +474,11 @@ def main() -> None:
     for key, rate in summary["AM_rates"].items():
         print(f"  {key} {rate:>6.1%}")
     print(f"  실패 {summary['failures']}건")
+    if retried:
+        print(f"  한 번에 안 돼 다시 부른 건 {len(retried)}건 "
+              f"(전부 --retry {args.retry} 안에서 붙었다)")
+    if summary["failures"]:
+        print(f"  → 실패분만 다시: --resume {out_dir.relative_to(REPOSITORY_DIR)}")
     print()
     for verdict, count in verdicts.most_common():
         print(f"  {verdict:<14} {count}건")
