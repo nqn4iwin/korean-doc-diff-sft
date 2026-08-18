@@ -1,4 +1,13 @@
-"""Collect the three approved operating-guideline pairs from official sites."""
+"""승인된 원천 pair를 공식 사이트에서 받아 `data/raw_collection/`에 등록한다.
+
+이름은 운영지침이지만 **주소만 있으면 어떤 원천이든 등록한다.** 국가법령정보센터 본문
+HTML, 부처 게시판의 HWPX 첨부, 공정거래위원회 표준약관 첨부가 모두 같은 경로를 탄다.
+받을 것은 아래 `PAIRS` 목록이 전부이고, 인자로 `directory` 값을 주면 그것만 받는다.
+
+    python3 source_data/crawlers/collect_guideline_pairs.py <directory 값>
+
+**넣기 전에 `check_candidate.py`로 합격을 받는다.** 이 스크립트는 수락 기준을 보지 않는다.
+"""
 
 from __future__ import annotations
 
@@ -79,6 +88,250 @@ PAIRS = [
             "file_url": "https://www.mof.go.kr/jfile/readDownloadFile.do?fileNum=2&fileType=MOF_ARTICLE&fileTypeSeq=58895",
         },
     },
+    # 홀드아웃을 늘리려고 2026-08-18에 받았다. 씨앗이 아니라 **채점용**이므로 받는 즉시
+    # `training_data/mutate/documents.py`의 `HOLDOUT_SERIES`에 이 디렉터리 이름을 적는다.
+    #
+    # **판본을 고를 때 국가연구개발혁신법(2021 시행)을 사이에 두면 안 된다.** 처음에
+    # 2020-12-30 -> 2024-12-30으로 잡았더니 유사도가 0.2891이고 실질 변경 470블록 중
+    # 상위가 전부 법정 용어 일괄 개정이었다 -- `과제 -> 연구개발과제` 224회,
+    # `전담기관 -> 전문기관` 131회, `사업 -> 연구개발` 55회. 채점용 자로 쓰면 홀드아웃의
+    # 대부분이 명칭 변경이 된다. 그 판본은 `data/rejected/motie_industrial_tech_2020__2024/`에
+    # 남겼다 -- `data/raw_collection/` 안에 두면 `annotate.py`가 같이 세어 버린다.
+    #
+    # 혁신법 이후끼리인 2022-01-04 -> 2024-12-30은 유사도 0.6562에 실질 변경
+    # 159블록/141묶음이고 최다 치환이 18회로 흩어져 있다. 채택된 pair의 유사도 범위
+    # (해수부 0.5983 ~ 팁스 공고 0.987) 안이다.
+    {
+        "directory": "motie_industrial_tech_guideline_pair",
+        "case_id": "motie-industrial-tech-guideline-2020__2024",
+        "issuer": "산업통상자원부",
+        "series": "산업기술혁신사업 공통 운영요령",
+        "before": {
+            "file": "before_2022.html",
+            "date": "2022-01-04",
+            "number": "산업통상자원부고시 제2022-4호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000208247",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000208247&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2024.html",
+            "date": "2024-12-30",
+            "number": "산업통상자원부고시 제2024-218호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000251982",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000251982&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "mafra_rd_guideline_pair",
+        "case_id": "mafra-rd-guideline-2022__2025",
+        "issuer": "농림축산식품부",
+        "series": "농림축산식품 연구개발사업 운영규정",
+        "before": {
+            "file": "before_2022.html",
+            "date": "2022-09-28",
+            "number": "농림축산식품부훈령 제444호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000214779",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000214779&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2025.html",
+            "date": "2025-03-10",
+            "number": "농림축산식품부훈령 제534호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000256254",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000256254&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "me_environment_tech_guideline_pair",
+        "case_id": "me-environment-tech-guideline-2023__2024",
+        "issuer": "환경부",
+        "series": "환경기술개발사업 운영규정",
+        "before": {
+            "file": "before_2023.html",
+            "date": "2023-12-20",
+            "number": "환경부훈령 제1619호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000233040",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000233040&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2024.html",
+            "date": "2024-12-10",
+            "number": "환경부훈령 제1668호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000250596",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000250596&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "mohw_health_rd_guideline_pair",
+        "case_id": "mohw-health-rd-guideline-2022__2023",
+        "issuer": "보건복지부",
+        "series": "보건의료기술 연구개발사업 운영·관리규정",
+        "before": {
+            "file": "before_2022.html",
+            "date": "2022-01-01",
+            "number": "보건복지부고시 제2021-335호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000207505",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000207505&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2023.html",
+            "date": "2023-12-26",
+            "number": "보건복지부고시 제2023-275호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000233560",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000233560&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "msit_science_rd_guideline_pair",
+        "case_id": "msit-science-rd-guideline-2022__2023",
+        "issuer": "과학기술정보통신부",
+        "series": "과학기술정보통신부 소관 과학기술분야 연구개발사업 처리규정",
+        "before": {
+            "file": "before_2022.html",
+            "date": "2022-01-14",
+            "number": "과학기술정보통신부훈령 제193호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000208408",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000208408&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2023.html",
+            "date": "2023-08-24",
+            "number": "과학기술정보통신부훈령 제242호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000228284",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000228284&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "molit_rd_guideline_pair",
+        "case_id": "molit-rd-guideline-2021__2024",
+        "issuer": "국토교통부",
+        "series": "국토교통부소관 연구개발사업 운영규정",
+        "before": {
+            "file": "before_2021.html",
+            "date": "2021-11-17",
+            "number": "국토교통부훈령 제1449호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000206215",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000206215&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+        "after": {
+            "file": "after_2024.html",
+            "date": "2024-01-22",
+            "number": "국토교통부훈령 제1708호",
+            "page_url": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000235502",
+            "file_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000235502&joTpYn=Y&languageType=KO&chrClsCd=010202",
+        },
+    },
+    {
+        "directory": "mss_modoo_startup_notice_pair",
+        "case_id": "mss-modoo-startup-2026-208__2026-275",
+        "issuer": "중소벤처기업부",
+        "series": "모두의 창업 프로젝트",
+        "source_class": "지원사업 공고·정정공고",
+        "scope_note": "통합 모집공고 원공고와 수정공고. series는 양쪽 제목이 '모집공고'와 '모집 수정공고'로 갈려 공통으로 들어 있는 사업명만 적는다.",
+        "match_evidence": {
+            "type": "explicit_prior_notice_citation",
+            "before_notice_number": "중소벤처기업부 공고 제2026-208호",
+            "after_notice_number": "중소벤처기업부 공고 제2026-275호",
+            "citation_in_after": "「모두의 창업 프로젝트」 통합 모집 공고(2026.3.26.)에서 주요 변경된 사항을 안내드립니다.",
+            "note": "인용은 첨부 본문이 아니라 수정공고 게시글 본문에 있다. 2026.3.26.은 원공고 제2026-208호의 공고일과 일치한다.",
+        },
+        "before": {
+            "file": "before_2026_208.hwpx",
+            "date": "2026-03-26",
+            "number": "중소벤처기업부 공고 제2026-208호",
+            "page_url": "https://www.mss.go.kr/site/smba/ex/bbs/View.do?bcIdx=1066642&cbIdx=310",
+            "file_url": "https://www.mss.go.kr/common/board/Download.do?bcIdx=1066642&cbIdx=310&streFileNm=6c8d7b2f-a8e6-4cff-88aa-444bd806afeb.hwpx",
+        },
+        "after": {
+            "file": "after_2026_275.hwpx",
+            "date": "2026-04-16",
+            "number": "중소벤처기업부 공고 제2026-275호",
+            "page_url": "https://www.mss.go.kr/site/smba/ex/bbs/View.do?bcIdx=1067363&cbIdx=310",
+            "file_url": "https://www.mss.go.kr/common/board/Download.do?bcIdx=1067363&cbIdx=310&streFileNm=f63ff4f4-8345-442d-adcc-046535f91e9a.hwpx",
+        },
+    },
+    {
+        "directory": "mss_innovation_voucher_notice_pair",
+        "case_id": "mss-innovation-voucher-2026-280__2026-317",
+        "issuer": "중소벤처기업부",
+        "series": "중소기업 혁신바우처(채용지원)",
+        "source_class": "지원사업 공고·정정공고",
+        "scope_note": "채용지원 사업 지원계획 원공고와 수정공고. series는 양쪽 제목이 '공고'와 '수정 공고'로 갈려 공통으로 들어 있는 사업명만 적는다.",
+        "match_evidence": {
+            "type": "same_board_preserved_prior_notice",
+            "before_notice_number": "중소벤처기업부 공고 제2026-280호",
+            "after_notice_number": "중소벤처기업부 공고 제2026-317호",
+            "note": "이 pair는 근거가 위 셋 중 가장 약하다. 수정공고 본문도 게시글도 원공고의 번호나 공고일을 인용하지 않고 '수정 공고합니다'라고만 적는다. 근거는 발행처·연도·사업명이 같고 같은 게시판이 원공고를 별도 게시글로 보존한다는 것뿐이다.",
+        },
+        "before": {
+            "file": "before_2026_280.hwpx",
+            "date": "2026-04-20",
+            "number": "중소벤처기업부 공고 제2026-280호",
+            "page_url": "https://www.mss.go.kr/site/smba/ex/bbs/View.do?bcIdx=1067475&cbIdx=310",
+            "file_url": "https://www.mss.go.kr/common/board/Download.do?bcIdx=1067475&cbIdx=310&streFileNm=17539c8f-6ce1-4f35-b33e-fb5833488c56.hwpx",
+        },
+        "after": {
+            "file": "after_2026_317.hwpx",
+            "date": "2026-05-06",
+            "number": "중소벤처기업부 공고 제2026-317호",
+            "page_url": "https://www.mss.go.kr/site/smba/ex/bbs/View.do?bcIdx=1067991&cbIdx=310",
+            "file_url": "https://www.mss.go.kr/common/board/Download.do?bcIdx=1067991&cbIdx=310&streFileNm=7c6903b2-6005-4137-93d5-5d7f8eafe974.hwpx",
+        },
+    },
+    {
+        "directory": "ftc_deposit_terms_pair",
+        "case_id": "ftc-standard-terms-10012-2022__2024",
+        "issuer": "공정거래위원회",
+        "series": "예금거래기본약관",
+        "source_class": "표준약관",
+        "scope_note": "공정거래위원회 표준약관 제10012호 예금거래기본약관의 2022년 개정본과 2024년 개정본.",
+        "match_evidence": {
+            "type": "same_standard_terms_number",
+            "value": "표준약관 제10012호",
+            "note": "표준약관 번호는 개정 후에도 유지된다. 두 판본 첫머리에 같은 번호가 그대로 찍혀 있다.",
+        },
+        "before": {
+            "file": "before_2022.hwpx",
+            "date": "2022-12-23",
+            "number": "표준약관 제10012호 (2022. 12. 23. 개정)",
+            "page_url": "https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=201&key=202&nttSn=11192",
+            "file_url": "https://www.ftc.go.kr/www/downloadBbsFile.do?atchmnflNo=14856",
+        },
+        "after": {
+            "file": "after_2024.hwpx",
+            "date": "2024-09-27",
+            "number": "표준약관 제10012호 (2024. 9. 27. 개정)",
+            "page_url": "https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=201&key=202&nttSn=11202",
+            "file_url": "https://www.ftc.go.kr/www/downloadBbsFile.do?atchmnflNo=14866",
+        },
+    },
+    {
+        "directory": "ftc_gift_certificate_terms_2024_2025_pair",
+        "case_id": "ftc-standard-terms-10073-2024__2025",
+        "issuer": "공정거래위원회",
+        "series": "신유형 상품권 표준약관",
+        "source_class": "표준약관",
+        "scope_note": "표준약관 제10073호의 2024년 개정본과 2025년 개정본. `ftc_gift_certificate_terms`(2020->2024)와 같은 계열의 두 번째 쌍이고, 그 폴더의 2024년판이 이 쌍의 before와 같은 문서다. 한 계열 세 쌍 한도 중 두 쌍째다.",
+        "match_evidence": {
+            "type": "same_standard_terms_number",
+            "value": "표준약관 제10073호",
+            "note": "표준약관 번호는 개정 후에도 유지된다. 두 판본 첫머리에 같은 번호가 그대로 찍혀 있다.",
+        },
+        "before": {
+            "file": "before_2024.hwpx",
+            "date": "2024-09-27",
+            "number": "표준약관 제10073호 (2024. 9. 27. 개정)",
+            "page_url": "https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=201&key=202&nttSn=11199",
+            "file_url": "https://www.ftc.go.kr/www/downloadBbsFile.do?atchmnflNo=14863",
+        },
+        "after": {
+            "file": "after_2025.hwpx",
+            "date": "2025-09-11",
+            "number": "표준약관 제10073호 (2025. 9. 11. 개정)",
+            "page_url": "https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=201&key=202&nttSn=46431",
+            "file_url": "https://www.ftc.go.kr/www/downloadBbsFile.do?atchmnflNo=51574",
+        },
+    },
 ]
 
 
@@ -113,15 +366,25 @@ def collect_pair(pair: dict) -> None:
     for side in ("before", "after"):
         spec = pair[side]
         path = directory / spec["file"]
+        if path.suffix.lower() in (".pdf", ".hwp"):
+            raise RuntimeError(
+                f"{path.name}: PDF와 구형 HWP는 문단 단위로 자를 수 없고 추출 경로도 없다. "
+                f"HWPX나 HTML 판본을 쓴다")
         url = spec.get("file_url", spec["page_url"])
         content_type, byte_size = download(url, path)
+        if path.read_bytes()[:4] == b"%PDF":
+            raise RuntimeError(
+                f"{path.name}: {path.suffix}로 적었는데 실제로 온 것은 PDF다. "
+                f"주소가 가리키는 첨부를 다시 본다")
         if path.suffix == ".hwpx" and not zipfile.is_zipfile(path):
             raise RuntimeError(f"{path.name}: HWPX ZIP signature missing")
         blocks, text_path = extract(path)
         joined = "".join(blocks)
         if pair["series"].replace(" ", "") not in joined.replace(" ", ""):
             raise RuntimeError(f"{path.name}: document title missing from extracted text")
-        if len(joined) < 5_000:
+        # 하한이 5,000자였는데 이미 채택한 공정위 표준약관 2020년판이 4,868자라 스스로
+        # 걸렸다. `check_candidate.py`의 MIN_CHARACTERS와 같은 값으로 맞춘다.
+        if len(joined) < 2_000:
             raise RuntimeError(f"{path.name}: extracted body is too short ({len(joined)} characters)")
         paths[side] = path
         sources[side] = {
@@ -148,14 +411,14 @@ def collect_pair(pair: dict) -> None:
     comparison = json.loads(output.read_text(encoding="utf-8"))
     manifest = {
         "case_id": pair["case_id"],
-        "source_class": "기관 운영지침·사업시행지침",
+        "source_class": pair.get("source_class", "기관 운영지침·사업시행지침"),
         "collected_at": datetime.now().astimezone().isoformat(),
         "issuer": pair["issuer"],
         "document_series": pair["series"],
-        "match_evidence": {
+        "match_evidence": pair.get("match_evidence", {
             "type": "official_administrative_rule_history",
             "note": "국가법령정보센터의 동일 제명 연혁과 각 판본의 일부개정 발령번호로 연결한다.",
-        },
+        }),
         "sources": sources,
         "comparison": {
             "classifier_file": output.name,
@@ -168,7 +431,8 @@ def collect_pair(pair: dict) -> None:
             "real_change_groups": comparison["real_change"]["groups"],
         },
         "acceptance": "accepted_meaningful_change",
-        "scope_note": "수정 명세에 따라 사업 운영지침 성격의 행정규칙을 포함한다.",
+        "scope_note": pair.get(
+            "scope_note", "수정 명세에 따라 사업 운영지침 성격의 행정규칙을 포함한다."),
     }
     (directory / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
