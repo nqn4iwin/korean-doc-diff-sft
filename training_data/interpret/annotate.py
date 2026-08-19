@@ -167,14 +167,18 @@ def score_blind(raw: str, item: dict | None = None) -> dict:
     result = {"AM1": 0, "AM2": 0, "AM3": 0, "AM6s": 0, "AM8s": 0}
     if item is not None:
         result["AM9"] = 1
+    # **일찍 빠져나가는 길에서도 이 키를 빼면 안 된다.** 부르는 쪽이 `pop`으로 꺼내므로
+    # 없으면 KeyError로 실행 전체가 죽는다. 2026-08-19에 파싱 실패 한 건이 160건짜리
+    # 실행을 14번째에서 끊었다.
+    directions: list[str] = []
     parsed = _run.parse_output(raw)
     if parsed is None:
-        return {**result, "parsed": None}
+        return {**result, "parsed": None, "evidence_directions": directions}
     result["AM1"] = 1
 
     pairs = _run.label_pairs(parsed.get("labels", []))
     if pairs is None:
-        return {**result, "parsed": parsed}
+        return {**result, "parsed": parsed, "evidence_directions": directions}
     result["AM2"] = int(all(t in _run.TARGETS and d in _run.DIRECTIONS for t, d in pairs))
     result["AM3"] = int(len(pairs) == len(set(pairs)))
 
@@ -196,7 +200,6 @@ def score_blind(raw: str, item: dict | None = None) -> dict:
         result["AM8s"] = int(all(_run.subject_survives(s, sentence)
                                  for s in subjects if s))
 
-    directions = []
     if item is not None:
         directions = [_run.evidence_direction(item["before"], item["after"],
                                               str(x.get("근거", "")))
