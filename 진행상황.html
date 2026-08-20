@@ -91,15 +91,15 @@
       <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
         <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a>
         · <a href="https://rnd.dacon.kr/drive/s/uQIDDBIJxiPO3kXg_SEFVQ" target="_blank" rel="noopener">문서 모음 (공유 드라이브)</a></p>
-      <span class="updated">기준일: 2026-08-18 (18:00)</span>
+      <span class="updated">기준일: 2026-08-20 (18:00)</span>
     </header>
 
     <div class="grid">
       <section class="card summary" aria-labelledby="progress-title">
         <h2 id="progress-title">현재 진행률</h2>
-        <div class="big">55%</div>
-        <div class="meter" aria-label="전체 진행률 55%"><span style="width:55%"></span></div>
-        <p class="note"><strong>학습 1,655건으로 돌린 2차 스윕 66개가 끝났습니다.</strong> 결과가 나온 62개 중 24개가 통과했고, 1차에서 붕괴했던 43개 중 26개가 살아났습니다. 데이터만 바꿔 확인한 결과라 1차의 붕괴 상당수는 학습 방법보다 negative 비율이 높은 데이터가 만든 함정이었습니다. 이제 문장 품질을 사람 눈가림 평가로 확인하고, 채점 기준을 보완한 뒤 3,000건 증량으로 넘어갑니다.</p>
+        <div class="big">62%</div>
+        <div class="meter" aria-label="전체 진행률 62%"><span style="width:62%"></span></div>
+        <p class="note"><strong>3,000건 증량의 합성 생성이 거의 끝났습니다.</strong> 1패스에서 1,416건을 뽑았고(계획 1,450건 대비 수율 97.7%, 호출 실패 0건), 복합 수정을 만드는 2패스도 앞 60건에서 성공률 81.7%를 확인해 나머지 130건만 남았습니다. 복합은 새 프롬프트를 만들지 않고 <strong>기존 v1.2를 두 번 적용</strong>해 만듭니다 — 생성기를 바꾸지 않아야 605 → 1,655 → 3,000 곡선의 세 점을 같은 축에서 비교할 수 있기 때문입니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
@@ -112,11 +112,11 @@
             <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 홀드아웃 개방</td><td>10</td><td>10</td></tr>
             <tr><td>학습데이터 605건 확보</td><td>실제 pair에 해석을 붙여 게이트 통과분 확보</td><td>5</td><td>5</td></tr>
             <tr><td>1차 학습</td><td>pre-run(605건) → 본 학습(1,655건)·결과 확인</td><td>15</td><td>15</td></tr>
-            <tr class="zero"><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>0</td></tr>
+            <tr><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>7</td></tr>
             <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>15</td><td>0</td></tr>
             <tr class="zero"><td>비교군·평가·분석</td><td>베이스라인 대비 가설의 채택 또는 기각 근거</td><td>15</td><td>0</td></tr>
           </tbody>
-          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>55</td></tr></tfoot>
+          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>62</td></tr></tfoot>
         </table>
       </section>
     </div>
@@ -142,8 +142,8 @@
     <section aria-labelledby="next-title">
       <h2 id="next-title">지금 가장 중요한 다음 단계</h2>
       <div class="callout">
-        <strong>채점 기준을 보완한 뒤 3,000건 데이터 증강으로 넘어갑니다.</strong><br><br>
-        먼저 높은 학습률로 다시 돌리는 여섯 설정의 3라운드 결과를 확인합니다. 이어 교사 대 모델과 1차 대 2차의 <code>direct_impact</code> 문장을 조문별 상한 2건으로 눈가림 평가합니다. 라벨 일치는 문장 품질의 대리값일 뿐이므로 사람이 읽은 결과로 채점 기준을 고정하고, 실제 데이터보다 부족한 복합 수정을 어떤 비율과 방법으로 넣을지 설계합니다.
+        <strong>2패스 남은 130건을 돌려 합성 생성을 끝내고, 3,000건 두 판을 고정합니다.</strong><br><br>
+        복합 목표는 142건입니다. 처음 계산한 192건에서 줄었는데, 1패스 산출물에 이미 복합이 50건 섞여 있었기 때문입니다(전체의 3.5%로, 실제 문서의 자연 발생률 4.0%와 비슷합니다). 생성이 끝나면 1패스에서 178건을 덜어 1,238건으로 맞추고, 복합을 넣은 <strong>조건 A</strong>와 그 자리를 단일 수정으로 바꾼 <strong>조건 B</strong> 두 판을 고정합니다. 조건 B의 짝은 따로 만들지 않습니다 — 사슬의 중간본이 그대로 단일 수정판이라, 두 판이 2,858건을 공유하고 142건만 다릅니다.
       </div>
     </section>
 
@@ -299,8 +299,8 @@
       </article>
       </details>
 
-      <details class="day" open>
-      <summary><time>2026-08-18</time><span class="tag">진행 중 — 2차 스윕을 마치고 다음 라운드를 준비했다</span></summary>
+      <details class="day">
+      <summary><time>2026-08-18</time><span class="tag">완료 — 2차 스윕을 마치고 다음 라운드를 준비했다</span></summary>
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
@@ -317,6 +317,41 @@
           <div><h3>왜 어려웠나</h3><p class="prompt">원천을 더 모아도 모델 negative가 예상만큼 나오지 않았다. 기존 계획량을 그대로 합성하면 negative 비율이 약 2%까지 내려가 평가에 영향을 줄 수 있었다. 역할 B(모리아티)가 negative를 의도적으로 만들도록 프롬프트를 고치자니, 이미 만든 합성 약 1,000건과 다른 프롬프트를 쓰게 되어 같은 데이터로 묶어도 되는지 고민이 생겼다.</p></div>
           <div><h3>다음에는 어떻게 할까</h3><p class="prompt">학습데이터 증량 목표를 절반인 3,000건으로 줄였다. 현재 수집분 기준으로 negative가 약 9%가 되고, 원천을 조금 더 찾아 자연 발생분을 보태면 10%를 넘길 수 있다고 판단했다. 다음 생성부터는 시작 전에 목표 건수에 따른 라벨 분포를 먼저 계산한다.</p></div>
           <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt">실제 라벨 분포가 예상과 다를 때, 특정 라벨을 의도적으로 살리기 위한 생성 작업을 추가하는 것이 맞는지 의문이 남는다.</p></div>
+        </div>
+      </article>
+      </details>
+
+      <details class="day">
+      <summary><time>2026-08-19</time><span class="tag">완료 — 복합을 만드는 방법을 정하고 1패스를 걸었다</span></summary>
+      <article class="entry">
+        <div class="entry-head">진행 기록</div>
+        <div class="entry-grid">
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>복합 수정</strong>(한 조항에 변경이 둘 이상 들어간 것)을 만들 프롬프트 v1.3을 새로 깎는다. 3,000건에 넣을 복합의 비율을 정하고 그날 안에 생성을 걸어 둔다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>v1.3을 만들지 않기로 했다.</strong> 대신 기존 v1.2를 두 번 적용해 <code>원문 → 중간본 → 최종본</code>으로 잇기로 하고, 생성 코드는 한 줄도 바꾸지 않았다. 계획을 전 문서에서 한 번에 세우는 <code>plan.py</code>를 만들며 <strong>중복 조항이 알려진 97건이 아니라 1,997건</strong>(후보의 42%)이라는 것을 찾았다. 생성기를 한 번도 통과한 적 없는 새 원천 5계열에 확인용 50건을 먼저 돌려 모두 BM5a 80% 이상을 확인하고, 이어 <strong>1,450건 본 생성</strong>을 걸었다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_collect</strong> 1패스 결과를 보고 복합 목표 건수를 다시 세운 뒤, 사슬 생성 코드를 준비한다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt empty">오늘은 커밋을 안 함</p></div>
+        </div>
+      </article>
+      </details>
+
+      <details class="day" open>
+      <summary><time>2026-08-20</time><span class="tag">진행 중 — 1패스를 수확하고 복합 생성을 시작했다</span></summary>
+      <article class="entry">
+        <div class="entry-head">진행 기록</div>
+        <div class="entry-grid">
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_collect</strong> 밤새 돌린 1패스 결과를 확인하고, 복합을 만드는 2패스 코드를 준비해 돌린다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>1패스가 1,450건 중 1,416건을 남겼다</strong> — 수율 97.7%에 호출 실패 0건으로, 시간 제한을 180초에서 900초로 올리고 동시 요청을 16에서 8로 내린 결과다(지난 생성은 74.9%에 시간 초과 227건). 1패스에 복합이 이미 50건(3.5%) 섞여 있어 <strong>복합 목표를 192건에서 142건으로 내렸다</strong> — 실제 문서의 자연 발생률 4.0%와 비슷한 값이다. 사슬 생성기 <code>chain.py</code>로 앞 60건을 돌려 <strong>성공률(BM8) 81.7%</strong>를 확인했고(최저선 40%의 두 배, 폐기 0건), 남은 호출을 296건에서 <strong>130건</strong>으로 줄였다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_collect</strong> 남은 130건을 돌려 복합 142건을 채우고, 1패스에서 178건을 덜어 1,238건으로 맞춘다. 그 뒤 조건 A·B 두 판을 내보낸다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_collect</strong> <code>a9882f1</code> add: chain.py, plan.py, plans/run2, plans/pass2<br>· <code>8e6196d</code> fix: CHANGELOG.md, 세션_브리프.md</p></div>
+        </div>
+      </article>
+      <article class="entry">
+        <div class="entry-head">회고</div>
+        <div class="entry-grid">
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt">이 작업에 집중을 많이 못 하고 있다. 다른 작업을 함께 하느라 주의가 나뉜다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt">두 작업을 한꺼번에 할 때 무엇을 먼저 잡을지, 적절한 우선순위를 가르기가 힘들다.</p></div>
+          <div><h3>다음에는 어떻게 할까</h3><p class="prompt empty">재사용할 규칙이나 먼저 확인할 일을 적으세요.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt empty">혼자 정할 수 없는 선택지를 적으세요.</p></div>
         </div>
       </article>
       </details>
@@ -359,6 +394,7 @@
         <div class="decision"><span>2026-08-13</span><span>이번 생성·학습에서는 한 블록쌍에 복수 변경을 넣지 않는다</span><span>605건에서 1,655건으로 양을 늘린 효과를 먼저 보기 위해 데이터 구성은 바꾸지 않는다. 복수 변경은 이번 학습 결과를 본 뒤 다시 검토한다.</span></div>
         <div class="decision"><span>2026-08-14</span><span>본 학습 데이터 1,655건과 홀드아웃 37건을 고정한다</span><span>학습 중 데이터가 바뀌면 설정별 결과를 같은 조건에서 비교할 수 없다. 홀드아웃은 pre-run과 동일하게 유지한다.</span></div>
         <div class="decision"><span>2026-08-18</span><span>산업기술혁신사업 운영요령 pair는 새 홀드아웃으로만 쓴다</span><span>기존 홀드아웃이 단일 문서라 현재 결과가 그 문서에 특화된 것인지 보편적인 경향인지 가르기 어려웠다. 별도 문서인 산업기술혁신사업 운영요령을 추가 홀드아웃으로 마련해 함께 확인한다.</span></div>
+        <div class="decision"><span>2026-08-19</span><span>복합은 새 프롬프트 v1.3을 만들지 않고, 기존 v1.2를 두 번 적용해 만든다</span><span>프롬프트가 바뀌면 605 → 1,655 → 3,000 곡선의 세 번째 점을 앞의 두 점과 같은 축에 놓을 수 없다. 개선이 양·구성·생성기 셋으로 갈려 무엇이 효과를 냈는지 못 가른다. 대조군인 단일 수정판도 사슬의 중간본을 그대로 써서, 두 판이 같은 생성기에서 나오게 한다.</span></div>
         <div class="decision"><span class="empty">YYYY-MM-DD</span><span class="empty">예: PDF pair는 라벨링에서 보류</span><span class="empty">문단 추출 경로를 확보하면 다시 검토</span></div>
       </div>
     </section>
