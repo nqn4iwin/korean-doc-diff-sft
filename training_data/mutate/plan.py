@@ -47,7 +47,7 @@ B가 `적용 범위`로 쏠려 「복합 미증량」이 아니라 「적용 범
 사용:
     python3 training_data/mutate/plan.py --out plans/run2 --limit 1450 --composite 330
     python3 training_data/mutate/plan.py --out plans/run2 --limit 1450 --dry-run
-    python3 training_data/mutate/plan.py --out plans/smoke --limit 50 --composite 0 \
+    python3 training_data/mutate/plan.py --out plans/archive/smoke --limit 50 --composite 0 \
         --per-series 10 --series mafra_rd_guideline_pair me_environment_tech_guideline_pair
 """
 from __future__ import annotations
@@ -254,9 +254,9 @@ def report(plan: list[dict], limit: int) -> None:
 
 def write_plans(plan: list[dict], out_dir: Path, prompt: str, concurrency: int,
                 timeout: int) -> None:
-    """문서별 계획 파일과 실행 스크립트를 쓴다. `plans/retry/`와 같은 모양이다."""
+    """문서별 계획 파일과 실행 스크립트를 쓴다. `plans/archive/retry/`와 같은 모양이다."""
     # 다시 돌리면 앞의 계획을 지우고 새로 쓴다. **다만 이 스크립트가 만든 폴더만.**
-    # 표시가 없는 폴더를 지우면 손으로 만든 계획이 날아간다 -- `plans/retry/`는
+    # 표시가 없는 폴더를 지우면 손으로 만든 계획이 날아간다 -- `plans/archive/retry/`는
     # 2026-08-13 복구 실행의 기록이라 다시 만들 수 없다.
     marker = out_dir / ".made_by_plan_py"
     if out_dir.exists() and not marker.exists() and any(out_dir.iterdir()):
