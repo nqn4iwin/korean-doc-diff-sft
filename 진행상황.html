@@ -91,15 +91,15 @@
       <p class="sub">무엇이 끝났고, 다음에 무엇을 결정해야 하는지 한 화면에서 확인하는 기록입니다.<br>
         <a href="https://github.com/nqn4iwin/korean-doc-diff-sft" target="_blank" rel="noopener">github.com/nqn4iwin/korean-doc-diff-sft</a>
         · <a href="https://rnd.dacon.kr/drive/s/uQIDDBIJxiPO3kXg_SEFVQ" target="_blank" rel="noopener">문서 모음 (공유 드라이브)</a></p>
-      <span class="updated">기준일: 2026-08-20 (18:00)</span>
+      <span class="updated">기준일: 2026-08-21 (18:00)</span>
     </header>
 
     <div class="grid">
       <section class="card summary" aria-labelledby="progress-title">
         <h2 id="progress-title">현재 진행률</h2>
-        <div class="big">62%</div>
-        <div class="meter" aria-label="전체 진행률 62%"><span style="width:62%"></span></div>
-        <p class="note"><strong>3,000건 증량의 합성 생성이 거의 끝났습니다.</strong> 1패스에서 1,416건을 뽑았고(계획 1,450건 대비 수율 97.7%, 호출 실패 0건), 복합 수정을 만드는 2패스도 앞 60건에서 성공률 81.7%를 확인해 나머지 130건만 남았습니다. 복합은 새 프롬프트를 만들지 않고 <strong>기존 v1.2를 두 번 적용</strong>해 만듭니다 — 생성기를 바꾸지 않아야 605 → 1,655 → 3,000 곡선의 세 점을 같은 축에서 비교할 수 있기 때문입니다.</p>
+        <div class="big">70%</div>
+        <div class="meter" aria-label="전체 진행률 70%"><span style="width:70%"></span></div>
+        <p class="note"><strong>원천 2차 확보와 학습데이터 확대를 끝냈습니다.</strong> 실제 원천 669건, 기존 합성 1,093건, 신규 합성 1,416건을 합쳐 <strong>3,178건</strong> 두 판을 고정했고, <code>model_train</code>의 2차 학습도 시작했습니다. 조건 A는 복합 308건(9.7%), 조건 B는 158건(5.0%)이며 총량은 같고 사슬 최종본 183건에서만 다릅니다.</p>
       </section>
 
       <section class="card definition" aria-labelledby="definition-title">
@@ -107,16 +107,16 @@
         <table class="score">
           <thead><tr><th>단계</th><th>완료 기준</th><th>배점</th><th>현재</th></tr></thead>
           <tbody>
-            <tr><td>원천데이터 확보</td><td>5개 분류 pair 확보, 추출·해시·블록 정렬</td><td>15</td><td>10</td></tr>
+            <tr><td>원천데이터 확보</td><td>5개 분류 pair 확보, 추출·해시·블록 정렬</td><td>15</td><td>15</td></tr>
             <tr><td>전처리·라벨 체계 확정</td><td>정규화 8종, 3단 라벨 정의서 확정</td><td>15</td><td>15</td></tr>
             <tr><td>Solar 입출력 정의·결과물 평가</td><td>역할 A·B 프롬프트 잠금, 채점 항목 정의, 홀드아웃 개방</td><td>10</td><td>10</td></tr>
             <tr><td>학습데이터 605건 확보</td><td>실제 pair에 해석을 붙여 게이트 통과분 확보</td><td>5</td><td>5</td></tr>
             <tr><td>1차 학습</td><td>pre-run(605건) → 본 학습(1,655건)·결과 확인</td><td>15</td><td>15</td></tr>
-            <tr><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>7</td></tr>
+            <tr><td>학습데이터 확대</td><td>실제 pair 분포에 맞춘 목표 비중으로 증량</td><td>10</td><td>10</td></tr>
             <tr class="zero"><td>학습 고도화 (2차 학습)</td><td>학습 trial 20회까지 확보</td><td>15</td><td>0</td></tr>
             <tr class="zero"><td>비교군·평가·분석</td><td>베이스라인 대비 가설의 채택 또는 기각 근거</td><td>15</td><td>0</td></tr>
           </tbody>
-          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>62</td></tr></tfoot>
+          <tfoot><tr><td colspan="2">합계</td><td>100</td><td>70</td></tr></tfoot>
         </table>
       </section>
     </div>
@@ -126,13 +126,13 @@
       <div class="gantt">
         <div class="timeline">
           <div class="months"><span>작업</span><div class="dates"><span>8/4</span><span>8/5</span><span>8/6</span><span>8/7</span><span class="holiday">8/8</span><span class="holiday">8/9</span><span>8/10</span><span>8/11</span><span>8/12</span><span>8/13</span><span>8/14</span><span class="holiday">8/15</span><span class="holiday">8/16</span><span class="holiday">8/17</span><span>8/18</span><span>8/19</span><span>8/20</span><span>8/21</span><span class="holiday">8/22</span><span class="holiday">8/23</span><span>8/24</span><span>8/25</span><span>8/26</span><span>8/27</span><span>8/28</span><span class="holiday">8/29</span><span class="holiday">8/30</span><span>8/31</span></div></div>
-          <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 25 / 60 pair. 후보 중복 검사기를 두고 수집 재개</small></div><div class="track"><span class="bar done" style="--start:1;--span:5">1차 확보</span><span class="bar current" style="--start:15;--span:4">재개</span></div></div>
+          <div class="gantt-row"><div class="task">원천데이터 확보<small>5개 분류 완료, 30 / 60 pair. 2차 확보까지 마침</small></div><div class="track"><span class="bar done" style="--start:1;--span:5">1차 확보</span><span class="bar done" style="--start:15;--span:4">2차 확보</span></div></div>
           <div class="gantt-row"><div class="task">전처리·라벨 체계 확정<small>정규화 8종, 3단 라벨, 2단 짝짓기</small></div><div class="track"><span class="bar done" style="--start:1;--span:3">완료</span></div></div>
           <div class="gantt-row"><div class="task">Solar 입출력 정의·결과물 평가<small>역할 A 프롬프트 v2.2·역할 B 프롬프트 v1.2 잠금</small></div><div class="track"><span class="bar done" style="--start:3;--span:6">완료</span></div></div>
           <div class="gantt-row"><div class="task">학습데이터 605건 확보<small>원천데이터 697쌍에 역할 A 해석을 붙임</small></div><div class="track"><span class="bar done" style="--start:7;--span:2">완료</span></div></div>
           <div class="gantt-row"><div class="task">1차 학습<small>pre-run 70개와 본 학습 66개를 같은 홀드아웃에서 비교</small></div><div class="track"><span class="bar done" style="--start:8;--span:8">완료</span></div></div>
-          <div class="gantt-row"><div class="task">학습데이터 확대<small>복합 수정 비율·방법을 설계하고 3,000건으로 증량</small></div><div class="track"><span class="bar current" style="--start:15;--span:4">현재</span></div></div>
-          <div class="gantt-row"><div class="task">학습 고도화 (2차 학습)<small>학습 trial 20회까지</small></div><div class="track"><span class="bar planned" style="--start:16;--span:5">예정</span></div></div>
+          <div class="gantt-row"><div class="task">학습데이터 확대<small>복합 수정 비율·방법을 설계하고 3,178건 두 판을 고정</small></div><div class="track"><span class="bar done" style="--start:15;--span:4">완료</span></div></div>
+          <div class="gantt-row"><div class="task">학습 고도화 (2차 학습)<small>조건 A·B 28개 설정을 8/21~8/24에 학습·채점</small></div><div class="track"><span class="bar current" style="--start:18;--span:4">진행 중</span></div></div>
           <div class="gantt-row"><div class="task">비교군·평가·분석<small>베이스라인, 가설 검증</small></div><div class="track"><span class="bar planned" style="--start:21;--span:8">예정</span></div></div>
         </div>
       </div>
@@ -142,8 +142,8 @@
     <section aria-labelledby="next-title">
       <h2 id="next-title">지금 가장 중요한 다음 단계</h2>
       <div class="callout">
-        <strong>2패스 남은 130건을 돌려 합성 생성을 끝내고, 3,000건 두 판을 고정합니다.</strong><br><br>
-        복합 목표는 142건입니다. 처음 계산한 192건에서 줄었는데, 1패스 산출물에 이미 복합이 50건 섞여 있었기 때문입니다(전체의 3.5%로, 실제 문서의 자연 발생률 4.0%와 비슷합니다). 생성이 끝나면 1패스에서 178건을 덜어 1,238건으로 맞추고, 복합을 넣은 <strong>조건 A</strong>와 그 자리를 단일 수정으로 바꾼 <strong>조건 B</strong> 두 판을 고정합니다. 조건 B의 짝은 따로 만들지 않습니다 — 사슬의 중간본이 그대로 단일 수정판이라, 두 판이 2,858건을 공유하고 142건만 다릅니다.
+        <strong><code>model_train</code>의 2차 학습 28개 설정을 8월 24일까지 학습·채점하고, 조건 A·B의 복합 비율 효과를 비교합니다.</strong><br><br>
+        두 판은 각각 3,178건이며 183건만 다릅니다. 8개 학습 방식을 조건 A·B와 seed 42로 비교하고, 주력 세 방식은 seed 43·44도 더해 흔들림을 확인합니다. 학습 전에는 135건 홀드아웃으로 76개 재채점을 먼저 수행합니다.
       </div>
     </section>
 
@@ -238,19 +238,19 @@
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 전날 밤 걸어둔 6에폭 실험 세 건의 결과 확인.<br><br><strong class="who">data_collect</strong> 역할 B(모리아티)를 인수인계받아 합성 3,000건의 방법론 세우기. 교사 모델이 바뀌어 기준선부터 다시 잡아야 했다.</p></div>
-          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 6에폭 세 건과 체크포인트 10건을 추가 채점했다. <code>delora-sentence-e3</code>를 새로 돌려 빈 칸을 메웠다. <code>붕괴</code> 43건을 유형별로 갈랐다. venv를 <code>model_train</code> 전용으로 분리하고 W&amp;B를 붙였다.<br><br><strong class="who">data_collect</strong> 새 교사 모델로 기준선 60건을 다시 잡았다. 판정 효과와 생성 효과를 갈라 쟀다. 채점 항목 셋(C2·BM7 라우팅·BM5a)을 고쳤다. 같은 60건을 사람과 기계 채점자가 각각 매겼다. 프롬프트 v1.2를 내고 <code>절차·요건</code> 지시를 고쳤다. 도구 다섯을 만들고 문서를 갱신했다.</p></div>
-          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 채점기에 라벨일치 열 넣기. <code>sentence</code> 조건의 AM8s 처리 정하기. 밤사이 걸어둔 여섯 건 확인. 커밋 세 건.<br><br><strong class="who">data_collect</strong> 합성에 복수 변경을 넣을지 정하기. 지시 배분 고치기. v1.2 60건 재채점. 판정 잡음 바닥 재기.</p></div>
-          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>aa68b11</code> · <code>91f2343</code> · <code>4a7b057</code> · <code>a7a5b72</code><br>문서는 <code>docs/에폭_결과.md</code> · <code>docs/스윕_결과.md</code> 9절 · <code>docs/서버환경.md</code>.<br><br><strong class="who">data_collect</strong> <code>f60bd4a</code> · <code>4608b17</code> · <code>0cbb242</code> · <code>103f03b</code> · <code>4e7cc3f</code><br>문서는 <code>mutate/CHANGELOG.md</code> · <code>rubric.md</code> · <code>설계_메모.md</code> 7절 · <code>docs/학습데이터_생성_프로세스.md</code> 3절.</p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 전날 밤 걸어둔 6에폭 실험 세 건의 결과 확인.<br><br><strong class="who">data_pipeline</strong> 역할 B(모리아티)를 인수인계받아 합성 3,000건의 방법론 세우기. 교사 모델이 바뀌어 기준선부터 다시 잡아야 했다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 6에폭 세 건과 체크포인트 10건을 추가 채점했다. <code>delora-sentence-e3</code>를 새로 돌려 빈 칸을 메웠다. <code>붕괴</code> 43건을 유형별로 갈랐다. venv를 <code>model_train</code> 전용으로 분리하고 W&amp;B를 붙였다.<br><br><strong class="who">data_pipeline</strong> 새 교사 모델로 기준선 60건을 다시 잡았다. 판정 효과와 생성 효과를 갈라 쟀다. 채점 항목 셋(C2·BM7 라우팅·BM5a)을 고쳤다. 같은 60건을 사람과 기계 채점자가 각각 매겼다. 프롬프트 v1.2를 내고 <code>절차·요건</code> 지시를 고쳤다. 도구 다섯을 만들고 문서를 갱신했다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 채점기에 라벨일치 열 넣기. <code>sentence</code> 조건의 AM8s 처리 정하기. 밤사이 걸어둔 여섯 건 확인. 커밋 세 건.<br><br><strong class="who">data_pipeline</strong> 합성에 복수 변경을 넣을지 정하기. 지시 배분 고치기. v1.2 60건 재채점. 판정 잡음 바닥 재기.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>aa68b11</code> · <code>91f2343</code> · <code>4a7b057</code> · <code>a7a5b72</code><br>문서는 <code>docs/에폭_결과.md</code> · <code>docs/스윕_결과.md</code> 9절 · <code>docs/서버환경.md</code>.<br><br><strong class="who">data_pipeline</strong> <code>f60bd4a</code> · <code>4608b17</code> · <code>0cbb242</code> · <code>103f03b</code> · <code>4e7cc3f</code><br>문서는 <code>mutate/CHANGELOG.md</code> · <code>rubric.md</code> · <code>설계_메모.md</code> 7절 · <code>docs/학습데이터_생성_프로세스.md</code> 3절.</p></div>
         </div>
       </article>
       <article class="entry">
         <div class="entry-head">회고</div>
         <div class="entry-grid">
-          <div><h3>가장 어려웠던 지점</h3><p class="prompt"><strong class="who">model_train</strong> 43개짜리 <code>붕괴</code> 칸을 숫자만 보고 넘겼다. 그 안에 아무것도 안 배운 6개가 들어 있었다.<br><br><strong class="who">data_collect</strong> v1.2를 돌렸더니 점수가 내려갔다(78.3% → 68.3%). 프롬프트를 고쳤는데 나빠진 것이라 되돌릴 뻔했다.</p></div>
-          <div><h3>왜 어려웠나</h3><p class="prompt"><strong class="who">model_train</strong> 요약된 숫자만 보고 원본을 안 열었다. 같은 실수를 <code>스윕_결과.md</code> 8절에 이미 적어두고도 반복했다.<br><br><strong class="who">data_collect</strong> 지표 한 칸이 두 가지를 뭉쳐 재고 있었다. 갈라 보니 대상 회수는 5/12 → 10/12로 두 배가 됐고, 방향이 어긋나 최종 점수만 0이 된 것이었다. 틀린 것은 모델이 아니라 우리 지시였다.</p></div>
-          <div><h3>다음에는 어떻게 할까</h3><p class="prompt"><strong class="who">model_train</strong> 한 칸이 여러 건을 묶고 있으면 그 칸을 연다. 숫자를 인용하기 전에 어느 실행에서 나온 것인지 확인한다.<br><br><strong class="who">data_collect</strong> 점수가 안 나오면 모델보다 지시를 먼저 의심한다. 그리고 합쳐진 지표는 실패의 성격을 가린다 — 두 능력이 서로 상쇄해 “변화 없음”으로 보인다.</p></div>
-          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong class="who">model_train</strong> AM8s와 둥근 따옴표를 고칠지 판단이 필요하다. 지금 생각은 합격선은 안 건드리고 열만 늘리는 쪽이다. 3,000건 본 학습에 방법을 몇 개 데려갈지도 정해야 한다.<br><br><strong class="who">data_collect</strong> 합성에 복수 변경을 넣을지 정해야 한다(실제 18% 대 합성 2%). 그리고 3,000건이 정말 필요한지 605 → 2,000 → 3,000으로 재보고 싶다.</p></div>
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt"><strong class="who">model_train</strong> 43개짜리 <code>붕괴</code> 칸을 숫자만 보고 넘겼다. 그 안에 아무것도 안 배운 6개가 들어 있었다.<br><br><strong class="who">data_pipeline</strong> v1.2를 돌렸더니 점수가 내려갔다(78.3% → 68.3%). 프롬프트를 고쳤는데 나빠진 것이라 되돌릴 뻔했다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt"><strong class="who">model_train</strong> 요약된 숫자만 보고 원본을 안 열었다. 같은 실수를 <code>스윕_결과.md</code> 8절에 이미 적어두고도 반복했다.<br><br><strong class="who">data_pipeline</strong> 지표 한 칸이 두 가지를 뭉쳐 재고 있었다. 갈라 보니 대상 회수는 5/12 → 10/12로 두 배가 됐고, 방향이 어긋나 최종 점수만 0이 된 것이었다. 틀린 것은 모델이 아니라 우리 지시였다.</p></div>
+          <div><h3>다음에는 어떻게 할까</h3><p class="prompt"><strong class="who">model_train</strong> 한 칸이 여러 건을 묶고 있으면 그 칸을 연다. 숫자를 인용하기 전에 어느 실행에서 나온 것인지 확인한다.<br><br><strong class="who">data_pipeline</strong> 점수가 안 나오면 모델보다 지시를 먼저 의심한다. 그리고 합쳐진 지표는 실패의 성격을 가린다 — 두 능력이 서로 상쇄해 “변화 없음”으로 보인다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt"><strong class="who">model_train</strong> AM8s와 둥근 따옴표를 고칠지 판단이 필요하다. 지금 생각은 합격선은 안 건드리고 열만 늘리는 쪽이다. 3,000건 본 학습에 방법을 몇 개 데려갈지도 정해야 한다.<br><br><strong class="who">data_pipeline</strong> 합성에 복수 변경을 넣을지 정해야 한다(실제 18% 대 합성 2%). 그리고 3,000건이 정말 필요한지 605 → 2,000 → 3,000으로 재보고 싶다.</p></div>
         </div>
       </article>
       </details>
@@ -285,7 +285,7 @@
           <div><h3>오늘 하려던 일</h3><p class="prompt">합성 결과를 학습 데이터로 고정하고, 실제 1차 학습을 시작한다.</p></div>
           <div><h3>실제로 한 일</h3><p class="prompt">본 생성과 복구 결과에서 합성 레코드 1,093건을 확정했다. 기존 데이터와 합쳐 학습 1,655건·홀드아웃 37건으로 갈랐고, 홀드아웃 유출과 필터 문제를 막았다. 판정과 라벨을 따로 보는 판독표를 만든 뒤 1차 학습 설정 66개와 실행 순서를 확정해 학습에 들어갔다.</p></div>
           <div><h3>남은 일</h3><p class="prompt">8월 17일까지 학습을 마치고, 실행 실패 여부와 홀드아웃 결과를 판독표에서 확인한다.</p></div>
-          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_collect</strong> <code>3b0e9e2</code> · <code>a07497d</code><br><strong class="who">model_train</strong> <code>4d91a0c</code> · <code>31a79f6</code> · <code>93644eb</code> · <code>4bf70ab</code></p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_pipeline</strong> <code>3b0e9e2</code> · <code>a07497d</code><br><strong class="who">model_train</strong> <code>4d91a0c</code> · <code>31a79f6</code> · <code>93644eb</code> · <code>4bf70ab</code></p></div>
         </div>
       </article>
       <article class="entry">
@@ -304,10 +304,10 @@
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 학습 1,655건으로 돌린 2차 스윕을 정리하고, 다음 데이터 증강 전에 무엇을 더 확인할지 정한다.<br><br><strong class="who">data_collect</strong> 원천 수집을 다시 열되 기존 계열과 겹치는 후보를 앞에서 막고, 새 홀드아웃이 합성 씨앗에 섞이지 않게 한다.</p></div>
-          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 설정 66개의 2차 스윕을 마쳤다. 결과가 나온 62개 중 24개가 통과했고, 1차 붕괴 43개 중 26개가 벗어났다. 라벨 일치를 140줄 표에 소급하고, 부족한 기록과 에폭 혼입을 막았다. <code>run/</code>을 <code>cli/</code>로 바꾸고, 문장을 직접 비교하는 눈가림 판을 만들었다. VeRA에서 학습률을 <code>2e-4</code>에서 <code>1e-2</code>로 올리자 파싱률이 10.8%에서 91.9%로 올라, 같은 조건을 여섯 방식에 적용할 3라운드 설정을 준비했다.<br><br><strong class="who">data_collect</strong> 후보의 유사도·실질 변경·중복을 자동 판정하는 <code>check_candidate.py</code>와 수집 지시서 둘을 만들었다. 산업기술혁신사업 공통 운영요령 pair를 25번째 원천이자 새 홀드아웃으로 받았다. 재시도·재개 기능으로 Solar 응답 유실을 막고, 두 홀드아웃 계열을 합성 씨앗 단계에서 제외했다.</p></div>
-          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 높은 학습률을 적용한 여섯 설정을 돌려 확인하고, 교사 대 모델과 1차 대 2차 문장을 사람 눈가림으로 채점한다.<br><br><strong class="who">data_collect</strong> 새 홀드아웃에 해석을 붙이고 원천 수집을 이어간다. 3,000건 증강에 넣을 복합 수정의 비율과 생성 방법을 설계한다.</p></div>
-          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>96a8ea8</code> · <code>61cdce7</code> · <code>8798238</code> · <code>9c63272</code> · <code>4c90ded</code> · <code>bb2159d</code> · <code>0097142</code> · <code>a1fa8ae</code> · <code>cbf6297</code> · <code>4da3427</code><br><br><strong class="who">data_collect</strong> <code>ca5a378</code> · <code>eb23a5e</code> · <code>cc39c98</code></p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">model_train</strong> 학습 1,655건으로 돌린 2차 스윕을 정리하고, 다음 데이터 증강 전에 무엇을 더 확인할지 정한다.<br><br><strong class="who">data_pipeline</strong> 원천 수집을 다시 열되 기존 계열과 겹치는 후보를 앞에서 막고, 새 홀드아웃이 합성 씨앗에 섞이지 않게 한다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">model_train</strong> 설정 66개의 2차 스윕을 마쳤다. 결과가 나온 62개 중 24개가 통과했고, 1차 붕괴 43개 중 26개가 벗어났다. 라벨 일치를 140줄 표에 소급하고, 부족한 기록과 에폭 혼입을 막았다. <code>run/</code>을 <code>cli/</code>로 바꾸고, 문장을 직접 비교하는 눈가림 판을 만들었다. VeRA에서 학습률을 <code>2e-4</code>에서 <code>1e-2</code>로 올리자 파싱률이 10.8%에서 91.9%로 올라, 같은 조건을 여섯 방식에 적용할 3라운드 설정을 준비했다.<br><br><strong class="who">data_pipeline</strong> 후보의 유사도·실질 변경·중복을 자동 판정하는 <code>check_candidate.py</code>와 수집 지시서 둘을 만들었다. 산업기술혁신사업 공통 운영요령 pair를 25번째 원천이자 새 홀드아웃으로 받았다. 재시도·재개 기능으로 Solar 응답 유실을 막고, 두 홀드아웃 계열을 합성 씨앗 단계에서 제외했다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 높은 학습률을 적용한 여섯 설정을 돌려 확인하고, 교사 대 모델과 1차 대 2차 문장을 사람 눈가림으로 채점한다.<br><br><strong class="who">data_pipeline</strong> 새 홀드아웃에 해석을 붙이고 원천 수집을 이어간다. 3,000건 증강에 넣을 복합 수정의 비율과 생성 방법을 설계한다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">model_train</strong> <code>96a8ea8</code> · <code>61cdce7</code> · <code>8798238</code> · <code>9c63272</code> · <code>4c90ded</code> · <code>bb2159d</code> · <code>0097142</code> · <code>a1fa8ae</code> · <code>cbf6297</code> · <code>4da3427</code><br><br><strong class="who">data_pipeline</strong> <code>ca5a378</code> · <code>eb23a5e</code> · <code>cc39c98</code></p></div>
         </div>
       </article>
       <article class="entry">
@@ -326,23 +326,23 @@
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>복합 수정</strong>(한 조항에 변경이 둘 이상 들어간 것)을 만들 프롬프트 v1.3을 새로 깎는다. 3,000건에 넣을 복합의 비율을 정하고 그날 안에 생성을 걸어 둔다.</p></div>
-          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>v1.3을 만들지 않기로 했다.</strong> 대신 기존 v1.2를 두 번 적용해 <code>원문 → 중간본 → 최종본</code>으로 잇기로 하고, 생성 코드는 한 줄도 바꾸지 않았다. 계획을 전 문서에서 한 번에 세우는 <code>plan.py</code>를 만들며 <strong>중복 조항이 알려진 97건이 아니라 1,997건</strong>(후보의 42%)이라는 것을 찾았다. 생성기를 한 번도 통과한 적 없는 새 원천 5계열에 확인용 50건을 먼저 돌려 모두 BM5a 80% 이상을 확인하고, 이어 <strong>1,450건 본 생성</strong>을 걸었다.</p></div>
-          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_collect</strong> 1패스 결과를 보고 복합 목표 건수를 다시 세운 뒤, 사슬 생성 코드를 준비한다.</p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> <strong>복합 수정</strong>(한 조항에 변경이 둘 이상 들어간 것)을 만들 프롬프트 v1.3을 새로 깎는다. 3,000건에 넣을 복합의 비율을 정하고 그날 안에 생성을 걸어 둔다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> <strong>v1.3을 만들지 않기로 했다.</strong> 대신 기존 v1.2를 두 번 적용해 <code>원문 → 중간본 → 최종본</code>으로 잇기로 하고, 생성 코드는 한 줄도 바꾸지 않았다. 계획을 전 문서에서 한 번에 세우는 <code>plan.py</code>를 만들며 <strong>중복 조항이 알려진 97건이 아니라 1,997건</strong>(후보의 42%)이라는 것을 찾았다. 생성기를 한 번도 통과한 적 없는 새 원천 5계열에 확인용 50건을 먼저 돌려 모두 BM5a 80% 이상을 확인하고, 이어 <strong>1,450건 본 생성</strong>을 걸었다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> 1패스 결과를 보고 복합 목표 건수를 다시 세운 뒤, 사슬 생성 코드를 준비한다.</p></div>
           <div><h3>관련 커밋</h3><p class="prompt empty">오늘은 커밋을 안 함</p></div>
         </div>
       </article>
       </details>
 
-      <details class="day" open>
-      <summary><time>2026-08-20</time><span class="tag">진행 중 — 1패스를 수확하고 복합 생성을 시작했다</span></summary>
+      <details class="day">
+      <summary><time>2026-08-20</time><span class="tag">완료 — 1패스를 수확하고 복합 생성을 시작했다</span></summary>
       <article class="entry">
         <div class="entry-head">진행 기록</div>
         <div class="entry-grid">
-          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_collect</strong> 밤새 돌린 1패스 결과를 확인하고, 복합을 만드는 2패스 코드를 준비해 돌린다.</p></div>
-          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_collect</strong> <strong>1패스가 1,450건 중 1,416건을 남겼다</strong> — 수율 97.7%에 호출 실패 0건으로, 시간 제한을 180초에서 900초로 올리고 동시 요청을 16에서 8로 내린 결과다(지난 생성은 74.9%에 시간 초과 227건). 1패스에 복합이 이미 50건(3.5%) 섞여 있어 <strong>복합 목표를 192건에서 142건으로 내렸다</strong> — 실제 문서의 자연 발생률 4.0%와 비슷한 값이다. 사슬 생성기 <code>chain.py</code>로 앞 60건을 돌려 <strong>성공률(BM8) 81.7%</strong>를 확인했고(최저선 40%의 두 배, 폐기 0건), 남은 호출을 296건에서 <strong>130건</strong>으로 줄였다.</p></div>
-          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_collect</strong> 남은 130건을 돌려 복합 142건을 채우고, 1패스에서 178건을 덜어 1,238건으로 맞춘다. 그 뒤 조건 A·B 두 판을 내보낸다.</p></div>
-          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_collect</strong> <code>a9882f1</code> add: chain.py, plan.py, plans/run2, plans/pass2<br>· <code>8e6196d</code> fix: CHANGELOG.md, 세션_브리프.md</p></div>
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> 밤새 돌린 1패스 결과를 확인하고, 복합을 만드는 2패스 코드를 준비해 돌린다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> <strong>1패스가 1,450건 중 1,416건을 남겼다</strong> — 수율 97.7%에 호출 실패 0건으로, 시간 제한을 180초에서 900초로 올리고 동시 요청을 16에서 8로 내린 결과다(지난 생성은 74.9%에 시간 초과 227건). 1패스에 복합이 이미 50건(3.5%) 섞여 있어 <strong>복합 목표를 192건에서 142건으로 내렸다</strong> — 실제 문서의 자연 발생률 4.0%와 비슷한 값이다. 사슬 생성기 <code>chain.py</code>로 앞 60건을 돌려 <strong>성공률(BM8) 81.7%</strong>를 확인했고(최저선 40%의 두 배, 폐기 0건), 남은 호출을 296건에서 <strong>130건</strong>으로 줄였다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> 남은 130건을 돌려 복합 142건을 채우고, 1패스에서 178건을 덜어 1,238건으로 맞춘다. 그 뒤 조건 A·B 두 판을 내보낸다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_pipeline</strong> <code>a9882f1</code> add: chain.py, plan.py, plans/run2, plans/pass2<br>· <code>8e6196d</code> fix: CHANGELOG.md, 세션_브리프.md</p></div>
         </div>
       </article>
       <article class="entry">
@@ -352,6 +352,28 @@
           <div><h3>왜 어려웠나</h3><p class="prompt">두 작업을 한꺼번에 할 때 무엇을 먼저 잡을지, 적절한 우선순위를 가르기가 힘들다.</p></div>
           <div><h3>다음에는 어떻게 할까</h3><p class="prompt empty">재사용할 규칙이나 먼저 확인할 일을 적으세요.</p></div>
           <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt empty">혼자 정할 수 없는 선택지를 적으세요.</p></div>
+        </div>
+      </article>
+      </details>
+
+      <details class="day" open>
+      <summary><time>2026-08-21</time><span class="tag">진행 중 — 3,178건으로 학습을 시작했다</span></summary>
+      <article class="entry">
+        <div class="entry-head">진행 기록</div>
+        <div class="entry-grid">
+          <div><h3>오늘 하려던 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> 2패스 복합 생성을 끝내고, 복합을 넣은 판과 넣지 않은 판을 같은 양으로 고정한다.<br><br><strong class="who">model_train</strong> 고정된 두 판을 받아 2차 학습을 시작한다.</p></div>
+          <div><h3>실제로 한 일</h3><p class="prompt"><strong class="who">data_pipeline</strong> 사슬 최종본 183건으로 신규 합성 1,416건의 조건 A·B를 고정했다. 복합은 조건 A 308건(9.7%), 조건 B 158건(5.0%)이고, 대체 대상이 없는 export 6건은 뺐다. 근거 없는 3,000건 목표는 취소했다. 홀드아웃을 135건으로 늘리고 원천 후보 5쌍을 등록해 2차 원천 확보도 마쳤다.<br><br><strong class="who">model_train</strong> 조건 A·B 학습셋(각 3,178건)과 같은 홀드아웃 135건을 받았다. 재채점 76개 뒤 학습 28개를 잇는 실행을 만들고, 조건 A·B × 8개 방식 × seed 42에 주력 세 방식의 seed 43·44를 더해 2차 학습에 들어갔다.</p></div>
+          <div><h3>남은 일</h3><p class="prompt"><strong class="who">model_train</strong> 8월 24일까지 학습·채점을 끝내고, 조건 A·B의 복합 비율 차이 4.7%p가 성능에 주는 효과를 같은 홀드아웃에서 비교한다.</p></div>
+          <div><h3>관련 커밋</h3><p class="prompt"><strong class="who">data_pipeline</strong> <code>7b9af4a</code> · <code>848c2da</code> · <code>a2f9770</code> · <code>bfc165e</code> · <code>c547fe9</code><br><br><strong class="who">model_train</strong> <code>2cacbd3</code> · <code>cc3acbd</code></p></div>
+        </div>
+      </article>
+      <article class="entry">
+        <div class="entry-head">회고</div>
+        <div class="entry-grid">
+          <div><h3>가장 어려웠던 지점</h3><p class="prompt">3,000이라는 목표 숫자와 두 조건을 공정하게 비교하는 조건이 충돌하는지 가르는 일이었다.</p></div>
+          <div><h3>왜 어려웠나</h3><p class="prompt">처음에는 총량을 맞추려 178건을 버리려 했지만, 그 숫자는 실측 근거가 없었다. 반면 두 판의 양을 같게 하는 것은 비교를 위해 반드시 지켜야 했다.</p></div>
+          <div><h3>다음에는 어떻게 할까</h3><p class="prompt">목표 건수와 분포 상한은 생성 전에 독립 근거를 적고, 생성 뒤에는 사후 조정 대신 실제 분포를 먼저 확인한다.</p></div>
+          <div><h3>도움 또는 결정이 필요한 것</h3><p class="prompt">조건 A·B 학습 결과가 나오면, 복합 비율 차이 4.7%p가 성능에 주는 효과를 같은 홀드아웃에서 판단한다.</p></div>
         </div>
       </article>
       </details>
