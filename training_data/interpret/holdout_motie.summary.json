@@ -1,0 +1,29 @@
+{
+  "note": "보존 평가용 홀드아웃. 산업기술혁신사업 공통 운영요령 계열이며 학습에 넣지 않는다.",
+  "series": "motie_industrial_tech_guideline_pair",
+  "source_run": "training_data/interpret/runs/20260819T053950.069586Z__annotate__v2.2",
+  "kept": 98,
+  "judgements": {
+    "positive": 87,
+    "negative": 11
+  },
+  "복합": 21,
+  "labels_per_record": {
+    "0": 11,
+    "1": 66,
+    "2": 16,
+    "3": 3,
+    "4": 2
+  },
+  "targets": {
+    "적용 범위": 45,
+    "절차·요건": 22,
+    "명칭": 20,
+    "수행 주체": 14,
+    "수치·기준": 6,
+    "기한·시점": 5,
+    "제출물·기재사항": 3
+  },
+  "수정": "2026-08-21에 before_2022-B0737의 labels[].근거 화살표를 바로잡았다(이후 → 이전으로 뒤집혀 있었다). 라벨·impacts·direct_impact는 원래 맞았다. 실행 기록 records.jsonl은 모델 출력 그대로 두었다.",
+  "함께 쓰는 것": "얼려둔 mof_rd_regulation_pair 37건. 합쳐 135건이고, 라운드 비교표는 mof 37건 부분집합으로 계속 이어진다."
+}
